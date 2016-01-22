@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		46170FBE1C4FB77600E14765 /* behavioralBluetoothRemote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46170FBD1C4FB77600E14765 /* behavioralBluetoothRemote.swift */; };
+		46170FC01C4FB8CF00E14765 /* deviceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46170FBF1C4FB8CF00E14765 /* deviceState.swift */; };
 		463BA3611C4DE63000AA3007 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463BA3601C4DE63000AA3007 /* AppDelegate.swift */; };
 		463BA3631C4DE63000AA3007 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463BA3621C4DE63000AA3007 /* ViewController.swift */; };
 		463BA3661C4DE63000AA3007 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 463BA3641C4DE63000AA3007 /* Main.storyboard */; };
@@ -15,6 +17,7 @@
 		463BA36E1C4DE63000AA3007 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 463BA36C1C4DE63000AA3007 /* LaunchScreen.storyboard */; };
 		463BA3791C4DE63000AA3007 /* behavioralBluetoothTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463BA3781C4DE63000AA3007 /* behavioralBluetoothTests.swift */; };
 		463BA3841C4DE63000AA3007 /* behavioralBluetoothUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463BA3831C4DE63000AA3007 /* behavioralBluetoothUITests.swift */; };
+		4641B4651C4FB64500CDAFE5 /* behavioralBluetoothLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4641B4641C4FB64500CDAFE5 /* behavioralBluetoothLocal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		46170FBD1C4FB77600E14765 /* behavioralBluetoothRemote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = behavioralBluetoothRemote.swift; path = behavioralBluetooth/behavioralBluetoothRemote.swift; sourceTree = "<group>"; };
+		46170FBF1C4FB8CF00E14765 /* deviceState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = deviceState.swift; sourceTree = "<group>"; };
 		463BA35D1C4DE63000AA3007 /* behavioralBluetooth.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = behavioralBluetooth.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		463BA3601C4DE63000AA3007 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		463BA3621C4DE63000AA3007 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -44,11 +49,12 @@
 		463BA36D1C4DE63000AA3007 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		463BA36F1C4DE63000AA3007 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		463BA3741C4DE63000AA3007 /* behavioralBluetoothTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = behavioralBluetoothTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		463BA3781C4DE63000AA3007 /* behavioralBluetoothTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = behavioralBluetoothTests.swift; sourceTree = "<group>"; };
+		463BA3781C4DE63000AA3007 /* behavioralBluetoothTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = behavioralBluetoothTests.swift; path = behavioralBluetoothTests/behavioralBluetoothTests.swift; sourceTree = SOURCE_ROOT; };
 		463BA37A1C4DE63000AA3007 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		463BA37F1C4DE63000AA3007 /* behavioralBluetoothUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = behavioralBluetoothUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		463BA3831C4DE63000AA3007 /* behavioralBluetoothUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = behavioralBluetoothUITests.swift; sourceTree = "<group>"; };
 		463BA3851C4DE63000AA3007 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4641B4641C4FB64500CDAFE5 /* behavioralBluetoothLocal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = behavioralBluetoothLocal.swift; path = behavioralBluetooth/behavioralBluetoothLocal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +85,7 @@
 		463BA3541C4DE62F00AA3007 = {
 			isa = PBXGroup;
 			children = (
+				4641B4661C4FB69700CDAFE5 /* behavioralBluetoothModule */,
 				463BA35F1C4DE63000AA3007 /* behavioralBluetooth */,
 				463BA3771C4DE63000AA3007 /* behavioralBluetoothTests */,
 				463BA3821C4DE63000AA3007 /* behavioralBluetoothUITests */,
@@ -126,6 +133,16 @@
 				463BA3851C4DE63000AA3007 /* Info.plist */,
 			);
 			path = behavioralBluetoothUITests;
+			sourceTree = "<group>";
+		};
+		4641B4661C4FB69700CDAFE5 /* behavioralBluetoothModule */ = {
+			isa = PBXGroup;
+			children = (
+				46170FBD1C4FB77600E14765 /* behavioralBluetoothRemote.swift */,
+				4641B4641C4FB64500CDAFE5 /* behavioralBluetoothLocal.swift */,
+				46170FBF1C4FB8CF00E14765 /* deviceState.swift */,
+			);
+			name = behavioralBluetoothModule;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -260,8 +277,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				463BA3631C4DE63000AA3007 /* ViewController.swift in Sources */,
+				46170FBE1C4FB77600E14765 /* behavioralBluetoothRemote.swift in Sources */,
 				463BA3691C4DE63000AA3007 /* behavioralBluetooth.xcdatamodeld in Sources */,
+				46170FC01C4FB8CF00E14765 /* deviceState.swift in Sources */,
 				463BA3611C4DE63000AA3007 /* AppDelegate.swift in Sources */,
+				4641B4651C4FB64500CDAFE5 /* behavioralBluetoothLocal.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -488,6 +508,7 @@
 				463BA38A1C4DE63000AA3007 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		463BA38B1C4DE63000AA3007 /* Build configuration list for PBXNativeTarget "behavioralBluetoothTests" */ = {
 			isa = XCConfigurationList;
@@ -496,6 +517,7 @@
 				463BA38D1C4DE63000AA3007 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		463BA38E1C4DE63000AA3007 /* Build configuration list for PBXNativeTarget "behavioralBluetoothUITests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +526,7 @@
 				463BA3901C4DE63000AA3007 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

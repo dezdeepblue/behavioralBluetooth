@@ -1,0 +1,52 @@
+behavioralBluetoothRemote.swift
+	var state = DeviceState()
+	private var hardwareID: NSUUID?
+	private var uuidString: String?
+	private var nameString: String?
+	private var connectable: Bool?
+	private var txPowerLevel: Int?
+	private var rssi: Int?
+	init()
+	internal func serialDataAvailable(deviceOfInterest: NSUUID, data: String)
+	internal func setBackgroundConnection(allow: Bool)
+	internal func getRxBufferChar(deviceOfInterest: NSUUID)
+	internal func clearRxBuffer(deviceOfInterest: NSUUID)
+	class RemoteCentral: RemoteSerialDevice
+	class RemotePeripheral: RemoteSerialDevice
+	class RemoteBluetoothCentral: RemotePeripheral
+	class RemoteBluetoothLECentral: RemotePeripheral
+	class RemoteBluetoothPeripheral: RemotePeripheral
+	class RemoteBluetoothLEPeripheral: RemotePeripheral
+	private var manufacturerData: String?
+	private var serviceUUID: String?
+	private var serviceData: String?
+	private var solicitedServiceUUID: String?
+	private var dataLocalName: String?
+	private var services: CBService?
+	private var characteristics: CBCharacteristic?
+	private var descriptors: CBDescriptor?
+behavioralBluetoothLocal.swift
+	var connectedRemote: RemoteSerialDevice?
+	var state = DeviceState()
+	private var hardwareID: NSUUID?
+	private var discoveredDevices: Dictionary<NSUUID, RemotePeripheral>?
+	private var connectionLimit: Int?
+	private var reconnectOnLostConnection: Int?
+	private var retriesOnFailedConnect: Int?
+	private var retriesOnDisconnect: Int?
+	private var searchTimeout: Double?
+	private var reconnectTimer: Double?
+	private var lastConnectedDevice: NSUUID?
+	private var allowConnectionInBackgroun: Bool?
+	private var rxSerialBuffer: String?
+	init()
+	internal class LocalCentral: LocalSerialDevice
+	internal class LocalPeripheral: LocalSerialDevice
+	class LocalBluetoothCentral: LocalPeripheral
+	class LocalBluetoothLECentral: LocalPeripheral
+	var conectedPeripherals: RemoteBluetoothLEPeripheral?
+	public func connectToDevice(serviceOfInterest: CBService, characteristicOfInterest: CBCharacteristic)
+	public func connectToLastConnected()
+	public func writeToDevice(deviceOfInterest: NSUUID, data: String)
+	class LocalBluetoothPeripheral: LocalPeripheral
+	class LocalBluetoothLEPeripheral: LocalPeripheral
