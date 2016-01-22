@@ -87,6 +87,9 @@ typedef int swift_int3  __attribute__((__ext_vector_type__(3)));
 typedef int swift_int4  __attribute__((__ext_vector_type__(4)));
 #if defined(__has_feature) && __has_feature(modules)
 @import UIKit;
+@import ObjectiveC;
+@import CoreBluetooth;
+@import Foundation;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
@@ -115,6 +118,154 @@ SWIFT_CLASS("_TtC19behavioralBluetooth11AppDelegate")
 - (void)saveContext;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
+
+@protocol LocalBehavioralSerialDeviceDelegate;
+@class NSUUID;
+@class CBPeripheral;
+@class NSArray;
+
+
+/// This hopefully provides some info
+SWIFT_CLASS("_TtC19behavioralBluetooth27LocalBehavioralSerialDevice")
+@interface LocalBehavioralSerialDevice : NSObject
+@property (nonatomic, strong) id <LocalBehavioralSerialDeviceDelegate> __nullable delegate;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+
+/// ###Sets whether the connected serial device should be dismissed when the app enters the background.
+///
+/// \param allow Bool
+- (void)setBackgroundConnection:(BOOL)allow;
+
+/// ###Limits the local device as to how many remote devices can be connected at one time.
+///
+/// \param connectionLimit Integer representining the device connection limit.
+- (void)setNumberOfConnectionsAllowed:(NSInteger)connectionLimit;
+
+/// ###Controls automatica reconnect behavior.  If this option is set to true, the local device will attempt to automatically reconnect to all remote devices which lose connection.
+///
+/// \param enabled Should the reconnection be attempted.
+///
+/// \param tries An integer representing how many attempts should be made to reconnect before foreiting the connection.
+///
+/// \param timeBetweenTries Double representing how long of a delay is made before another attempt to reconnect is made.
+- (void)setAutomaticReconnectOnDisconnect:(BOOL)enabled tries:(NSInteger)tries timeBetweenTries:(double)timeBetweenTries;
+
+/// ###Controls automatic behavior for reconnecting to a remote device after failing to initially connect.  If this option is set to true, the local device will attempt to automatically reconnect to all remote devices which lose connection.
+///
+/// \param enabled Should the reconnection be attempted.
+///
+/// \param tries An integer representing how many attempts should be made to reconnect before foreiting the connection.
+///
+/// \param timeBetweenTries Double representing how long of a delay is made before another attempt to reconnect is made.
+- (void)setRetryConnectAfterFail:(BOOL)enabled tries:(NSInteger)tries timeBetweenTries:(double)timeBetweenTries;
+
+/// ###Attempts to last connected device, without discovery.
+- (void)connectToLastConnected;
+
+/// ###Writes data to a particular RemoteDevice
+- (void)writeToDevice:(NSUUID * __nonnull)deviceOfInterest data:(NSString * __nonnull)data;
+
+/// ###Clears all received data for a particular device from its respective local buffer.  Each remote device has its own received buffer contained within the LocalDevice object.
+///
+/// \param deviceOfInterest NSUUID of device buffer which should be flushed.
+- (void)clearRxBuffer:(NSUUID * __nonnull)deviceOfInterest;
+
+/// ###Check to see if any serial data has arrived from device of interest.
+///
+/// \param deviceOfInterest The NSUUID of the device which you would like to obtain serial data.
+- (void)serialDataAvailable:(NSUUID * __nonnull)deviceOfInterest;
+- (NSDictionary<NSUUID *, CBPeripheral *> * __nonnull)getdiscoveredDeviceDictionary;
+- (NSInteger)getNumberOfDiscoveredDevices;
+- (NSArray<NSUUID *> * __nonnull)getDeviceListAsArray;
+- (NSString * __nonnull)getDeviceName:(NSUUID * __nonnull)deviceOfInterest;
+- (NSString * __nonnull)getDeviceUUIDAsString:(NSUUID * __nonnull)deviceOfInterest;
+- (NSInteger)getDeviceRSSI:(NSUUID * __nonnull)deviceOfInterest;
+- (BOOL)getAdvDeviceConnectable:(NSUUID * __nonnull)deviceOfInterest;
+- (NSString * __nonnull)getAdvDeviceName:(NSUUID * __nonnull)deviceOfInterest;
+- (NSString * __nonnull)getAdvDeviceManufactureData:(NSUUID * __nonnull)deviceOfInterest;
+- (NSArray<NSString *> * __nonnull)getAdvDeviceServiceData:(NSUUID * __nonnull)deviceOfInterest;
+- (NSArray * __nonnull)getAdvDeviceServiceUUIDasNSArray:(NSUUID * __nonnull)deviceOfInterest;
+- (NSInteger)getAdvTxPowerLevel:(NSUUID * __nonnull)deviceOfInterest;
+- (NSArray * __nullable)getAdvSolicitedUUID:(NSUUID * __nonnull)deviceOfInterest;
+- (NSInteger)getDeviceState;
+- (void)searchTimerExpire;
+- (BOOL)connectToDevice:(NSUUID * __nonnull)deviceNSUUID;
+- (BOOL)alreadyConnected:(NSUUID * __nonnull)deviceNSUUID;
+- (void)clearDiscoveredDevices;
+- (void)clearDiscoveredDevicesAdvertisementData;
+- (void)clearConnectedDevices;
+- (void)reconnectTimerExpired;
+- (void)printDiscoveredDeviceListInfo;
+- (void)printConnectedDevices;
+@end
+
+
+SWIFT_PROTOCOL("_TtP19behavioralBluetooth35LocalBehavioralSerialDeviceDelegate_")
+@protocol LocalBehavioralSerialDeviceDelegate
+@optional
+- (void)searchTimerExpired;
+- (void)deviceStatusChanged:(NSUUID * __nonnull)nsuuidOfDevice deviceState:(NSInteger)deviceState;
+- (void)connectedToDevice;
+@end
+
+
+SWIFT_CLASS("_TtC19behavioralBluetooth15LocalPeripheral")
+@interface LocalPeripheral : LocalBehavioralSerialDevice
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+SWIFT_CLASS("_TtC19behavioralBluetooth21LocalBluetoothCentral")
+@interface LocalBluetoothCentral : LocalPeripheral
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+@class CBCentralManager;
+@class NSNumber;
+@class NSError;
+@class CBService;
+@class CBCharacteristic;
+
+
+/// ##The Local Bluetooth LE Object
+SWIFT_CLASS("_TtC19behavioralBluetooth23LocalBluetoothLECentral")
+@interface LocalBluetoothLECentral : LocalPeripheral <CBPeripheralDelegate, CBCentralManagerDelegate>
+
+/// ###Updates the the state of the Local Bluetooth LE device.
+///
+/// <ul><li>parameter</li></ul>
+- (void)centralManagerDidUpdateState:(CBCentralManager * __nonnull)central;
+- (void)centralManager:(CBCentralManager * __nonnull)central didDiscoverPeripheral:(CBPeripheral * __nonnull)peripheral advertisementData:(NSDictionary<NSString *, id> * __nonnull)advertisementData RSSI:(NSNumber * __nonnull)RSSI;
+- (void)centralManager:(CBCentralManager * __nonnull)central didConnectPeripheral:(CBPeripheral * __nonnull)peripheral;
+- (void)peripheral:(CBPeripheral * __nonnull)peripheral didDiscoverServices:(NSError * __nullable)error;
+- (void)peripheral:(CBPeripheral * __nonnull)peripheral didDiscoverCharacteristicsForService:(CBService * __nonnull)service error:(NSError * __nullable)error;
+- (void)peripheral:(CBPeripheral * __nonnull)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic * __nonnull)characteristic error:(NSError * __nullable)error;
+- (void)centralManager:(CBCentralManager * __nonnull)central didFailToConnectPeripheral:(CBPeripheral * __nonnull)peripheral error:(NSError * __nullable)error;
+- (void)search:(NSTimeInterval)timeoutSecs;
+- (void)connectToDevice:(CBService * __nonnull)serviceOfInterest characteristicOfInterest:(CBCharacteristic * __nonnull)characteristicOfInterest;
+- (void)centralManager:(CBCentralManager * __nonnull)central didDisconnectPeripheral:(CBPeripheral * __nonnull)peripheral error:(NSError * __nullable)error;
+- (BOOL)disconnectFromPeriphera:(NSUUID * __nonnull)deviceOfInterest;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+SWIFT_CLASS("_TtC19behavioralBluetooth26LocalBluetoothLEPeripheral")
+@interface LocalBluetoothLEPeripheral : LocalPeripheral
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+SWIFT_CLASS("_TtC19behavioralBluetooth24LocalBluetoothPeripheral")
+@interface LocalBluetoothPeripheral : LocalPeripheral
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+SWIFT_CLASS("_TtC19behavioralBluetooth12LocalCentral")
+@interface LocalCentral : LocalBehavioralSerialDevice
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
 
 @class NSBundle;
 @class NSCoder;

@@ -1,52 +1,60 @@
-behavioralBluetoothRemote.swift
+behavioralSerialDeviceRemote.swift
 	var state = DeviceState()
-	private var hardwareID: NSUUID?
-	private var uuidString: String?
-	private var nameString: String?
-	private var connectable: Bool?
-	private var txPowerLevel: Int?
-	private var rssi: Int?
 	init()
 	internal func serialDataAvailable(deviceOfInterest: NSUUID, data: String)
 	internal func setBackgroundConnection(allow: Bool)
 	internal func getRxBufferChar(deviceOfInterest: NSUUID)
 	internal func clearRxBuffer(deviceOfInterest: NSUUID)
-	class RemoteCentral: RemoteSerialDevice
-	class RemotePeripheral: RemoteSerialDevice
+	internal class RemoteCentral: RemoteBehavioralSerialDevice
+	internal class RemotePeripheral: RemoteBehavioralSerialDevice
 	class RemoteBluetoothCentral: RemotePeripheral
 	class RemoteBluetoothLECentral: RemotePeripheral
 	class RemoteBluetoothPeripheral: RemotePeripheral
 	class RemoteBluetoothLEPeripheral: RemotePeripheral
-	private var manufacturerData: String?
-	private var serviceUUID: String?
-	private var serviceData: String?
-	private var solicitedServiceUUID: String?
-	private var dataLocalName: String?
-	private var services: CBService?
-	private var characteristics: CBCharacteristic?
-	private var descriptors: CBDescriptor?
-behavioralBluetoothLocal.swift
-	var connectedRemote: RemoteSerialDevice?
-	var state = DeviceState()
-	private var hardwareID: NSUUID?
-	private var discoveredDevices: Dictionary<NSUUID, RemotePeripheral>?
-	private var connectionLimit: Int?
-	private var reconnectOnLostConnection: Int?
-	private var retriesOnFailedConnect: Int?
-	private var retriesOnDisconnect: Int?
-	private var searchTimeout: Double?
-	private var reconnectTimer: Double?
-	private var lastConnectedDevice: NSUUID?
-	private var allowConnectionInBackgroun: Bool?
-	private var rxSerialBuffer: String?
-	init()
-	internal class LocalCentral: LocalSerialDevice
-	internal class LocalPeripheral: LocalSerialDevice
+behavioralSerialDeviceLocal.swift
+	@objc protocol LocalBehavioralSerialDeviceDelegate
+	optional func searchTimerExpired()
+	optional func deviceStatusChanged(nsuuidOfDevice: NSUUID, deviceState: Int)
+	optional func connectedToDevice()
+	var delegate:LocalBehavioralSerialDeviceDelegate? = nil
+	override init()
+	func getdiscoveredDeviceDictionary()->Dictionary<NSUUID, CBPeripheral>
+	func getNumberOfDiscoveredDevices()->Int
+	func getDeviceListAsArray()->Array<NSUUID>
+	func getDeviceName(deviceOfInterest: NSUUID)->String
+	func getDeviceUUIDAsString(deviceOfInterest: NSUUID)->String
+	func getDeviceRSSI(deviceOfInterest: NSUUID)->Int
+	func getAdvDeviceConnectable(deviceOfInterest: NSUUID)->Bool
+	func getAdvDeviceName(deviceOfInterest: NSUUID)->String
+	func getAdvDeviceManufactureData(deviceOfInterest: NSUUID)->String
+	func getAdvDeviceServiceData(deviceOfInterest: NSUUID) -> Array<String>
+	func getAdvDeviceServiceUUIDasNSArray(deviceOfInterest: NSUUID)->NSArray
+	func getAdvTxPowerLevel(deviceOfInterest: NSUUID)->Int
+	func getAdvSolicitedUUID(deviceOfInterest: NSUUID)->NSArray?
+	func getSortedArraysBasedOnRSSI()-> (nsuuids: Array<NSUUID>, rssies: Array<NSNumber>)
+	func getDeviceState()->Int
+	func searchTimerExpire()
+	func connectToDevice(deviceNSUUID: NSUUID) -> Bool
+	func alreadyConnected(deviceNSUUID: NSUUID) -> Bool
+	func clearDiscoveredDevices()
+	func clearDiscoveredDevicesAdvertisementData()
+	func clearConnectedDevices()
+	func reconnectTimerExpired()
+	func printDiscoveredDeviceListInfo()
+	func printConnectedDevices()
+	internal class LocalCentral: LocalBehavioralSerialDevice
+	internal class LocalPeripheral: LocalBehavioralSerialDevice
 	class LocalBluetoothCentral: LocalPeripheral
-	class LocalBluetoothLECentral: LocalPeripheral
 	var conectedPeripherals: RemoteBluetoothLEPeripheral?
-	public func connectToDevice(serviceOfInterest: CBService, characteristicOfInterest: CBCharacteristic)
-	public func connectToLastConnected()
-	public func writeToDevice(deviceOfInterest: NSUUID, data: String)
+	func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber)
+	func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral)
+	func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?)
+	func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?)
+	func peripheral(peripheral: CBPeripheral, didDiscoverDescriptorsForCharacteristic characteristic: CBCharacteristic, error: NSError?)
+	func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?)
+	func search(timeoutSecs: NSTimeInterval)
+	func connectToDevice(serviceOfInterest: CBService, characteristicOfInterest: CBCharacteristic)
+	func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?)
+	func disconnectFromPeriphera(deviceOfInterest: NSUUID)->Bool
 	class LocalBluetoothPeripheral: LocalPeripheral
 	class LocalBluetoothLEPeripheral: LocalPeripheral

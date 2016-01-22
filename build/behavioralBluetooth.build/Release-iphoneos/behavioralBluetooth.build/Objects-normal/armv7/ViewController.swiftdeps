@@ -6,13 +6,13 @@ provides-nominal:
 provides-member:
 - ["C19behavioralBluetooth14ViewController", ""]
 provides-dynamic-lookup:
-- "didReceiveMemoryWarning"
 - "viewDidLoad"
+- "didReceiveMemoryWarning"
 depends-top-level:
-- !private "LocalBluetoothLECentral"
 - "ViewController"
-- "UIViewController"
+- !private "LocalBluetoothLECentral"
 - !private "RemoteBluetoothLEPeripheral"
+- "UIViewController"
 depends-member:
 - !private ["PSs9AnyObject", "LocalBluetoothLECentral"]
 - !private ["PSs9AnyObject", "RemoteBluetoothLEPeripheral"]
@@ -21,36 +21,44 @@ depends-member:
 - !private ["PSs9AnyObject", "setConnectedDevice"]
 - ["PSs9AnyObject", "viewDidLoad"]
 - ["PSs9AnyObject", ""]
+- !private ["PSo24CBCentralManagerDelegate", "init"]
+- !private ["PSo24CBCentralManagerDelegate", "setConnectedDevice"]
+- !private ["PSo20CBPeripheralDelegate", "init"]
+- !private ["PSo20CBPeripheralDelegate", "setConnectedDevice"]
 - !private ["PSs11CVarArgType", "LocalBluetoothLECentral"]
 - !private ["PSs11CVarArgType", "RemoteBluetoothLEPeripheral"]
 - ["PSs11CVarArgType", "didReceiveMemoryWarning"]
 - ["PSs11CVarArgType", "init"]
+- !private ["PSs11CVarArgType", "setConnectedDevice"]
 - ["PSs11CVarArgType", "viewDidLoad"]
 - ["PSs11CVarArgType", ""]
 - !private ["PSs23CustomStringConvertible", "LocalBluetoothLECentral"]
 - !private ["PSs23CustomStringConvertible", "RemoteBluetoothLEPeripheral"]
 - ["PSs23CustomStringConvertible", "didReceiveMemoryWarning"]
 - ["PSs23CustomStringConvertible", "init"]
+- !private ["PSs23CustomStringConvertible", "setConnectedDevice"]
 - ["PSs23CustomStringConvertible", "viewDidLoad"]
 - ["PSs23CustomStringConvertible", ""]
 - !private ["PSs9Equatable", "LocalBluetoothLECentral"]
 - !private ["PSs9Equatable", "RemoteBluetoothLEPeripheral"]
 - ["PSs9Equatable", "didReceiveMemoryWarning"]
 - ["PSs9Equatable", "init"]
+- !private ["PSs9Equatable", "setConnectedDevice"]
 - ["PSs9Equatable", "viewDidLoad"]
 - ["PSs9Equatable", ""]
 - !private ["PSs8Hashable", "LocalBluetoothLECentral"]
 - !private ["PSs8Hashable", "RemoteBluetoothLEPeripheral"]
 - ["PSs8Hashable", "didReceiveMemoryWarning"]
 - ["PSs8Hashable", "init"]
+- !private ["PSs8Hashable", "setConnectedDevice"]
 - ["PSs8Hashable", "viewDidLoad"]
 - ["PSs8Hashable", ""]
+- !private ["C19behavioralBluetooth27LocalBehavioralSerialDevice", "init"]
+- !private ["C19behavioralBluetooth27LocalBehavioralSerialDevice", "setConnectedDevice"]
 - !private ["C19behavioralBluetooth23LocalBluetoothLECentral", "init"]
 - !private ["C19behavioralBluetooth23LocalBluetoothLECentral", "setConnectedDevice"]
 - !private ["C19behavioralBluetooth15LocalPeripheral", "init"]
 - !private ["C19behavioralBluetooth15LocalPeripheral", "setConnectedDevice"]
-- !private ["C19behavioralBluetooth17LocalSerialDevice", "init"]
-- !private ["C19behavioralBluetooth17LocalSerialDevice", "setConnectedDevice"]
 - !private ["PSo8NSCoding", "LocalBluetoothLECentral"]
 - !private ["PSo8NSCoding", "RemoteBluetoothLEPeripheral"]
 - ["PSo8NSCoding", "didReceiveMemoryWarning"]
@@ -67,16 +75,18 @@ depends-member:
 - !private ["CSo8NSObject", "RemoteBluetoothLEPeripheral"]
 - ["CSo8NSObject", "didReceiveMemoryWarning"]
 - ["CSo8NSObject", "init"]
+- !private ["CSo8NSObject", "setConnectedDevice"]
 - ["CSo8NSObject", "viewDidLoad"]
 - !private ["PSo16NSObjectProtocol", "LocalBluetoothLECentral"]
 - !private ["PSo16NSObjectProtocol", "RemoteBluetoothLEPeripheral"]
 - ["PSo16NSObjectProtocol", "didReceiveMemoryWarning"]
 - ["PSo16NSObjectProtocol", "init"]
+- !private ["PSo16NSObjectProtocol", "setConnectedDevice"]
 - ["PSo16NSObjectProtocol", "viewDidLoad"]
 - ["PSo16NSObjectProtocol", ""]
+- !private ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "init"]
 - !private ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "init"]
 - !private ["C19behavioralBluetooth16RemotePeripheral", "init"]
-- !private ["C19behavioralBluetooth18RemoteSerialDevice", "init"]
 - !private ["PSo21UIAppearanceContainer", "LocalBluetoothLECentral"]
 - !private ["PSo21UIAppearanceContainer", "RemoteBluetoothLEPeripheral"]
 - ["PSo21UIAppearanceContainer", "didReceiveMemoryWarning"]
@@ -126,20 +136,22 @@ depends-member:
 - ["C19behavioralBluetooth14ViewController", "viewDidLoad"]
 depends-nominal:
 - "PSs9AnyObject"
+- !private "PSo24CBCentralManagerDelegate"
+- !private "PSo20CBPeripheralDelegate"
 - "PSs11CVarArgType"
 - "PSs23CustomStringConvertible"
 - "PSs9Equatable"
 - "PSs8Hashable"
+- !private "C19behavioralBluetooth27LocalBehavioralSerialDevice"
 - !private "C19behavioralBluetooth23LocalBluetoothLECentral"
 - !private "C19behavioralBluetooth15LocalPeripheral"
-- !private "C19behavioralBluetooth17LocalSerialDevice"
 - "PSo8NSCoding"
 - "PSo26NSExtensionRequestHandling"
 - "CSo8NSObject"
 - "PSo16NSObjectProtocol"
+- !private "C19behavioralBluetooth28RemoteBehavioralSerialDevice"
 - !private "C19behavioralBluetooth27RemoteBluetoothLEPeripheral"
 - !private "C19behavioralBluetooth16RemotePeripheral"
-- !private "C19behavioralBluetooth18RemoteSerialDevice"
 - "PSo21UIAppearanceContainer"
 - "PSo18UIContentContainer"
 - "PSo18UIFocusEnvironment"

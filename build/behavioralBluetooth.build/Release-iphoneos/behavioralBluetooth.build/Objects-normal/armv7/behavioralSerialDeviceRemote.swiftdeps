@@ -1,6 +1,6 @@
 ### Swift dependencies file v0 ###
 provides-top-level:
-- "RemoteSerialDevice"
+- "RemoteBehavioralSerialDevice"
 - "RemoteCentral"
 - "RemotePeripheral"
 - "RemoteBluetoothCentral"
@@ -8,7 +8,7 @@ provides-top-level:
 - "RemoteBluetoothPeripheral"
 - "RemoteBluetoothLEPeripheral"
 provides-nominal:
-- "C19behavioralBluetooth18RemoteSerialDevice"
+- "C19behavioralBluetooth28RemoteBehavioralSerialDevice"
 - "C19behavioralBluetooth13RemoteCentral"
 - "C19behavioralBluetooth16RemotePeripheral"
 - "C19behavioralBluetooth22RemoteBluetoothCentral"
@@ -16,7 +16,7 @@ provides-nominal:
 - "C19behavioralBluetooth25RemoteBluetoothPeripheral"
 - "C19behavioralBluetooth27RemoteBluetoothLEPeripheral"
 provides-member:
-- ["C19behavioralBluetooth18RemoteSerialDevice", ""]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", ""]
 - ["C19behavioralBluetooth13RemoteCentral", ""]
 - ["C19behavioralBluetooth16RemotePeripheral", ""]
 - ["C19behavioralBluetooth22RemoteBluetoothCentral", ""]
@@ -25,21 +25,21 @@ provides-member:
 - ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "Bool"
-- "RemoteSerialDevice"
-- "RemotePeripheral"
-- "CBService"
-- "RemoteCentral"
-- "RemoteBluetoothLECentral"
+- "RemoteBluetoothCentral"
+- "RemoteBehavioralSerialDevice"
 - "String"
 - "RemoteBluetoothLEPeripheral"
-- "RemoteBluetoothCentral"
-- "CBDescriptor"
-- "DeviceState"
+- "CBService"
 - "Int"
 - "RemoteBluetoothPeripheral"
-- "CBCharacteristic"
+- "RemotePeripheral"
 - "NSUUID"
+- "CBDescriptor"
+- "DeviceState"
+- "RemoteBluetoothLECentral"
+- "RemoteCentral"
+- "CBCharacteristic"
+- "Bool"
 depends-member:
 - ["PSs9AnyObject", "DeviceState"]
 - ["PSs9AnyObject", "characteristics"]
@@ -53,6 +53,36 @@ depends-member:
 - ["PSs9AnyObject", "solicitedServiceUUID"]
 - ["PSs9AnyObject", ""]
 - ["C19behavioralBluetooth11DeviceState", "init"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "Bool"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "CBCharacteristic"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "CBDescriptor"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "CBService"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "DeviceState"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "Int"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "NSUUID"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "String"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "characteristics"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "clearRxBuffer"]
+- !private ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "connectable"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "dataLocalName"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "deinit"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "descriptors"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "getRxBufferChar"]
+- !private ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "hardwareID"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "init"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "manufacturerData"]
+- !private ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "nameString"]
+- !private ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "rssi"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "serialDataAvailable"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "serviceData"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "serviceUUID"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "services"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "setBackgroundConnection"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "solicitedServiceUUID"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "state"]
+- !private ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "txPowerLevel"]
+- !private ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "uuidString"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", ""]
 - ["C19behavioralBluetooth22RemoteBluetoothCentral", "deinit"]
 - ["C19behavioralBluetooth22RemoteBluetoothCentral", "init"]
 - ["C19behavioralBluetooth24RemoteBluetoothLECentral", "deinit"]
@@ -90,56 +120,26 @@ depends-member:
 - ["C19behavioralBluetooth16RemotePeripheral", "services"]
 - ["C19behavioralBluetooth16RemotePeripheral", "solicitedServiceUUID"]
 - ["C19behavioralBluetooth16RemotePeripheral", ""]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "Bool"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "CBCharacteristic"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "CBDescriptor"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "CBService"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "DeviceState"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "Int"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "NSUUID"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "String"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "characteristics"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "clearRxBuffer"]
-- !private ["C19behavioralBluetooth18RemoteSerialDevice", "connectable"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "dataLocalName"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "deinit"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "descriptors"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "getRxBufferChar"]
-- !private ["C19behavioralBluetooth18RemoteSerialDevice", "hardwareID"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "init"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "manufacturerData"]
-- !private ["C19behavioralBluetooth18RemoteSerialDevice", "nameString"]
-- !private ["C19behavioralBluetooth18RemoteSerialDevice", "rssi"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "serialDataAvailable"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "serviceData"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "serviceUUID"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "services"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "setBackgroundConnection"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "solicitedServiceUUID"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", "state"]
-- !private ["C19behavioralBluetooth18RemoteSerialDevice", "txPowerLevel"]
-- !private ["C19behavioralBluetooth18RemoteSerialDevice", "uuidString"]
-- ["C19behavioralBluetooth18RemoteSerialDevice", ""]
 depends-nominal:
 - "PSs9AnyObject"
 - "C19behavioralBluetooth11DeviceState"
+- "C19behavioralBluetooth28RemoteBehavioralSerialDevice"
 - "C19behavioralBluetooth22RemoteBluetoothCentral"
 - "C19behavioralBluetooth24RemoteBluetoothLECentral"
 - "C19behavioralBluetooth27RemoteBluetoothLEPeripheral"
 - "C19behavioralBluetooth25RemoteBluetoothPeripheral"
 - "C19behavioralBluetooth13RemoteCentral"
 - "C19behavioralBluetooth16RemotePeripheral"
-- "C19behavioralBluetooth18RemoteSerialDevice"
 depends-dynamic-lookup:
 depends-external:
-- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Swift.swiftmodule"
-- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/UIKit.swiftmodule"
-- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Foundation.swiftmodule"
-- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Darwin.swiftmodule"
-- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Dispatch.swiftmodule"
-- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/ObjectiveC.swiftmodule"
-- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreGraphics.swiftmodule"
-- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreImage.swiftmodule"
-- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreBluetooth.swiftmodule"
-- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreData.swiftmodule"
-interface-hash: "23c03b192c295ef59fc90817cc4fcc50"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/Swift.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/UIKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/Foundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/Darwin.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/Dispatch.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/ObjectiveC.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/CoreGraphics.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/CoreImage.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/CoreBluetooth.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/CoreData.swiftmodule"
+interface-hash: "f7cdea983041510bdfe7f955dd6e9e27"
