@@ -25,21 +25,21 @@ provides-member:
 - ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "DeviceState"
-- "RemoteBluetoothCentral"
-- "CBService"
-- "String"
-- "Int"
-- "CBDescriptor"
-- "RemotePeripheral"
-- "Bool"
 - "RemoteBluetoothLEPeripheral"
-- "RemoteBluetoothPeripheral"
-- "RemoteBluetoothLECentral"
-- "RemoteCentral"
 - "NSUUID"
+- "RemoteBluetoothLECentral"
 - "CBCharacteristic"
+- "RemoteCentral"
 - "RemoteBehavioralSerialDevice"
+- "Bool"
+- "CBDescriptor"
+- "RemoteBluetoothCentral"
+- "Int"
+- "String"
+- "CBService"
+- "RemoteBluetoothPeripheral"
+- "DeviceState"
+- "RemotePeripheral"
 depends-member:
 - ["PSs9AnyObject", "DeviceState"]
 - ["PSs9AnyObject", "characteristics"]
@@ -142,4 +142,4 @@ depends-external:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreImage.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreBluetooth.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreData.swiftmodule"
-interface-hash: "f7cdea983041510bdfe7f955dd6e9e27"
+interface-hash: "4a88abc5645fd14813ca5d4d496f9e62"

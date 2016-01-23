@@ -1,1 +1,1 @@
-jazzy --min-acl internal --exclude /Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/AppDelegate.swift,/Users/Ladvien/Desktop/behavioralBluetooth/deviceState.swift,/Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/ViewController.swift
+jazzy --exclude /Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/AppDelegate.swift,/Users/Ladvien/Desktop/behavioralBluetooth/deviceState.swift,/Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/ViewController.swift

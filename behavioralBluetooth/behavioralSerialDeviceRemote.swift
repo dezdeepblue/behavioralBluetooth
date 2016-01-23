@@ -10,7 +10,7 @@ import Foundation
 import CoreBluetooth
 
 /// This hopefully provides some info
-internal class RemoteBehavioralSerialDevice {
+public class RemoteBehavioralSerialDevice {
     
     var state = DeviceState()
     private var hardwareID: NSUUID?
@@ -40,11 +40,11 @@ internal class RemoteBehavioralSerialDevice {
     }
 }
 
-internal class RemoteCentral: RemoteBehavioralSerialDevice {
+public class RemoteCentral: RemoteBehavioralSerialDevice {
     
 }
 
-internal class RemotePeripheral: RemoteBehavioralSerialDevice {
+public class RemotePeripheral: RemoteBehavioralSerialDevice {
     
 }
 

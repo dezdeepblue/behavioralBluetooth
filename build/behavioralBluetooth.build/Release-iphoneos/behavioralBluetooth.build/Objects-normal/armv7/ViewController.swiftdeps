@@ -9,10 +9,10 @@ provides-dynamic-lookup:
 - "viewDidLoad"
 - "didReceiveMemoryWarning"
 depends-top-level:
-- "ViewController"
-- !private "LocalBluetoothLECentral"
 - !private "RemoteBluetoothLEPeripheral"
 - "UIViewController"
+- !private "LocalBluetoothLECentral"
+- "ViewController"
 depends-member:
 - !private ["PSs9AnyObject", "LocalBluetoothLECentral"]
 - !private ["PSs9AnyObject", "RemoteBluetoothLEPeripheral"]

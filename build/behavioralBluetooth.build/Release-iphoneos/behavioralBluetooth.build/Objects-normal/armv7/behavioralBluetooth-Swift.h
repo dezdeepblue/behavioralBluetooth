@@ -122,7 +122,6 @@ SWIFT_CLASS("_TtC19behavioralBluetooth11AppDelegate")
 @protocol LocalBehavioralSerialDeviceDelegate;
 @class NSUUID;
 @class CBPeripheral;
-@class NSArray;
 
 
 /// This hopefully provides some info
@@ -174,27 +173,57 @@ SWIFT_CLASS("_TtC19behavioralBluetooth27LocalBehavioralSerialDevice")
 ///
 /// \param deviceOfInterest The NSUUID of the device which you would like to obtain serial data.
 - (void)serialDataAvailable:(NSUUID * __nonnull)deviceOfInterest;
+
+/// Returns a Dictionary object of discovered peripheral devices.
 - (NSDictionary<NSUUID *, CBPeripheral *> * __nonnull)getdiscoveredDeviceDictionary;
+
+/// Returns number of discovered devices
+///
+/// <code>if(bbObject.getNumberOfDiscoveredDevices() > 0){
+///     connectDevice()
+/// }
+/// 
+/// </code>
 - (NSInteger)getNumberOfDiscoveredDevices;
+
+/// Returns the discovered devices as an array.
 - (NSArray<NSUUID *> * __nonnull)getDeviceListAsArray;
+
+/// Provides the name of a particular discovered device as a String object.
+///
+/// <code>println(getDeviceName(myDeviceNSUUID))
+/// 
+/// </code>
+/// <code>Output: myDevice
+/// 
+/// </code>
 - (NSString * __nonnull)getDeviceName:(NSUUID * __nonnull)deviceOfInterest;
+
+/// Returns the device's NSUUID as a String object.
+///
+/// <code>println(getDeviceUUIDAsString(myDeviceNSUUID)
+/// 
+/// </code>
+/// <code>Output: BE5BA3D0-971C-4418-9ECF-E2D1ABCB66BE
+/// 
+/// </code>
 - (NSString * __nonnull)getDeviceUUIDAsString:(NSUUID * __nonnull)deviceOfInterest;
+
+/// Returns the device of interest's Radio Signal Strength Indicator (RSSI) as an integer.
+///
+/// <code>println(getDeviceRSSI(myDeviceNSUUID))
+/// 
+/// </code>
+/// <code>Output: -56
+/// 
+/// </code>
+/// This option is key for NFC imitation.  For example,
+///
+/// <a href="https://youtu.be/vcrPdhN9MJw"><img src="https://i.ytimg.com/vi/vcrPdhN9MJw/mqdefault.jpg" alt="iPhone Connects Based on Proximity"\></a>
 - (NSInteger)getDeviceRSSI:(NSUUID * __nonnull)deviceOfInterest;
-- (BOOL)getAdvDeviceConnectable:(NSUUID * __nonnull)deviceOfInterest;
-- (NSString * __nonnull)getAdvDeviceName:(NSUUID * __nonnull)deviceOfInterest;
-- (NSString * __nonnull)getAdvDeviceManufactureData:(NSUUID * __nonnull)deviceOfInterest;
-- (NSArray<NSString *> * __nonnull)getAdvDeviceServiceData:(NSUUID * __nonnull)deviceOfInterest;
-- (NSArray * __nonnull)getAdvDeviceServiceUUIDasNSArray:(NSUUID * __nonnull)deviceOfInterest;
-- (NSInteger)getAdvTxPowerLevel:(NSUUID * __nonnull)deviceOfInterest;
-- (NSArray * __nullable)getAdvSolicitedUUID:(NSUUID * __nonnull)deviceOfInterest;
-- (NSInteger)getDeviceState;
-- (void)searchTimerExpire;
-- (BOOL)connectToDevice:(NSUUID * __nonnull)deviceNSUUID;
+
+/// Returns true if already connected to the deviceOfInterest.
 - (BOOL)alreadyConnected:(NSUUID * __nonnull)deviceNSUUID;
-- (void)clearDiscoveredDevices;
-- (void)clearDiscoveredDevicesAdvertisementData;
-- (void)clearConnectedDevices;
-- (void)reconnectTimerExpired;
 - (void)printDiscoveredDeviceListInfo;
 - (void)printConnectedDevices;
 @end
@@ -221,10 +250,9 @@ SWIFT_CLASS("_TtC19behavioralBluetooth21LocalBluetoothCentral")
 @end
 
 @class CBCentralManager;
-@class NSNumber;
-@class NSError;
 @class CBService;
 @class CBCharacteristic;
+@class NSArray;
 
 
 /// ##The Local Bluetooth LE Object
@@ -235,16 +263,26 @@ SWIFT_CLASS("_TtC19behavioralBluetooth23LocalBluetoothLECentral")
 ///
 /// <ul><li>parameter</li></ul>
 - (void)centralManagerDidUpdateState:(CBCentralManager * __nonnull)central;
-- (void)centralManager:(CBCentralManager * __nonnull)central didDiscoverPeripheral:(CBPeripheral * __nonnull)peripheral advertisementData:(NSDictionary<NSString *, id> * __nonnull)advertisementData RSSI:(NSNumber * __nonnull)RSSI;
-- (void)centralManager:(CBCentralManager * __nonnull)central didConnectPeripheral:(CBPeripheral * __nonnull)peripheral;
-- (void)peripheral:(CBPeripheral * __nonnull)peripheral didDiscoverServices:(NSError * __nullable)error;
-- (void)peripheral:(CBPeripheral * __nonnull)peripheral didDiscoverCharacteristicsForService:(CBService * __nonnull)service error:(NSError * __nullable)error;
-- (void)peripheral:(CBPeripheral * __nonnull)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic * __nonnull)characteristic error:(NSError * __nullable)error;
-- (void)centralManager:(CBCentralManager * __nonnull)central didFailToConnectPeripheral:(CBPeripheral * __nonnull)peripheral error:(NSError * __nullable)error;
+
+/// Requests the Local Device connect to a Bluetooth LE Remote device of interest.  The call will assure a connection to the particular device doesn't exist.  If the connectionsLimit has not been reached.
+- (BOOL)connectToDevice:(NSUUID * __nonnull)deviceNSUUID;
 - (void)search:(NSTimeInterval)timeoutSecs;
 - (void)connectToDevice:(CBService * __nonnull)serviceOfInterest characteristicOfInterest:(CBCharacteristic * __nonnull)characteristicOfInterest;
-- (void)centralManager:(CBCentralManager * __nonnull)central didDisconnectPeripheral:(CBPeripheral * __nonnull)peripheral error:(NSError * __nullable)error;
 - (BOOL)disconnectFromPeriphera:(NSUUID * __nonnull)deviceOfInterest;
+
+/// <code>println(getDeviceRSSI(myDeviceNSUUID))
+/// 
+/// </code>
+/// <code>Output: -56
+/// 
+/// </code>
+- (BOOL)getAdvDeviceConnectable:(NSUUID * __nonnull)deviceOfInterest;
+- (NSString * __nonnull)getAdvDeviceName:(NSUUID * __nonnull)deviceOfInterest;
+- (NSString * __nonnull)getAdvDeviceManufactureData:(NSUUID * __nonnull)deviceOfInterest;
+- (NSArray<NSString *> * __nonnull)getAdvDeviceServiceData:(NSUUID * __nonnull)deviceOfInterest;
+- (NSArray * __nonnull)getAdvDeviceServiceUUIDasNSArray:(NSUUID * __nonnull)deviceOfInterest;
+- (NSInteger)getAdvTxPowerLevel:(NSUUID * __nonnull)deviceOfInterest;
+- (NSArray * __nullable)getAdvSolicitedUUID:(NSUUID * __nonnull)deviceOfInterest;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 

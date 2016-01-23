@@ -9,7 +9,7 @@
 import Foundation
 import CoreBluetooth
 
-class DeviceState {
+public class DeviceState {
     
     enum connectionStatuses: Int {
         case disconnected = 1
