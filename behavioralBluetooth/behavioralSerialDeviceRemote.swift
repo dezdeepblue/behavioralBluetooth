@@ -9,8 +9,12 @@
 import Foundation
 import CoreBluetooth
 
+protocol RemoteBehavioralSerialDeviceDelegate {
+    func update()
+}
+
 /// This hopefully provides some info
-public class RemoteBehavioralSerialDevice {
+public class RemoteBehavioralSerialDevice: NSObject, CBPeripheralDelegate {
     
     var state = DeviceState()
     private var hardwareID: NSUUID?
@@ -19,10 +23,6 @@ public class RemoteBehavioralSerialDevice {
     private var connectable: Bool?
     private var txPowerLevel: Int?
     private var rssi: Int?
-    
-    init(){
-        
-    }
     
     internal func serialDataAvailable(deviceOfInterest: NSUUID, data: String){
     }
@@ -61,16 +61,36 @@ class RemoteBluetoothPeripheral: RemotePeripheral {
 }
 
 class RemoteBluetoothLEPeripheral: RemotePeripheral {
+
+    public var ID: NSUUID?
+    public var dataLocalNameString: String?
+
+    // Each device may have multiple services.
+    public var services: Array<CBService>?
+    public var serviceUUIDString: Array<String>?
     
-    private var manufacturerData: String?
-    private var serviceUUID: String?
-    private var serviceData: String?
-    private var solicitedServiceUUID: String?
-    private var dataLocalName: String?
-    private var services: CBService?
-    private var characteristics: CBCharacteristic?
-    private var descriptors: CBDescriptor?
+    // May have several characteristics
+    public var characteristics: CBCharacteristic?
+    public var characteristicsString: String?
     
+    // May have sever descriptors.
+    public var descriptors: CBDescriptor?
+    
+    
+    
+    // Discovered device advertisement data.
+    public var discoveredDevicekCBAdvDataManufacturerData: String?
+    public var discoveredDevicekCBAdvDataIsConnectable: String?
+    public var discoveredDevicekCBAdvDataServiceUUIDs: String?
+    public var discoveredDevicekCBAdvDataTxPowerLevel: String?
+    public var discoveredDevicekCBAdvDataServiceData: String?
+    public var discoveredDevicekCBAdvSolicitedServiceUUID: String?
+    public var discoveredDevicekCBAdvDataLocalName: String?
+    
+
+    override init(){
+        
+    }
     
 }
 
