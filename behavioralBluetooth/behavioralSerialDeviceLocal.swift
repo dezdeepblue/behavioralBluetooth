@@ -19,6 +19,9 @@ import CoreBluetooth
 /// This hopefully provides some info
 public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDeviceDelegate {
     
+    // Device lists
+    public var discoveredDeviceList: Dictionary<NSUUID, RemoteBehavioralSerialDevice>?
+    
     // Device information
     private var connectedRemote: RemoteBehavioralSerialDevice?
     private var state = DeviceState()
@@ -160,8 +163,10 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     /**
     Returns a Dictionary object of discovered peripheral devices.
     */
-    public func getdiscoveredDeviceDictionary()->Dictionary<NSUUID, CBPeripheral>{
-        return discoveredDeviceList
+    public func getdiscoveredDeviceDictionary()->Dictionary<NSUUID, RemoteBehavioralSerialDevice>{
+        if let discoveredDeviceList = discoveredDeviceList {
+            return discoveredDeviceList
+        }
     }
     
     /**
@@ -175,15 +180,22 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     
     */
     public func getNumberOfDiscoveredDevices()->Int{
-        return discoveredDeviceList.count
+        if let discoveredDeviceList = discoveredDeviceList {
+            return discoveredDeviceList.count
+        }
+        else {
+            return 0
+        }
     }
     
     /**
     Returns the discovered devices as an array.
     */
     public func getDeviceListAsArray()->Array<NSUUID>{
-        let deviceListArray =  Array(discoveredDeviceList.keys)
-        return deviceListArray
+        if let discoveredDeviceList = discoveredDeviceList {
+            let deviceListArray = Array(discoveredDeviceList.keys)
+            return deviceListArray
+        }
     }
     
     /**
@@ -199,8 +211,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      
     */
     public func getDeviceName(deviceOfInterest: NSUUID)->String{
-        let deviceName = discoveredDeviceListNameString[deviceOfInterest]
-        if let deviceName = deviceName {
+        if let deviceName = discoveredDeviceList?[deviceOfInterest]?.getName() {
             return deviceName
         }
         else {
@@ -221,9 +232,8 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      
     */
     public func getDeviceUUIDAsString(deviceOfInterest: NSUUID)->String{
-        let deviceUUIDasString = discoveredDeviceListUUIDString[deviceOfInterest]
-        if let deviceUUIDasString = deviceUUIDasString {
-            return deviceUUIDasString
+        if let hardwareID = discoveredDeviceList?[deviceOfInterest]?.getHardwareID(){
+            return hardwareID
         }
         else {
             return ""
@@ -246,13 +256,30 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      
      */
     public func getDeviceRSSI(deviceOfInterest: NSUUID)->Int {
-        let deviceRSSI = discoveredDeviceListRSSI[deviceOfInterest]
-        if let deviceRSSI = deviceRSSI {
-            return Int(deviceRSSI)
+        if let rssi = discoveredDeviceList?[deviceOfInterest]?.getRSSI() {
+            return rssi
         }
         else {
             return 0
         }
+    }
+    
+    
+    private func discoveredDeviceRSSIDictionary()->Dictionary<NSUUID, Int>{
+        
+        if let discoveredDeviceList = discoveredDeviceList {
+            let arrayOfDevices = Array(discoveredDeviceList.keys)
+            var dict: Dictionary<NSUUID, Int>?
+            for key in arrayOfDevices {
+                if let rssiForDevice = discoveredDeviceList[key]?.getRSSI() {
+                    dict?.updateValue(rssiForDevice, forKey: key)
+                }
+            }
+            if let dict = dict {
+                return dict
+            }
+        }
+        
     }
     
     /**
@@ -270,6 +297,8 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      
      */
     private func getAscendingSortedArraysBasedOnRSSI()-> (nsuuids: Array<NSUUID>, rssies: Array<NSNumber>){
+        
+        let discoveredDeviceListRSSI: Dictionary<NSUUID, Int> = discoveredDeviceRSSIDictionary()
         
         // Bubble-POP! :)
         var rssies = Array(discoveredDeviceListRSSI.values)
@@ -502,56 +531,61 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
                 thisRemoteDevice.serviceUUIDString?.append(String(service))
             }
         }
+        // Set its name.
+        if let name = peripheral.name {
+            thisRemoteDevice.setName(name)
+        }
+        thisRemoteDevice.setRSSI(Int(RSSI))
+
+
         
-        // Characteristics will go in the "didDiscoverChar..."
-//        public var characteristics: CBCharacteristic?
-//        public var descriptors: CBDescriptor?
         
-        // Advertising data.
-        //public var manufacturerData: String?
+        // Search its characteristics
+        //      Search its descriptors
         
         // Let's get all the information about the discovered devices.
 //        discoveredDeviceList.updateValue(peripheral, forKey: peripheral.identifier)
 //        discoveredDeviceListRSSI.updateValue(RSSI, forKey: peripheral.identifier)
 //        discoveredDeviceListAdvertisementData.updateValue(advertisementData, forKey: peripheral.identifier)
 //        discoveredDeviceListUUIDString.updateValue(peripheral.identifier.UUIDString, forKey: peripheral.identifier)
-        
+
+        // Advertising data.
         if(discoverAdvertizingDataOnSearch){
-            // Advertising data.
-            let advertisementDataIsConnectable = advertisementData[CBAdvertisementDataIsConnectable]
-            if let advertisementDataIsConnectable = advertisementDataIsConnectable {
-                thisRemoteDevice.discoveredDevicekCBAdvDataIsConnectable = String(advertisementDataIsConnectable)
+            
+            // Get DataLocalNameKey
+            let advertisementDataLocalNameKey = advertisementData[CBAdvertisementDataLocalNameKey]
+            if let advertisementDataLocalNameKey = advertisementDataLocalNameKey {
+                if var thisDeviceNameKey = thisRemoteDevice.discoveredDevicekCBAdvDataLocalName {
+                    thisDeviceNameKey = String(advertisementDataLocalNameKey)
+                }
             }
             else
             {
-                print("Nil found unwrapping AdvertisementDataIsConnectable")
+                print("Nil found unwrapping AdvertisementDataLocalNameKey")
             }
-            
 
+            // Get ManufacturerDataKey
             let advertisementDataManufacturerDataKey = advertisementData[CBAdvertisementDataManufacturerDataKey]
             if let advertisementDataManufacturerDataKey = advertisementDataManufacturerDataKey {
-                    thisRemoteDevice.discoveredDevicekCBAdvDataManufacturerData = String(advertisementDataManufacturerDataKey)
+                thisRemoteDevice.discoveredDevicekCBAdvDataManufacturerData = String(advertisementDataManufacturerDataKey)
             }
             else
             {
                 print("Nil found unwrapping AdvertisementDataManufacturerDataKey")
             }
             
-            // Cast advertisementData back into a dictionary.
+            // Get ServiceDataKeys
             let advertisementDataServiceDataKeys = advertisementData[CBAdvertisementDataServiceDataKey] as? Dictionary<CBUUID, NSData>
-
-            // Unwrap the data
             if let advertisementDataServiceDataKeys = advertisementDataServiceDataKeys {
-                // Unwrap the Remote device adv. object.
-                if var thisDeviceAdDataServiceUUIDDict = thisRemoteDevice.discoveredDevicekCBAdvDataServiceUUIDs {
-                    // Get an array of the Data Service Data Keys Keys :)
-                    let cbuuidArray = Array(advertisementDataServiceDataKeys.keys)
-                    // Itterate.
-                    for cbuuid in cbuuidArray {
-                        // Convert each to a string
-                        let valueAsString = String(advertisementDataServiceDataKeys[cbuuid])
-                        // Make a dictionary
-                        thisDeviceAdDataServiceUUIDDict.updateValue(valueAsString, forKey: cbuuid)
+                // Get an array of the Data Service Data Keys Keys :)
+                let cbuuidArray = Array(advertisementDataServiceDataKeys.keys)
+                // Itterate.
+                for cbuuid in cbuuidArray {
+                    // Convert each to a string
+                    if let data = advertisementDataServiceDataKeys[cbuuid]{
+                        if let advString = String(data: data, encoding: NSUTF8StringEncoding) {
+                            thisRemoteDevice.discoveredDevicekCBAdvDataServiceUUIDs?.updateValue(advString, forKey: cbuuid)
+                        }
                     }
                 }
             }
@@ -560,49 +594,53 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
                 print("Nil found unwrapping AdvertisementDataServiceDataKey")
             }
             
-            
-            let advertisementDataLocalNameKey = advertisementData[CBAdvertisementDataLocalNameKey]
-            if let advertisementDataLocalNameKey = advertisementDataLocalNameKey {            discoveredDevicekCBAdvDataLocalName.updateValue(AdvertisementDataLocalNameKey, forKey: peripheral.identifier)
+            // Get OverflowServiceUUIDsKey
+            if let advertisementDataOverflowServiceUUIDsKey = advertisementData[CBAdvertisementDataOverflowServiceUUIDsKey] as? Array<String> {
+                    for item in advertisementDataOverflowServiceUUIDsKey {
+                        thisRemoteDevice.discoveredDevicekOverflowServiceUUIDsKey?.append(item)
+                    }
+                }
             }
             else
             {
-                print("Nil found unwrapping AdvertisementDataLocalNameKey")
+                print("Nil found unwrapping AdvertisementDataOverflowServiceUUIDsKey")
             }
-            
-            let AdvertisementDataTxPowerLevelKey = advertisementData[CBAdvertisementDataTxPowerLevelKey]
-            if let AdvertisementDataTxPowerLevelKey = AdvertisementDataTxPowerLevelKey{
-                discoveredDevicekCBAdvDataTxPowerLevel.updateValue(AdvertisementDataTxPowerLevelKey, forKey: peripheral.identifier)
+        
+            if let advertisementDataTxPowerLevelKey = advertisementData[CBAdvertisementDataTxPowerLevelKey] {
+                if let txInt = advertisementDataTxPowerLevelKey as? Int{
+                    thisRemoteDevice.discoveredDevicekCBAdvDataTxPowerLevel = txInt
+                }
             }
             else
             {
                 print("Nil found unwrapping AdvertisementDataTxPowerLevelKey")
             }
-            
-            let AdvertisementDataServiceUUIDsKey = advertisementData[CBAdvertisementDataServiceUUIDsKey]
-            if let AdvertisementDataServiceUUIDsKey = AdvertisementDataServiceUUIDsKey {
-                discoveredDevicekCBAdvDataServiceUUIDs.updateValue(AdvertisementDataServiceUUIDsKey, forKey: peripheral.identifier)
-            } else
-            {
-                print("Nil found unwrapping AdvertisementDataServiceUUIDsKey")
+        
+            // Get IsConnectable
+            let advertisementDataIsConnectable = advertisementData[CBAdvertisementDataIsConnectable]
+            if let advertisementDataIsConnectable = advertisementDataIsConnectable {
+                thisRemoteDevice.discoveredDevicekCBAdvDataIsConnectable = String(advertisementDataIsConnectable)
             }
-            
-            let AdvertisementDataSolicitedServiceUUIDsKey = advertisementData[CBAdvertisementDataSolicitedServiceUUIDsKey]
-            if let AdvertisementDataSolicitedServiceUUIDsKey = AdvertisementDataSolicitedServiceUUIDsKey {
-                discoveredDevicekCBAdvSolicitedServiceUUID.updateValue(AdvertisementDataSolicitedServiceUUIDsKey, forKey: peripheral.identifier)
-            } else {
+            else
+            {
+                print("Nil found unwrapping AdvertisementDataIsConnectable")
+            }
+        
+            if let advertisementDataSolicitedServiceUUIDsKey = advertisementData[CBAdvertisementDataSolicitedServiceUUIDsKey] as? Array<String> {
+                for item in advertisementDataSolicitedServiceUUIDsKey {
+                    thisRemoteDevice.discoveredDevicekCBAdvSolicitedServiceUUID?.append(item)
+                }
+            }
+            else
+            {
                 print("Nil found unwrapping AdvertisementDataSolicitedServiceUUIDsKey")
             }
         }
 
         // Clear any connections.  (Strangely, if a search is initiated, all devices are disconnected without
         // didDisconnectPeripheral() being called.
-        connectedPeripheralServices.removeAll()
-        connectedPeripheralCharacteristics.removeAll()
-        connectedPeripheralCharacteristicsDescriptors.removeAll()
         
-        if let name = peripheral.name {
-            discoveredDeviceListNameString.updateValue(name, forKey: peripheral.identifier)
-        }
+
         
         discoveredPeripheral?.updateValue(thisRemoteDevice, forKey: <#T##Hashable#>)
     }

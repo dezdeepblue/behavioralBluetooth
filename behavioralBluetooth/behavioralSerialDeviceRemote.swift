@@ -17,11 +17,9 @@ protocol RemoteBehavioralSerialDeviceDelegate {
 public class RemoteBehavioralSerialDevice: NSObject, CBPeripheralDelegate {
     
     var state = DeviceState()
-    private var hardwareID: NSUUID?
-    private var uuidString: String?
+    public var ID: NSUUID?
     private var nameString: String?
     private var connectable: Bool?
-    private var txPowerLevel: Int?
     private var rssi: Int?
     
     internal func serialDataAvailable(deviceOfInterest: NSUUID, data: String){
@@ -38,6 +36,42 @@ public class RemoteBehavioralSerialDevice: NSObject, CBPeripheralDelegate {
     internal func clearRxBuffer(deviceOfInterest: NSUUID){
     
     }
+    
+    func setHardwareID(nsuuid: NSUUID){
+        ID = nsuuid
+    }
+    
+    func getHardwareID()->String{
+        if let ID = ID{
+            return ID.UUIDString
+        }
+    }
+    
+    func setName(name: String){
+        nameString = name
+    }
+    
+    func getName()->String{
+        if let nameString = nameString {
+            return nameString
+        }
+    }
+    
+    func setConnectable(enable: Bool){
+        connectable = enable
+    }
+    
+    func setRSSI(newRssi: Int){
+        rssi = newRssi
+    }
+    
+    func getRSSI()->Int{
+        if let rssi = rssi {
+            return rssi
+        }
+    }
+    
+    
 }
 
 public class RemoteCentral: RemoteBehavioralSerialDevice {
@@ -62,7 +96,6 @@ class RemoteBluetoothPeripheral: RemotePeripheral {
 
 class RemoteBluetoothLEPeripheral: RemotePeripheral {
 
-    public var ID: NSUUID?
     public var dataLocalNameString: String?
 
     // Each device may have multiple services.
@@ -79,14 +112,15 @@ class RemoteBluetoothLEPeripheral: RemotePeripheral {
     
     
     // Discovered device advertisement data.
-    public var discoveredDevicekCBAdvDataManufacturerData: String?
-    public var discoveredDevicekCBAdvDataIsConnectable: String?
-    public var discoveredDevicekCBAdvDataServiceUUIDs: Dictionary<CBUUID, String>?
-    public var discoveredDevicekCBAdvDataTxPowerLevel: String?
-    public var discoveredDevicekCBAdvDataServiceData: String?
-    public var discoveredDevicekCBAdvSolicitedServiceUUID: String?
     public var discoveredDevicekCBAdvDataLocalName: String?
-    
+    public var discoveredDevicekCBAdvDataManufacturerData: String?
+    public var discoveredDevicekCBAdvDataServiceData: String?
+    public var discoveredDevicekCBAdvDataServiceUUIDs: Dictionary<CBUUID, String>?
+    public var discoveredDevicekOverflowServiceUUIDsKey: Array<String>?
+    public var discoveredDevicekCBAdvDataTxPowerLevel: Int?
+    public var discoveredDevicekCBAdvDataIsConnectable: String?
+    public var discoveredDevicekCBAdvSolicitedServiceUUID: Array<String>?
+
 
     override init(){
         
