@@ -81,7 +81,7 @@ class RemoteBluetoothLEPeripheral: RemotePeripheral {
     // Discovered device advertisement data.
     public var discoveredDevicekCBAdvDataManufacturerData: String?
     public var discoveredDevicekCBAdvDataIsConnectable: String?
-    public var discoveredDevicekCBAdvDataServiceUUIDs: String?
+    public var discoveredDevicekCBAdvDataServiceUUIDs: Dictionary<CBUUID, String>?
     public var discoveredDevicekCBAdvDataTxPowerLevel: String?
     public var discoveredDevicekCBAdvDataServiceData: String?
     public var discoveredDevicekCBAdvSolicitedServiceUUID: String?

@@ -506,10 +506,6 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
         // Characteristics will go in the "didDiscoverChar..."
 //        public var characteristics: CBCharacteristic?
 //        public var descriptors: CBDescriptor?
-        public var serviceUUIDString: String?
-        public var serviceDataString: String?
-        public var solicitedServiceUUIDString: String?
-        public var dataLocalNameString: String?
         
         // Advertising data.
         //public var manufacturerData: String?
@@ -522,28 +518,42 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
         
         if(discoverAdvertizingDataOnSearch){
             // Advertising data.
-            let AdvertisementDataIsConnectable = advertisementData[CBAdvertisementDataIsConnectable]
-            if let AdvertisementDataIsConnectable = AdvertisementDataIsConnectable {
-                discoveredDevicekCBAdvDataIsConnectable.updateValue(AdvertisementDataIsConnectable, forKey: peripheral.identifier)
+            let advertisementDataIsConnectable = advertisementData[CBAdvertisementDataIsConnectable]
+            if let advertisementDataIsConnectable = advertisementDataIsConnectable {
+                thisRemoteDevice.discoveredDevicekCBAdvDataIsConnectable = String(advertisementDataIsConnectable)
             }
             else
             {
                 print("Nil found unwrapping AdvertisementDataIsConnectable")
             }
             
-            
-            let AdvertisementDataManufacturerDataKey = advertisementData[CBAdvertisementDataManufacturerDataKey]
-            if let AdvertisementDataManufacturerDataKey = AdvertisementDataManufacturerDataKey{
-                discoveredDevicekCBAdvDataManufacturerData.updateValue(AdvertisementDataManufacturerDataKey, forKey: peripheral.identifier)
+
+            let advertisementDataManufacturerDataKey = advertisementData[CBAdvertisementDataManufacturerDataKey]
+            if let advertisementDataManufacturerDataKey = advertisementDataManufacturerDataKey {
+                    thisRemoteDevice.discoveredDevicekCBAdvDataManufacturerData = String(advertisementDataManufacturerDataKey)
             }
             else
             {
                 print("Nil found unwrapping AdvertisementDataManufacturerDataKey")
             }
             
-            let AdvertisementDataServiceDataKey = advertisementData[CBAdvertisementDataServiceDataKey] as? Dictionary<CBUUID, NSData>
-            if let AdvertisementDataServiceDataKey = AdvertisementDataServiceDataKey {
-                discoveredDevicekCBAdvDataServiceData.updateValue(AdvertisementDataServiceDataKey, forKey: peripheral.identifier)
+            // Cast advertisementData back into a dictionary.
+            let advertisementDataServiceDataKeys = advertisementData[CBAdvertisementDataServiceDataKey] as? Dictionary<CBUUID, NSData>
+
+            // Unwrap the data
+            if let advertisementDataServiceDataKeys = advertisementDataServiceDataKeys {
+                // Unwrap the Remote device adv. object.
+                if var thisDeviceAdDataServiceUUIDDict = thisRemoteDevice.discoveredDevicekCBAdvDataServiceUUIDs {
+                    // Get an array of the Data Service Data Keys Keys :)
+                    let cbuuidArray = Array(advertisementDataServiceDataKeys.keys)
+                    // Itterate.
+                    for cbuuid in cbuuidArray {
+                        // Convert each to a string
+                        let valueAsString = String(advertisementDataServiceDataKeys[cbuuid])
+                        // Make a dictionary
+                        thisDeviceAdDataServiceUUIDDict.updateValue(valueAsString, forKey: cbuuid)
+                    }
+                }
             }
             else
             {
@@ -551,9 +561,8 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
             }
             
             
-            let AdvertisementDataLocalNameKey = advertisementData[CBAdvertisementDataLocalNameKey]
-            if let AdvertisementDataLocalNameKey = AdvertisementDataLocalNameKey {
-                discoveredDevicekCBAdvDataLocalName.updateValue(AdvertisementDataLocalNameKey, forKey: peripheral.identifier)
+            let advertisementDataLocalNameKey = advertisementData[CBAdvertisementDataLocalNameKey]
+            if let advertisementDataLocalNameKey = advertisementDataLocalNameKey {            discoveredDevicekCBAdvDataLocalName.updateValue(AdvertisementDataLocalNameKey, forKey: peripheral.identifier)
             }
             else
             {
