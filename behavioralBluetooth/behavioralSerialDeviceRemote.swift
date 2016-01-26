@@ -14,7 +14,7 @@ protocol RemoteBehavioralSerialDeviceDelegate {
 }
 
 /// This hopefully provides some info
-public class RemoteBehavioralSerialDevice: NSObject, CBPeripheralDelegate {
+public class RemoteBehavioralSerialDevice: NSObject, CBPeripheral, CBPeripheralDelegate {
     
     var state = DeviceState()
     public var ID: NSUUID?
@@ -98,6 +98,9 @@ class RemoteBluetoothLEPeripheral: RemotePeripheral {
 
     public var dataLocalNameString: String?
 
+    // Peripheral
+    public var peripheral: CBPeripheral?
+    
     // Each device may have multiple services.
     public var services: Array<CBService>?
     public var serviceUUIDString: Array<String>?
