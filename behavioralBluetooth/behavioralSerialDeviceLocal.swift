@@ -54,7 +54,6 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     //  CoreBluetooth Classes
     private var activeCentralManager = CBCentralManager()
     private var activePeripheralManager = CBPeripheralManager()
-    private var peripheralDevice: CBPeripheral?
     private var lastConnectedPeripheralNSUUID: NSUUID?
     
     // Search properities.
@@ -70,7 +69,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
         
     }
     
-    // #MARK: Internal
+    // #MARK: public
     /** 
     ###Set the ID for the desired connected device. The device passed to this function will become the local device's new sought device.  If this will affect autoreconnect scenarios.
     - parameter device: The behavioralBluetooth RemoteSerialDevice desired.
@@ -210,7 +209,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      
     */
     public func getDeviceName(deviceOfInterest: NSUUID)->String{
-        if let deviceName = discoveredDeviceList?[deviceOfInterest]?.getName() {
+        if let deviceName = discoveredDeviceList?[deviceOfInterest]?.nameString {
             return deviceName
         }
         else {
@@ -231,7 +230,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      
     */
     public func getDeviceUUIDAsString(deviceOfInterest: NSUUID)->String{
-        if let hardwareID = discoveredDeviceList?[deviceOfInterest]?.getHardwareID(){
+        if let hardwareID = discoveredDeviceList?[deviceOfInterest]?.idAsString(){
             return hardwareID
         }
         else {
@@ -255,7 +254,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      
      */
     public func getDeviceRSSI(deviceOfInterest: NSUUID)->Int {
-        if let rssi = discoveredDeviceList?[deviceOfInterest]?.getRSSI() {
+        if let rssi = discoveredDeviceList?[deviceOfInterest]?.rssi {
             return rssi
         }
         else {
@@ -270,7 +269,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
             let arrayOfDevices = Array(discoveredDeviceList.keys)
             var dict: Dictionary<NSUUID, Int>?
             for key in arrayOfDevices {
-                if let rssiForDevice = discoveredDeviceList[key]?.getRSSI() {
+                if let rssiForDevice = discoveredDeviceList[key]?.rssi {
                     dict?.updateValue(rssiForDevice, forKey: key)
                 }
             }
@@ -376,13 +375,13 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
         if(searchComplete){
             if let discoveredDeviceList = discoveredDeviceList {
                 for ID in discoveredDeviceList.keys {
-                    if let name = discoveredDeviceList[ID]?.getName(){
+                    if let name = discoveredDeviceList[ID]?.nameString{
                         print("Device UUID: \(name)")
                     }
-                    if let thisUUID = discoveredDeviceList[ID]?.getName() {
-                        print("\t\tUUID: \(String(thisUUID))")
+                    if let thisUUID = discoveredDeviceList[ID]?.idAsString() {
+                        print("\t\tUUID: \(thisUUID)")
                     }
-                    if let RSSI = discoveredDeviceList[ID]?.getRSSI() {
+                    if let RSSI = discoveredDeviceList[ID]?.rssi{
                         print("\t\tRRSI: \(RSSI)")
                     }
                 }
@@ -413,21 +412,21 @@ public class LocalPeripheral: LocalBehavioralSerialDevice {
     
 }
 
-class LocalBluetoothCentral: LocalPeripheral {
+public class LocalBluetoothCentral: LocalPeripheral {
     
 }
 
 /// ##The Local Bluetooth LE Object
-class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeripheralDelegate {
+public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeripheralDelegate {
     
-    var conectedPeripherals: RemoteBluetoothLEPeripheral?
-    var discoveredPeripheral: Dictionary<NSUUID, RemoteBluetoothLEPeripheral>?
+    var conectedPeripherals: Dictionary<NSUUID, RemoteBluetoothLEPeripheral>?
+    var discoveredPeripherals: Dictionary<NSUUID, RemoteBluetoothLEPeripheral>?
 
     // Behavioral: Variables.
     var discoverAdvertizingDataOnSearch: Bool = false;
     
     // Behavioral: Methods.
-    internal func obtainAdvertizingDataOnConnect(enable: Bool){
+    func obtainAdvertizingDataOnConnect(enable: Bool){
         discoverAdvertizingDataOnSearch = enable
     }
     
@@ -436,7 +435,7 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
     Delegate method called from Remote objects.
     - parameter more on this later: more on this later.
     */
-    internal override func update() {
+    override func update() {
         //
     }
     
@@ -446,7 +445,7 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
     ###Updates the the state of the Local Bluetooth LE device.
     - parameter
     */
-    internal func centralManagerDidUpdateState(central: CBCentralManager) {
+    public func centralManagerDidUpdateState(central: CBCentralManager) {
         
         // Make sure the BLE device is on.
         switch activeCentralManager.state {
@@ -478,7 +477,7 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
     /**
     Requests the Local Device connect to a Bluetooth LE Remote device of interest.  The call will assure a connection to the particular device doesn't exist.  If the `connectionsLimit` has not been reached.
     */
-    internal func connectToDevice(deviceNSUUID: NSUUID) -> Bool {
+    func connectToDevice(deviceNSUUID: NSUUID) -> Bool {
         
         // Remember NSUUID
         lastConnectedPeripheralNSUUID = deviceNSUUID
@@ -492,7 +491,7 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
             else {
                 if let connectedRemotes = connectedRemotes {
                     if(connectedRemotes.count < connectionsLimit){
-                        if let deviceToConnect = discoveredPeripheral?[deviceNSUUID]?.peripheral {
+                        if let deviceToConnect = discoveredPeripherals?[deviceNSUUID]?.peripheral {
                             activeCentralManager.connectPeripheral(deviceToConnect, options: nil)
                         }
                         else {
@@ -514,7 +513,7 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
     }
     
     // #MARK: CoreBluetooth Central Manager
-    internal func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
+    public func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
         
         // 1. Creates RemotebBluetoothLE object and populates its data.
         // 2. Add the remote object to our Remote object Dictioanry.
@@ -526,22 +525,20 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
         // Each peripheral may have mutiple services.
         if let services = peripheral.services {
             for service in services {
-                thisRemoteDevice.services?.append(service)
+                thisRemoteDevice.bbServices?.append(service)
                 thisRemoteDevice.serviceUUIDString?.append(String(service))
             }
         }
+
         // Set its name.
         if let name = peripheral.name {
-            thisRemoteDevice.setName(name)
+            thisRemoteDevice.nameString = name
         }
-        thisRemoteDevice.setRSSI(Int(RSSI))
+        // Set RSSI
+        thisRemoteDevice.rssi = Int(RSSI)
 
-
-        
-        
         // Search its characteristics
         //      Search its descriptors
-        
         // Let's get all the information about the discovered devices.
 //        discoveredDeviceList.updateValue(peripheral, forKey: peripheral.identifier)
 //        discoveredDeviceListRSSI.updateValue(RSSI, forKey: peripheral.identifier)
@@ -552,9 +549,8 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
         if(discoverAdvertizingDataOnSearch){
             
             // Get DataLocalNameKey
-            let advertisementDataLocalNameKey = advertisementData[CBAdvertisementDataLocalNameKey]
-            if let advertisementDataLocalNameKey = advertisementDataLocalNameKey {
-                if var thisDeviceNameKey = thisRemoteDevice.discoveredDevicekCBAdvDataLocalName {
+            if let advertisementDataLocalNameKey = advertisementData[CBAdvertisementDataLocalNameKey] {
+                if var thisDeviceNameKey = thisRemoteDevice.advDataLocalName {
                     thisDeviceNameKey = String(advertisementDataLocalNameKey)
                 }
             }
@@ -564,9 +560,8 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
             }
 
             // Get ManufacturerDataKey
-            let advertisementDataManufacturerDataKey = advertisementData[CBAdvertisementDataManufacturerDataKey]
-            if let advertisementDataManufacturerDataKey = advertisementDataManufacturerDataKey {
-                thisRemoteDevice.discoveredDevicekCBAdvDataManufacturerData = String(advertisementDataManufacturerDataKey)
+            if let advertisementDataManufacturerDataKey = advertisementData[CBAdvertisementDataManufacturerDataKey] {
+                thisRemoteDevice.advDataManufacturerData = String(advertisementDataManufacturerDataKey)
             }
             else
             {
@@ -574,8 +569,7 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
             }
             
             // Get ServiceDataKeys
-            let advertisementDataServiceDataKeys = advertisementData[CBAdvertisementDataServiceDataKey] as? Dictionary<CBUUID, NSData>
-            if let advertisementDataServiceDataKeys = advertisementDataServiceDataKeys {
+            if let advertisementDataServiceDataKeys = advertisementData[CBAdvertisementDataServiceDataKey] as? Dictionary<CBUUID, NSData> {
                 // Get an array of the Data Service Data Keys Keys :)
                 let cbuuidArray = Array(advertisementDataServiceDataKeys.keys)
                 // Itterate.
@@ -583,7 +577,7 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
                     // Convert each to a string
                     if let data = advertisementDataServiceDataKeys[cbuuid]{
                         if let advString = String(data: data, encoding: NSUTF8StringEncoding) {
-                            thisRemoteDevice.discoveredDevicekCBAdvDataServiceUUIDs?.updateValue(advString, forKey: cbuuid)
+                            thisRemoteDevice.advDataServiceUUIDs?.updateValue(advString, forKey: cbuuid)
                         }
                     }
                 }
@@ -596,9 +590,8 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
             // Get OverflowServiceUUIDsKey
             if let advertisementDataOverflowServiceUUIDsKey = advertisementData[CBAdvertisementDataOverflowServiceUUIDsKey] as? Array<String> {
                     for item in advertisementDataOverflowServiceUUIDsKey {
-                        thisRemoteDevice.discoveredDevicekOverflowServiceUUIDsKey?.append(item)
+                        thisRemoteDevice.advDataOverflowServiceUUIDsKey?.append(item)
                     }
-                }
             }
             else
             {
@@ -607,7 +600,7 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
         
             if let advertisementDataTxPowerLevelKey = advertisementData[CBAdvertisementDataTxPowerLevelKey] {
                 if let txInt = advertisementDataTxPowerLevelKey as? Int{
-                    thisRemoteDevice.discoveredDevicekCBAdvDataTxPowerLevel = txInt
+                    thisRemoteDevice.advDataTxPowerLevel = txInt
                 }
             }
             else
@@ -618,7 +611,7 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
             // Get IsConnectable
             let advertisementDataIsConnectable = advertisementData[CBAdvertisementDataIsConnectable]
             if let advertisementDataIsConnectable = advertisementDataIsConnectable {
-                thisRemoteDevice.discoveredDevicekCBAdvDataIsConnectable = String(advertisementDataIsConnectable)
+                thisRemoteDevice.advDataIsConnectable = String(advertisementDataIsConnectable)
             }
             else
             {
@@ -627,7 +620,7 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
         
             if let advertisementDataSolicitedServiceUUIDsKey = advertisementData[CBAdvertisementDataSolicitedServiceUUIDsKey] as? Array<String> {
                 for item in advertisementDataSolicitedServiceUUIDsKey {
-                    thisRemoteDevice.discoveredDevicekCBAdvSolicitedServiceUUID?.append(item)
+                    thisRemoteDevice.advSolicitedServiceUUID?.append(item)
                 }
             }
             else
@@ -635,21 +628,40 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
                 print("Nil found unwrapping AdvertisementDataSolicitedServiceUUIDsKey")
             }
         }
-
+        
+        if var discoveredDeviceList = discoveredPeripherals {
+            if let thisRemoteDeviceId = thisRemoteDevice.ID {
+                discoveredDeviceList.updateValue(thisRemoteDevice, forKey: thisRemoteDeviceId)
+            }
+        }
         // Clear any connections.  (Strangely, if a search is initiated, all devices are disconnected without
         // didDisconnectPeripheral() being called.
-        if let discov
-    
-        discoveredPeripheral?.updateValue(thisRemoteDevice, forKey: thisRemoteDevice.)
+        
     }
     
-    private func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
+    @objc public func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
         
         // Add peripheral to connectedPeripheral dictionary.
-        connectedPeripherals.updateValue(peripheral, forKey: peripheral.identifier)
+        // What happens when it connects to a device without discovering it? (reconnect)?
+        if var connectedRemotes = connectedRemotes {
+            if let discoveredDeviceList = discoveredDeviceList?[peripheral.identifier] {
+                connectedRemotes.updateValue(discoveredDeviceList, forKey: peripheral.identifier)
+            }
+        }
+ 
+        // Transfer device object from discovered device dictionary to our connected
+        // device dictionary.
+        if let desiredDevice = discoveredDeviceList?[peripheral.identifier] {
+            connectedRemotes?.updateValue(desiredDevice, forKey: peripheral.identifier)
+        }
         
-        peripheralDevice = peripheral
-        peripheralDevice?.delegate = self
+        // 
+        if var desiredDeviceInConnectedDevices = connectedRemotes?[peripheral.identifier]{
+            desiredDeviceInConnectedDevices = peripheral
+            peripheralDevice?.delegate = self
+        }
+
+
         
         // Look for set services
         // #MARK: ADD
@@ -668,11 +680,12 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
         }
     }
     
-    private func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+    @objc public func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
         
         // Look for set characteristics.
-        
         // If not, do below.
+        
+        
         
         if let peripheralDevice = peripheralDevice {
             if let serviceArray = peripheralDevice.services {
@@ -686,7 +699,7 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
         
     }
     
-    private func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
+    @objc public func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
         
         // Look for set characteristics descriptors.
         
@@ -702,7 +715,7 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
         }
     }
     
-    private func peripheral(peripheral: CBPeripheral, didDiscoverDescriptorsForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+    @objc public func peripheral(peripheral: CBPeripheral, didDiscoverDescriptorsForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
         if let  descriptorsArray = characteristic.descriptors {
             for descriptors in descriptorsArray {
                 connectedPeripheralCharacteristicsDescriptors.append(descriptors)
@@ -711,7 +724,7 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
         // End of the line.
     }
     
-    private func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+    @objc public func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
         // If we fail to connect, don't remember this device.
         
         if(automaticConnectionRetryOnFail == true && retryIndexOnFail < retriesAfterConnectionFail){
@@ -737,7 +750,7 @@ class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeri
     }
     
     // #MARK: Connection Lost.
-    private func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+    @objc public func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
         
         // If connection is lost, remove it from the connected device dictionary.
         connectedPeripherals.removeValueForKey(peripheral.identifier)

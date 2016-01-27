@@ -14,64 +14,44 @@ protocol RemoteBehavioralSerialDeviceDelegate {
 }
 
 /// This hopefully provides some info
-public class RemoteBehavioralSerialDevice: NSObject, CBPeripheral, CBPeripheralDelegate {
+public class RemoteBehavioralSerialDevice: NSObject {
     
-    var state = DeviceState()
-    public var ID: NSUUID?
-    private var nameString: String?
-    private var connectable: Bool?
-    private var rssi: Int?
+    public var bbState = DeviceState()
     
-    internal func serialDataAvailable(deviceOfInterest: NSUUID, data: String){
+    internal(set) var ID: NSUUID {
+        get{ return self.ID}
+        set(newID){ self.ID = newID }
+    }
+    func idAsString()->String{
+        return String(ID)
+    }
+    internal(set) var nameString: String {
+        get{ return self.nameString}
+        set(newName){ self.nameString = newName }
+    }
+    internal(set) var connectable: Bool {
+        get{ return self.connectable}
+        set(enabled){ self.connectable = enabled}
+    }
+    internal(set) var rssi: Int {
+        get{ return self.rssi}
+        set(newRssi) {self.rssi = newRssi}
     }
     
-    internal func setBackgroundConnection(allow: Bool){
+    public func serialDataAvailable(deviceOfInterest: NSUUID, data: String){
+    }
+    
+    public func setBackgroundConnection(allow: Bool){
         
     }
     
-    internal func getRxBufferChar(deviceOfInterest: NSUUID){
+    public func getRxBufferChar(deviceOfInterest: NSUUID){
     
     }
     
-    internal func clearRxBuffer(deviceOfInterest: NSUUID){
+    public func clearRxBuffer(deviceOfInterest: NSUUID){
     
     }
-    
-    func setHardwareID(nsuuid: NSUUID){
-        ID = nsuuid
-    }
-    
-    func getHardwareID()->String{
-        if let ID = ID{
-            return ID.UUIDString
-        }
-    }
-    
-    func setName(name: String){
-        nameString = name
-    }
-    
-    func getName()->String{
-        if let nameString = nameString {
-            return nameString
-        }
-    }
-    
-    func setConnectable(enable: Bool){
-        connectable = enable
-    }
-    
-    func setRSSI(newRssi: Int){
-        rssi = newRssi
-    }
-    
-    func getRSSI()->Int{
-        if let rssi = rssi {
-            return rssi
-        }
-    }
-    
-    
 }
 
 public class RemoteCentral: RemoteBehavioralSerialDevice {
@@ -94,7 +74,7 @@ class RemoteBluetoothPeripheral: RemotePeripheral {
     
 }
 
-class RemoteBluetoothLEPeripheral: RemotePeripheral {
+public class RemoteBluetoothLEPeripheral: RemotePeripheral, CBPeripheralDelegate {
 
     public var dataLocalNameString: String?
 
@@ -102,7 +82,7 @@ class RemoteBluetoothLEPeripheral: RemotePeripheral {
     public var peripheral: CBPeripheral?
     
     // Each device may have multiple services.
-    public var services: Array<CBService>?
+    public var bbServices: Array<CBService>?
     public var serviceUUIDString: Array<String>?
     
     // May have several characteristics
@@ -111,23 +91,16 @@ class RemoteBluetoothLEPeripheral: RemotePeripheral {
     
     // May have sever descriptors.
     public var descriptors: CBDescriptor?
-    
-    
-    
+
     // Discovered device advertisement data.
-    public var discoveredDevicekCBAdvDataLocalName: String?
-    public var discoveredDevicekCBAdvDataManufacturerData: String?
-    public var discoveredDevicekCBAdvDataServiceData: String?
-    public var discoveredDevicekCBAdvDataServiceUUIDs: Dictionary<CBUUID, String>?
-    public var discoveredDevicekOverflowServiceUUIDsKey: Array<String>?
-    public var discoveredDevicekCBAdvDataTxPowerLevel: Int?
-    public var discoveredDevicekCBAdvDataIsConnectable: String?
-    public var discoveredDevicekCBAdvSolicitedServiceUUID: Array<String>?
-
-
-    override init(){
-        
-    }
+    public var advDataLocalName: String?
+    public var advDataManufacturerData: String?
+    public var advDataServiceData: String?
+    public var advDataServiceUUIDs: Dictionary<CBUUID, String>?
+    public var advDataOverflowServiceUUIDsKey: Array<String>?
+    public var advDataTxPowerLevel: Int?
+    public var advDataIsConnectable: String?
+    public var advSolicitedServiceUUID: Array<String>?
     
 }
 

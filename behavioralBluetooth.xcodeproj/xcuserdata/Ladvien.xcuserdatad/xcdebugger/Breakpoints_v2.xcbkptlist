@@ -6,31 +6,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "behavioralBluetooth/behavioralSerialDeviceRemote.swift"
-            timestampString = "475343642.950428"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "82"
-            endingLineNumber = "82"
-            landmarkName = "RemoteBluetoothLEPeripheral"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "behavioralBluetooth/behavioralSerialDeviceLocal.swift"
-            timestampString = "475344742.6269"
+            timestampString = "475505021.910487"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "499"
-            endingLineNumber = "499"
+            startingLineNumber = "637"
+            endingLineNumber = "637"
             landmarkName = "centralManager(_:didDiscoverPeripheral:advertisementData:RSSI:)"
             landmarkType = "5">
          </BreakpointContent>

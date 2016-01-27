@@ -21,7 +21,7 @@ class ViewController: UIViewController {
 
         var myLocal = LocalBluetoothLECentral()
         var myRemote = RemoteBluetoothLEPeripheral()
-        myLocal.setConnectedDevice(myRemote)
+        //myLocal.setConnectedDevice(myRemote)
     }
 
 
