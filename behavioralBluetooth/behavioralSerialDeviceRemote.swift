@@ -18,25 +18,13 @@ public class RemoteBehavioralSerialDevice: NSObject {
     
     public var bbState = DeviceState()
     
-    internal(set) var ID: NSUUID {
-        get{ return self.ID}
-        set(newID){ self.ID = newID }
-    }
+    internal(set) var ID: NSUUID?
     func idAsString()->String{
         return String(ID)
     }
-    internal(set) var nameString: String {
-        get{ return self.nameString}
-        set(newName){ self.nameString = newName }
-    }
-    internal(set) var connectable: Bool {
-        get{ return self.connectable}
-        set(enabled){ self.connectable = enabled}
-    }
-    internal(set) var rssi: Int {
-        get{ return self.rssi}
-        set(newRssi) {self.rssi = newRssi}
-    }
+    internal(set) var nameString: String?
+    internal(set) var connectable: Bool?
+    internal(set) var rssi: Int?
     
     public func serialDataAvailable(deviceOfInterest: NSUUID, data: String){
     }

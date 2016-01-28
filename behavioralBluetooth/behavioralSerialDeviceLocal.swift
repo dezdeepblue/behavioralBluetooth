@@ -339,7 +339,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
         return self.state
     }
     
-    private func searchTimerExpire(){
+    @objc private func searchTimerExpire(){
         searchTimeoutTimer.invalidate()
         searchComplete = true
         printDiscoveredDeviceListInfo()
@@ -349,6 +349,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
         else {
             // THROW ERROR
         }
+        
     }
     
     /**
@@ -633,9 +634,12 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
             }
         }
         
-        if var discoveredDeviceList = discoveredPeripherals {
-            discoveredDeviceList.updateValue(thisRemoteDevice, forKey: thisRemoteDevice.ID)
+        if let thisRemoteDeviceID = thisRemoteDevice.ID {
+            if var discoveredDeviceList = discoveredPeripherals {
+                discoveredDeviceList.updateValue(thisRemoteDevice, forKey: thisRemoteDeviceID)
+            }
         }
+
         // Clear any connections.  (Strangely, if a search is initiated, all devices are disconnected without
         // didDisconnectPeripheral() being called.
         
@@ -735,7 +739,7 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
     
     public func search(timeoutSecs: NSTimeInterval){
         searchComplete = false
-        clearDiscoveredDevices()
+        //clearDiscoveredDevices()
         // Strange.  If a search for peripherals is initiated it cancels all connections
         // without firing didDisconnectPeripheral.  This compensates.
         clearConnectedDevices()
