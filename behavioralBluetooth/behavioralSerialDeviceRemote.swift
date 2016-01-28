@@ -79,18 +79,18 @@ public class RemoteBluetoothLEPeripheral: RemotePeripheral, CBPeripheralDelegate
     public var dataLocalNameString: String?
 
     // Peripheral
-    public var peripheral: CBPeripheral?
+    public var bbPeripheral: CBPeripheral?
     
     // Each device may have multiple services.
     public var bbServices: Array<CBService>?
     public var serviceUUIDString: Array<String>?
     
     // May have several characteristics
-    public var characteristics: CBCharacteristic?
+    public var bbCharacteristics: Array<CBCharacteristic>?
     public var characteristicsString: String?
     
     // May have sever descriptors.
-    public var descriptors: CBDescriptor?
+    public var bbDescriptors: Array<CBDescriptor>?
 
     // Discovered device advertisement data.
     public var advDataLocalName: String?
