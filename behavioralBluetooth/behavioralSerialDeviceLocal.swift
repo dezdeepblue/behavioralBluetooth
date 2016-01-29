@@ -21,6 +21,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     
     // Device lists
     public var discoveredDeviceList: Dictionary<NSUUID, RemoteBehavioralSerialDevice>?
+    public var discoveredDeviceIdByName: Dictionary<String, NSUUID>?
     
     // Device information
     private var connectedRemotes: Dictionary<NSUUID, RemoteBehavioralSerialDevice>?
@@ -38,6 +39,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     private var retriesAfterConnectionFail: Int = 0
     private var retriesOnDisconnect: Int = 0
     private var automaticReconnectOnDisconnect: Bool = false
+    public var verboseOutput = false
     // Behavioral: Durations.
     private var searchTimeout: Double?
     private var reconnectTimerDuration: Double?
@@ -69,6 +71,12 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
         
     }
     
+    func debugOutput(output: String){
+        if(verboseOutput){
+            print(output)
+        }
+    }
+    
     // #MARK: public
     /** 
     ###Set the ID for the desired connected device. The device passed to this function will become the local device's new sought device.  If this will affect autoreconnect scenarios.
@@ -76,6 +84,12 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     */
     public func setConnectedDevice(nsuuidAsKey: NSUUID, device: RemoteBehavioralSerialDevice){
         connectedRemotes?.updateValue(device, forKey: nsuuidAsKey)
+        debugOutput("setConnectedDevice")
+    }
+    
+    public func getDeviceIdByName(name: String)->NSUUID{
+    
+        return NSUUID()
     }
     
     // #MARK: Behavioral Mutators
@@ -84,7 +98,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      - parameter allow: Bool
      */
     public func setBackgroundConnection(allow: Bool){
-        
+        debugOutput("setBackgroundConnection")
     }
     
     /**
@@ -92,7 +106,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      - parameter connectionLimit: Integer representining the device connection limit.
      */
     public func setNumberOfConnectionsAllowed(connectionLimit: Int){
-        
+        debugOutput("setNumberOfConnectionsAllowed")
     }
     
     /**
@@ -102,7 +116,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     - parameter timeBetweenTries: Double representing how long of a delay is made before another attempt to reconnect is made.
     */
     public func setAutomaticReconnectOnDisconnect(enabled: Bool, tries: Int, timeBetweenTries: Double){
-        
+        debugOutput("setAutomaticReconnectOnDisconnect")
     }
     
     /**
@@ -112,14 +126,14 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     - parameter timeBetweenTries: Double representing how long of a delay is made before another attempt to reconnect is made.
     */
     public func setRetryConnectAfterFail(enabled: Bool, tries: Int, timeBetweenTries: Double){
-        
+        debugOutput("setRetryConnectAfterFail")
     }
 
     /**
      ###Attempts to last connected device, without discovery.
      */
     public func connectToLastConnected(){
-        
+        debugOutput("connectToLastConnected")
     }
     
     // #MARK: Read and Write
@@ -128,7 +142,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      ###Writes data to a particular RemoteDevice
      */
     public func writeToDevice(deviceOfInterest: NSUUID, data: String){
-        
+        debugOutput("writeToDevice")
     }
     
     /**
@@ -136,7 +150,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      - parameter deviceOfInterest: NSUUID of device buffer which should be flushed.
      */
     public func clearRxBuffer(deviceOfInterest: NSUUID){
-        
+        debugOutput("clearRxBuffer")
     }
     
     /**
@@ -146,6 +160,8 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     public func getRxBufferChar(deviceOfInterest: NSUUID)->Character{
         var returnCharacter: Character?
         returnCharacter = "c"
+        
+        debugOutput("getRxBufferChar")
         return returnCharacter!
     }
     
@@ -154,17 +170,19 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      - parameter deviceOfInterest: The NSUUID of the device which you would like to obtain serial data.
      */
     public func serialDataAvailable(deviceOfInterest: NSUUID){
-        
+        debugOutput("serialDataAvailable")
     }
     
     // #MARK: Discovered but not Connected Info
     /**
     Returns a Dictionary object of discovered peripheral devices.
     */
-    public func getdiscoveredDeviceDictionary()->Dictionary<NSUUID, RemoteBehavioralSerialDevice>{
+    public func bbDeviceByIdDictionary()->Dictionary<NSUUID, RemoteBehavioralSerialDevice>{
         if let discoveredDeviceList = discoveredDeviceList {
+            debugOutput("getdiscoveredDeviceDictionary returned \n" + String(discoveredDeviceList))
             return discoveredDeviceList
         }
+        debugOutput("getdiscoveredDeviceDictionary returned nothing")
         return [:]
     }
     
@@ -180,9 +198,11 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     */
     public func getNumberOfDiscoveredDevices()->Int{
         if let discoveredDeviceList = discoveredDeviceList {
+            debugOutput("getNumberOfDiscoveredDevices: " + String(discoveredDeviceList.count))
             return discoveredDeviceList.count
         }
         else {
+            debugOutput("getNumberOfDiscoveredDevices: " + "0")
             return 0
         }
     }
@@ -190,7 +210,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     /**
     Returns the discovered devices as an array.
     */
-    public func getDeviceListAsArray()->Array<NSUUID>{
+    public func bbDeviceByIdArray()->Array<NSUUID>{
         if let discoveredDeviceList = discoveredDeviceList {
             let deviceListArray = Array(discoveredDeviceList.keys)
             return deviceListArray
@@ -517,133 +537,6 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         return true
     }
     
-    // #MARK: CoreBluetooth Central Manager
-    public func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
-        
-        // 1. Creates RemotebBluetoothLE object and populates its data.
-        // 2. Add the remote object to our Remote object Dictioanry.
-        
-        let thisRemoteDevice = RemoteBluetoothLEPeripheral()
-        
-        // Populate the object.
-        thisRemoteDevice.ID = peripheral.identifier
-        // Each peripheral may have mutiple services.
-        if let services = peripheral.services {
-            for service in services {
-                thisRemoteDevice.bbServices?.append(service)
-                thisRemoteDevice.serviceUUIDString?.append(String(service))
-            }
-        }
-
-        // Set its name.
-        if let name = peripheral.name {
-            thisRemoteDevice.nameString = name
-        }
-        // Set RSSI
-        thisRemoteDevice.rssi = Int(RSSI)
-
-        // Search its characteristics
-        //      Search its descriptors
-        // Let's get all the information about the discovered devices.
-//        discoveredDeviceList.updateValue(peripheral, forKey: peripheral.identifier)
-//        discoveredDeviceListRSSI.updateValue(RSSI, forKey: peripheral.identifier)
-//        discoveredDeviceListAdvertisementData.updateValue(advertisementData, forKey: peripheral.identifier)
-//        discoveredDeviceListUUIDString.updateValue(peripheral.identifier.UUIDString, forKey: peripheral.identifier)
-
-        // Advertising data.
-        if(discoverAdvertizingDataOnSearch){
-            
-            // Get DataLocalNameKey
-            if let advertisementDataLocalNameKey = advertisementData[CBAdvertisementDataLocalNameKey] {
-                if var thisDeviceNameKey = thisRemoteDevice.advDataLocalName {
-                    thisDeviceNameKey = String(advertisementDataLocalNameKey)
-                }
-            }
-            else
-            {
-                print("Nil found unwrapping AdvertisementDataLocalNameKey")
-            }
-
-            // Get ManufacturerDataKey
-            if let advertisementDataManufacturerDataKey = advertisementData[CBAdvertisementDataManufacturerDataKey] {
-                thisRemoteDevice.advDataManufacturerData = String(advertisementDataManufacturerDataKey)
-            }
-            else
-            {
-                print("Nil found unwrapping AdvertisementDataManufacturerDataKey")
-            }
-            
-            // Get ServiceDataKeys
-            if let advertisementDataServiceDataKeys = advertisementData[CBAdvertisementDataServiceDataKey] as? Dictionary<CBUUID, NSData> {
-                // Get an array of the Data Service Data Keys Keys :)
-                let cbuuidArray = Array(advertisementDataServiceDataKeys.keys)
-                // Itterate.
-                for cbuuid in cbuuidArray {
-                    // Convert each to a string
-                    if let data = advertisementDataServiceDataKeys[cbuuid]{
-                        if let advString = String(data: data, encoding: NSUTF8StringEncoding) {
-                            thisRemoteDevice.advDataServiceUUIDs?.updateValue(advString, forKey: cbuuid)
-                        }
-                    }
-                }
-            }
-            else
-            {
-                print("Nil found unwrapping AdvertisementDataServiceDataKey")
-            }
-            
-            // Get OverflowServiceUUIDsKey
-            if let advertisementDataOverflowServiceUUIDsKey = advertisementData[CBAdvertisementDataOverflowServiceUUIDsKey] as? Array<String> {
-                    for item in advertisementDataOverflowServiceUUIDsKey {
-                        thisRemoteDevice.advDataOverflowServiceUUIDsKey?.append(item)
-                    }
-            }
-            else
-            {
-                print("Nil found unwrapping AdvertisementDataOverflowServiceUUIDsKey")
-            }
-        
-            if let advertisementDataTxPowerLevelKey = advertisementData[CBAdvertisementDataTxPowerLevelKey] {
-                if let txInt = advertisementDataTxPowerLevelKey as? Int{
-                    thisRemoteDevice.advDataTxPowerLevel = txInt
-                }
-            }
-            else
-            {
-                print("Nil found unwrapping AdvertisementDataTxPowerLevelKey")
-            }
-        
-            // Get IsConnectable
-            let advertisementDataIsConnectable = advertisementData[CBAdvertisementDataIsConnectable]
-            if let advertisementDataIsConnectable = advertisementDataIsConnectable {
-                thisRemoteDevice.advDataIsConnectable = String(advertisementDataIsConnectable)
-            }
-            else
-            {
-                print("Nil found unwrapping AdvertisementDataIsConnectable")
-            }
-        
-            if let advertisementDataSolicitedServiceUUIDsKey = advertisementData[CBAdvertisementDataSolicitedServiceUUIDsKey] as? Array<String> {
-                for item in advertisementDataSolicitedServiceUUIDsKey {
-                    thisRemoteDevice.advSolicitedServiceUUID?.append(item)
-                }
-            }
-            else
-            {
-                print("Nil found unwrapping AdvertisementDataSolicitedServiceUUIDsKey")
-            }
-        }
-        
-        if let thisRemoteDeviceID = thisRemoteDevice.ID {
-            if var discoveredDeviceList = discoveredPeripherals {
-                discoveredDeviceList.updateValue(thisRemoteDevice, forKey: thisRemoteDeviceID)
-            }
-        }
-
-        // Clear any connections.  (Strangely, if a search is initiated, all devices are disconnected without
-        // didDisconnectPeripheral() being called.
-        
-    }
     
     @objc public func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
         
@@ -681,8 +574,185 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         }
     }
     
-    @objc public func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+
+    
+    @objc public func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+        // If we fail to connect, don't remember this device.
         
+        if(automaticConnectionRetryOnFail == true && retryIndexOnFail < retriesAfterConnectionFail){
+            reconnectTimer = NSTimer.scheduledTimerWithTimeInterval(timeBeforeAttemptingReconnectOnConnectionFail, target: self, selector: Selector("reconnectTimerExpired"), userInfo: nil, repeats: false)
+        }
+        else {
+            lastConnectedPeripheralNSUUID = nil
+        }
+    }
+    
+    public func search(timeoutSecs: NSTimeInterval){
+        searchComplete = false
+        //clearDiscoveredDevices()
+        // Strange.  If a search for peripherals is initiated it cancels all connections
+        // without firing didDisconnectPeripheral.  This compensates.
+        clearConnectedDevices()
+        activeCentralManager = CBCentralManager(delegate: self, queue: nil)
+        searchTimeoutTimer = NSTimer.scheduledTimerWithTimeInterval(timeoutSecs, target: self, selector: Selector("searchTimerExpire"), userInfo: nil, repeats: false)
+        debugOutput("Started search: "+String(timeoutSecs))
+    }
+    
+    public func connectToDevice(serviceOfInterest: CBService, characteristicOfInterest: CBCharacteristic){
+    }
+    
+    // #MARK: Connection Lost.
+    @objc public func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
+        
+        // If connection is lost, remove it from the connected device dictionary.
+        if var connectedRemotes = connectedRemotes {
+            connectedRemotes.removeValueForKey(peripheral.identifier)
+        }
+        print("Lost connection to: \(peripheral.identifier)")
+        
+        if(automaticReconnectOnDisconnect && purposefulDisconnect == false){
+            activePeripheralManager.state
+            reconnectTimer = NSTimer.scheduledTimerWithTimeInterval(timeBeforeAttemptingReconnectOnDisconnect, target: self, selector: Selector("reconnectTimerExpired"), userInfo: nil, repeats: false)
+        }
+        else {
+            //if let deviceStatusChanged = delegate?.deviceStatusChanged?(peripheral.identifier, deviceState: self.state){
+                purposefulDisconnect = false
+                //deviceStatusChanged
+            //}
+        }
+    }
+    
+    // #MARK: CoreBluetooth Central Manager
+    public func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
+        
+        debugOutput("didDiscoverPeripheral"+String(peripheral.identifier))
+        // 1. Creates RemotebBluetoothLE object and populates its data.
+        // 2. Add the remote object to our Remote object Dictioanry.
+        
+        let thisRemoteDevice = RemoteBluetoothLEPeripheral()
+        
+        // Populate the object.
+        thisRemoteDevice.ID = peripheral.identifier
+        
+        // Set its name.
+        if let name = peripheral.name {
+            thisRemoteDevice.nameString = name
+        }
+        // Set RSSI
+        thisRemoteDevice.rssi = Int(RSSI)
+        
+        // Search its characteristics
+        //      Search its descriptors
+        // Let's get all the information about the discovered devices.
+        //        discoveredDeviceList.updateValue(peripheral, forKey: peripheral.identifier)
+        //        discoveredDeviceListRSSI.updateValue(RSSI, forKey: peripheral.identifier)
+        //        discoveredDeviceListAdvertisementData.updateValue(advertisementData, forKey: peripheral.identifier)
+        //        discoveredDeviceListUUIDString.updateValue(peripheral.identifier.UUIDString, forKey: peripheral.identifier)
+        
+        // Advertising data.
+        if(discoverAdvertizingDataOnSearch){
+            
+            debugOutput("didDiscoverPeripheral found Adv. Data.")
+            // Get DataLocalNameKey
+            if let advertisementDataLocalNameKey = advertisementData[CBAdvertisementDataLocalNameKey] {
+                if var thisDeviceNameKey = thisRemoteDevice.advDataLocalName {
+                    thisDeviceNameKey = String(advertisementDataLocalNameKey)
+                }
+            }
+            else
+            {
+                print("Nil found unwrapping AdvertisementDataLocalNameKey")
+            }
+            
+            // Get ManufacturerDataKey
+            if let advertisementDataManufacturerDataKey = advertisementData[CBAdvertisementDataManufacturerDataKey] {
+                thisRemoteDevice.advDataManufacturerData = String(advertisementDataManufacturerDataKey)
+            }
+            else
+            {
+                print("Nil found unwrapping AdvertisementDataManufacturerDataKey")
+            }
+            
+            // Get ServiceDataKeys
+            if let advertisementDataServiceDataKeys = advertisementData[CBAdvertisementDataServiceDataKey] as? Dictionary<CBUUID, NSData> {
+                // Get an array of the Data Service Data Keys Keys :)
+                let cbuuidArray = Array(advertisementDataServiceDataKeys.keys)
+                // Itterate.
+                for cbuuid in cbuuidArray {
+                    // Convert each to a string
+                    if let data = advertisementDataServiceDataKeys[cbuuid]{
+                        if let advString = String(data: data, encoding: NSUTF8StringEncoding) {
+                            thisRemoteDevice.advDataServiceUUIDs?.updateValue(advString, forKey: cbuuid)
+                        }
+                    }
+                }
+            }
+            else
+            {
+                print("Nil found unwrapping AdvertisementDataServiceDataKey")
+            }
+            
+            // Get OverflowServiceUUIDsKey
+            if let advertisementDataOverflowServiceUUIDsKey = advertisementData[CBAdvertisementDataOverflowServiceUUIDsKey] as? Array<String> {
+                for item in advertisementDataOverflowServiceUUIDsKey {
+                    thisRemoteDevice.advDataOverflowServiceUUIDsKey?.append(item)
+                }
+            }
+            else
+            {
+                print("Nil found unwrapping AdvertisementDataOverflowServiceUUIDsKey")
+            }
+            
+            if let advertisementDataTxPowerLevelKey = advertisementData[CBAdvertisementDataTxPowerLevelKey] {
+                if let txInt = advertisementDataTxPowerLevelKey as? Int{
+                    thisRemoteDevice.advDataTxPowerLevel = txInt
+                }
+            }
+            else
+            {
+                print("Nil found unwrapping AdvertisementDataTxPowerLevelKey")
+            }
+            
+            // Get IsConnectable
+            let advertisementDataIsConnectable = advertisementData[CBAdvertisementDataIsConnectable]
+            if let advertisementDataIsConnectable = advertisementDataIsConnectable {
+                thisRemoteDevice.advDataIsConnectable = String(advertisementDataIsConnectable)
+            }
+            else
+            {
+                print("Nil found unwrapping AdvertisementDataIsConnectable")
+            }
+            
+            if let advertisementDataSolicitedServiceUUIDsKey = advertisementData[CBAdvertisementDataSolicitedServiceUUIDsKey] as? Array<String> {
+                for item in advertisementDataSolicitedServiceUUIDsKey {
+                    thisRemoteDevice.advSolicitedServiceUUID?.append(item)
+                }
+            }
+            else
+            {
+                print("Nil found unwrapping AdvertisementDataSolicitedServiceUUIDsKey")
+            }
+        }
+        
+        if let thisRemoteDeviceID = thisRemoteDevice.ID {
+            if var discoveredDeviceList = discoveredPeripherals {
+                discoveredDeviceList.updateValue(thisRemoteDevice, forKey: thisRemoteDeviceID)
+            }
+        }
+        
+        if var discoveredDeviceIdByName = discoveredDeviceIdByName {
+            if let peripheralName = peripheral.name {
+                discoveredDeviceIdByName.updateValue(peripheral.identifier, forKey: peripheralName)
+            }
+        }
+        
+        
+        // Clear any connections.  (Strangely, if a search is initiated, all devices are disconnected without
+        // didDisconnectPeripheral() being called.
+        
+    }
+    
+    @objc public func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
         // Look for set characteristics.
         // If not, do below.
         if let connectedPeripheral = connectedPeripherals?[peripheral.identifier]{
@@ -691,6 +761,7 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
                     for service in peripheralServices {
                         connectedPeripheralbbPeripheral.discoverCharacteristics(nil, forService: service)
                         connectedPeripheral.bbServices?.append(service)
+                        debugOutput("didDiscoverServices: "+String(service))
                     }
                 }
             }
@@ -725,53 +796,7 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
             }
         }
     }
-    
-    @objc public func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
-        // If we fail to connect, don't remember this device.
-        
-        if(automaticConnectionRetryOnFail == true && retryIndexOnFail < retriesAfterConnectionFail){
-            reconnectTimer = NSTimer.scheduledTimerWithTimeInterval(timeBeforeAttemptingReconnectOnConnectionFail, target: self, selector: Selector("reconnectTimerExpired"), userInfo: nil, repeats: false)
-        }
-        else {
-            lastConnectedPeripheralNSUUID = nil
-        }
-    }
-    
-    public func search(timeoutSecs: NSTimeInterval){
-        searchComplete = false
-        //clearDiscoveredDevices()
-        // Strange.  If a search for peripherals is initiated it cancels all connections
-        // without firing didDisconnectPeripheral.  This compensates.
-        clearConnectedDevices()
-        activeCentralManager = CBCentralManager(delegate: self, queue: nil)
-        searchTimeoutTimer = NSTimer.scheduledTimerWithTimeInterval(timeoutSecs, target: self, selector: Selector("searchTimerExpire"), userInfo: nil, repeats: false)
-    }
-    
-    public func connectToDevice(serviceOfInterest: CBService, characteristicOfInterest: CBCharacteristic){
-    }
-    
-    // #MARK: Connection Lost.
-    @objc public func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
-        
-        // If connection is lost, remove it from the connected device dictionary.
-        if var connectedRemotes = connectedRemotes {
-            connectedRemotes.removeValueForKey(peripheral.identifier)
-        }
-        print("Lost connection to: \(peripheral.identifier)")
-        
-        if(automaticReconnectOnDisconnect && purposefulDisconnect == false){
-            activePeripheralManager.state
-            reconnectTimer = NSTimer.scheduledTimerWithTimeInterval(timeBeforeAttemptingReconnectOnDisconnect, target: self, selector: Selector("reconnectTimerExpired"), userInfo: nil, repeats: false)
-        }
-        else {
-            //if let deviceStatusChanged = delegate?.deviceStatusChanged?(peripheral.identifier, deviceState: self.state){
-                purposefulDisconnect = false
-                //deviceStatusChanged
-            //}
-        }
-        
-        
-    }
+
     
     public func disconnectFromPeriphera(deviceOfInterest: NSUUID)->Bool {
         if let deviceToDisconnectPeripheral = connectedPeripherals?[deviceOfInterest]?.bbPeripheral {

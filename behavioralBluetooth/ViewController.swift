@@ -14,7 +14,15 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         var myLocal = LocalBluetoothLECentral()
         var myRemote = RemoteBluetoothLEPeripheral()
-        myLocal.search(3)
+        myLocal.verboseOutput = true;
+        myLocal.search(1)
+        if let deviceIdNameDict = myLocal.discoveredDeviceIdByName {
+            print(deviceIdNameDict)
+            if let deviceID = deviceIdNameDict["HMSoft"]{
+                print(deviceID)
+                myLocal.connectToDevice(deviceID)
+            }
+        }
     }
 
     override func didReceiveMemoryWarning() {
