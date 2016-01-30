@@ -16,7 +16,7 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
         super.viewDidLoad()
         myLocal.delegate = self
         myLocal.verboseOutput = true
-        myLocal.search(2)
+        myLocal.search(6)
         
 
     }
