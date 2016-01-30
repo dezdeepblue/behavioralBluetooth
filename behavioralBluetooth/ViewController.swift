@@ -16,7 +16,8 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
         super.viewDidLoad()
         myLocal.delegate = self
         myLocal.verboseOutput = true
-        myLocal.search(6)
+        myLocal.retriesOnDisconnect = 3
+        myLocal.search(2)
         
 
     }
@@ -29,11 +30,13 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
     }
     
     func searchTimerExpired() {
-        print(myLocal.discoveredDeviceIdByName)
         if let deviceID = myLocal.discoveredDeviceIdByName["HMSoft"]{
-            print(deviceID)
             myLocal.connectToDevice(deviceID)
         }
+    }
+    
+    func connectedToDevice() {
+
     }
 
     override func viewDidDisappear(animated: Bool) {
