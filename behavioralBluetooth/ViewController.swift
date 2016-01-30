@@ -8,21 +8,17 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
+    var myLocal = LocalBluetoothLECentral()
+    var myRemote = RemoteBluetoothLEPeripheral()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        var myLocal = LocalBluetoothLECentral()
-        var myRemote = RemoteBluetoothLEPeripheral()
-        myLocal.verboseOutput = true;
-        myLocal.search(1)
-        if let deviceIdNameDict = myLocal.discoveredDeviceIdByName {
-            print(deviceIdNameDict)
-            if let deviceID = deviceIdNameDict["HMSoft"]{
-                print(deviceID)
-                myLocal.connectToDevice(deviceID)
-            }
-        }
+        myLocal.delegate = self
+        myLocal.verboseOutput = true
+        myLocal.search(2)
+        
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -31,7 +27,17 @@ class ViewController: UIViewController {
 
 
     }
+    
+    func searchTimerExpired() {
+        print(myLocal.discoveredDeviceIdByName)
+        if let deviceID = myLocal.discoveredDeviceIdByName["HMSoft"]{
+            print(deviceID)
+            myLocal.connectToDevice(deviceID)
+        }
+    }
 
-
+    override func viewDidDisappear(animated: Bool) {
+myLocal.disconnectFromPeriphera(myLocal.discoveredDeviceIdByName["HMSoft"]!)
+    }
 }
 

@@ -21,7 +21,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     
     // Device lists
     public var discoveredDeviceList: Dictionary<NSUUID, RemoteBehavioralSerialDevice>?
-    public var discoveredDeviceIdByName: Dictionary<String, NSUUID>?
+    public var discoveredDeviceIdByName: Dictionary<String, NSUUID> = [:]
     
     // Device information
     private var connectedRemotes: Dictionary<NSUUID, RemoteBehavioralSerialDevice>?
@@ -362,7 +362,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     @objc private func searchTimerExpire(){
         searchTimeoutTimer.invalidate()
         searchComplete = true
-        printDiscoveredDeviceListInfo()
+        //printDiscoveredDeviceListInfo()
         if let searchTimerExpired = delegate?.searchTimerExpired?(){
             searchTimerExpired
         }
@@ -532,6 +532,8 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
                     }
                 }
             }
+        } else {
+            
         }
         
         return true
@@ -740,10 +742,8 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
             }
         }
         
-        if var discoveredDeviceIdByName = discoveredDeviceIdByName {
-            if let peripheralName = peripheral.name {
-                discoveredDeviceIdByName.updateValue(peripheral.identifier, forKey: peripheralName)
-            }
+        if let peripheralName = peripheral.name {
+            discoveredDeviceIdByName.updateValue(peripheral.identifier, forKey: peripheralName)
         }
         
         
