@@ -1,5 +1,6 @@
 ### Swift dependencies file v0 ###
 provides-top-level:
+- "RemoteBehavioralSerialDeviceDelegate"
 - "RemoteBehavioralSerialDevice"
 - "RemoteCentral"
 - "RemotePeripheral"
@@ -8,6 +9,7 @@ provides-top-level:
 - "RemoteBluetoothPeripheral"
 - "RemoteBluetoothLEPeripheral"
 provides-nominal:
+- "P19behavioralBluetooth36RemoteBehavioralSerialDeviceDelegate"
 - "C19behavioralBluetooth28RemoteBehavioralSerialDevice"
 - "C19behavioralBluetooth13RemoteCentral"
 - "C19behavioralBluetooth16RemotePeripheral"
@@ -16,6 +18,7 @@ provides-nominal:
 - "C19behavioralBluetooth25RemoteBluetoothPeripheral"
 - "C19behavioralBluetooth27RemoteBluetoothLEPeripheral"
 provides-member:
+- ["P19behavioralBluetooth36RemoteBehavioralSerialDeviceDelegate", ""]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", ""]
 - ["C19behavioralBluetooth13RemoteCentral", ""]
 - ["C19behavioralBluetooth16RemotePeripheral", ""]
@@ -24,112 +27,453 @@ provides-member:
 - ["C19behavioralBluetooth25RemoteBluetoothPeripheral", ""]
 - ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", ""]
 provides-dynamic-lookup:
+- "clearRxBuffer"
+- "dataLocalNameString"
+- "bbServices"
+- "advDataServiceUUIDs"
+- "getRxBufferChar"
+- "ID"
+- "bbCharacteristics"
+- "nameString"
+- "bbDescriptors"
+- "advDataManufacturerData"
+- "idAsString"
+- "setBackgroundConnection"
+- "advDataIsConnectable"
+- "serialDataAvailable"
+- "bbPeripheral"
+- "advDataOverflowServiceUUIDsKey"
+- "characteristicsString"
+- "advSolicitedServiceUUID"
+- "serviceUUIDString"
+- "advDataServiceData"
+- "advDataLocalName"
 depends-top-level:
 - "DeviceState"
-- "RemoteBluetoothLECentral"
-- "CBCharacteristic"
-- "RemoteBluetoothLEPeripheral"
-- "RemoteCentral"
+- "Array"
 - "NSUUID"
-- "Bool"
-- "RemoteBehavioralSerialDevice"
-- "CBDescriptor"
-- "RemoteBluetoothCentral"
-- "Int"
-- "String"
+- "CBCharacteristic"
 - "CBService"
-- "RemoteBluetoothPeripheral"
 - "RemotePeripheral"
+- "String"
+- "CBPeripheralDelegate"
+- "CBDescriptor"
+- "RemoteCentral"
+- "CBUUID"
+- "Dictionary"
+- "RemoteBluetoothLECentral"
+- "Int"
+- "RemoteBehavioralSerialDevice"
+- "RemoteBluetoothCentral"
+- "CBPeripheral"
+- "RemoteBluetoothLEPeripheral"
+- "RemoteBehavioralSerialDeviceDelegate"
+- "RemoteBluetoothPeripheral"
+- "NSObject"
+- "Bool"
 depends-member:
 - ["PSs9AnyObject", "DeviceState"]
-- ["PSs9AnyObject", "characteristics"]
-- ["PSs9AnyObject", "dataLocalName"]
-- ["PSs9AnyObject", "descriptors"]
+- ["PSs9AnyObject", "ID"]
+- !private ["PSs9AnyObject", "String"]
+- ["PSs9AnyObject", "advDataIsConnectable"]
+- ["PSs9AnyObject", "advDataLocalName"]
+- ["PSs9AnyObject", "advDataManufacturerData"]
+- ["PSs9AnyObject", "advDataOverflowServiceUUIDsKey"]
+- ["PSs9AnyObject", "advDataServiceData"]
+- ["PSs9AnyObject", "advDataServiceUUIDs"]
+- ["PSs9AnyObject", "advDataTxPowerLevel"]
+- ["PSs9AnyObject", "advSolicitedServiceUUID"]
+- ["PSs9AnyObject", "bbCharacteristics"]
+- ["PSs9AnyObject", "bbDescriptors"]
+- ["PSs9AnyObject", "bbPeripheral"]
+- ["PSs9AnyObject", "bbServices"]
+- ["PSs9AnyObject", "bbState"]
+- ["PSs9AnyObject", "characteristicsString"]
+- ["PSs9AnyObject", "clearRxBuffer"]
+- ["PSs9AnyObject", "connectable"]
+- ["PSs9AnyObject", "dataLocalNameString"]
+- ["PSs9AnyObject", "getRxBufferChar"]
+- ["PSs9AnyObject", "idAsString"]
 - ["PSs9AnyObject", "init"]
-- ["PSs9AnyObject", "manufacturerData"]
-- ["PSs9AnyObject", "serviceData"]
-- ["PSs9AnyObject", "serviceUUID"]
-- ["PSs9AnyObject", "services"]
-- ["PSs9AnyObject", "solicitedServiceUUID"]
+- ["PSs9AnyObject", "nameString"]
+- ["PSs9AnyObject", "peripheral"]
+- ["PSs9AnyObject", "peripheralDidUpdateName"]
+- ["PSs9AnyObject", "peripheralDidUpdateRSSI"]
+- ["PSs9AnyObject", "rssi"]
+- ["PSs9AnyObject", "serialDataAvailable"]
+- ["PSs9AnyObject", "serviceUUIDString"]
+- ["PSs9AnyObject", "setBackgroundConnection"]
 - ["PSs9AnyObject", ""]
+- ["PSo20CBPeripheralDelegate", "peripheral"]
+- ["PSo20CBPeripheralDelegate", "peripheralDidUpdateName"]
+- ["PSo20CBPeripheralDelegate", "peripheralDidUpdateRSSI"]
+- ["PSo20CBPeripheralDelegate", ""]
+- ["PSs11CVarArgType", "DeviceState"]
+- ["PSs11CVarArgType", "ID"]
+- !private ["PSs11CVarArgType", "String"]
+- ["PSs11CVarArgType", "advDataIsConnectable"]
+- ["PSs11CVarArgType", "advDataLocalName"]
+- ["PSs11CVarArgType", "advDataManufacturerData"]
+- ["PSs11CVarArgType", "advDataOverflowServiceUUIDsKey"]
+- ["PSs11CVarArgType", "advDataServiceData"]
+- ["PSs11CVarArgType", "advDataServiceUUIDs"]
+- ["PSs11CVarArgType", "advDataTxPowerLevel"]
+- ["PSs11CVarArgType", "advSolicitedServiceUUID"]
+- ["PSs11CVarArgType", "bbCharacteristics"]
+- ["PSs11CVarArgType", "bbDescriptors"]
+- ["PSs11CVarArgType", "bbPeripheral"]
+- ["PSs11CVarArgType", "bbServices"]
+- ["PSs11CVarArgType", "bbState"]
+- ["PSs11CVarArgType", "characteristicsString"]
+- ["PSs11CVarArgType", "clearRxBuffer"]
+- ["PSs11CVarArgType", "connectable"]
+- ["PSs11CVarArgType", "dataLocalNameString"]
+- ["PSs11CVarArgType", "getRxBufferChar"]
+- ["PSs11CVarArgType", "idAsString"]
+- ["PSs11CVarArgType", "init"]
+- ["PSs11CVarArgType", "nameString"]
+- ["PSs11CVarArgType", "peripheral"]
+- ["PSs11CVarArgType", "peripheralDidUpdateName"]
+- ["PSs11CVarArgType", "peripheralDidUpdateRSSI"]
+- ["PSs11CVarArgType", "rssi"]
+- ["PSs11CVarArgType", "serialDataAvailable"]
+- ["PSs11CVarArgType", "serviceUUIDString"]
+- ["PSs11CVarArgType", "setBackgroundConnection"]
+- ["PSs11CVarArgType", ""]
+- !private ["PSs10Comparable", "init"]
+- !private ["PSs28CustomDebugStringConvertible", "init"]
+- ["PSs23CustomStringConvertible", "DeviceState"]
+- ["PSs23CustomStringConvertible", "ID"]
+- !private ["PSs23CustomStringConvertible", "String"]
+- ["PSs23CustomStringConvertible", "advDataIsConnectable"]
+- ["PSs23CustomStringConvertible", "advDataLocalName"]
+- ["PSs23CustomStringConvertible", "advDataManufacturerData"]
+- ["PSs23CustomStringConvertible", "advDataOverflowServiceUUIDsKey"]
+- ["PSs23CustomStringConvertible", "advDataServiceData"]
+- ["PSs23CustomStringConvertible", "advDataServiceUUIDs"]
+- ["PSs23CustomStringConvertible", "advDataTxPowerLevel"]
+- ["PSs23CustomStringConvertible", "advSolicitedServiceUUID"]
+- ["PSs23CustomStringConvertible", "bbCharacteristics"]
+- ["PSs23CustomStringConvertible", "bbDescriptors"]
+- ["PSs23CustomStringConvertible", "bbPeripheral"]
+- ["PSs23CustomStringConvertible", "bbServices"]
+- ["PSs23CustomStringConvertible", "bbState"]
+- ["PSs23CustomStringConvertible", "characteristicsString"]
+- ["PSs23CustomStringConvertible", "clearRxBuffer"]
+- ["PSs23CustomStringConvertible", "connectable"]
+- ["PSs23CustomStringConvertible", "dataLocalNameString"]
+- ["PSs23CustomStringConvertible", "getRxBufferChar"]
+- ["PSs23CustomStringConvertible", "idAsString"]
+- ["PSs23CustomStringConvertible", "init"]
+- ["PSs23CustomStringConvertible", "nameString"]
+- ["PSs23CustomStringConvertible", "peripheral"]
+- ["PSs23CustomStringConvertible", "peripheralDidUpdateName"]
+- ["PSs23CustomStringConvertible", "peripheralDidUpdateRSSI"]
+- ["PSs23CustomStringConvertible", "rssi"]
+- ["PSs23CustomStringConvertible", "serialDataAvailable"]
+- ["PSs23CustomStringConvertible", "serviceUUIDString"]
+- ["PSs23CustomStringConvertible", "setBackgroundConnection"]
+- ["PSs23CustomStringConvertible", ""]
 - ["C19behavioralBluetooth11DeviceState", "init"]
+- ["PSs9Equatable", "DeviceState"]
+- ["PSs9Equatable", "ID"]
+- !private ["PSs9Equatable", "String"]
+- ["PSs9Equatable", "advDataIsConnectable"]
+- ["PSs9Equatable", "advDataLocalName"]
+- ["PSs9Equatable", "advDataManufacturerData"]
+- ["PSs9Equatable", "advDataOverflowServiceUUIDsKey"]
+- ["PSs9Equatable", "advDataServiceData"]
+- ["PSs9Equatable", "advDataServiceUUIDs"]
+- ["PSs9Equatable", "advDataTxPowerLevel"]
+- ["PSs9Equatable", "advSolicitedServiceUUID"]
+- ["PSs9Equatable", "bbCharacteristics"]
+- ["PSs9Equatable", "bbDescriptors"]
+- ["PSs9Equatable", "bbPeripheral"]
+- ["PSs9Equatable", "bbServices"]
+- ["PSs9Equatable", "bbState"]
+- ["PSs9Equatable", "characteristicsString"]
+- ["PSs9Equatable", "clearRxBuffer"]
+- ["PSs9Equatable", "connectable"]
+- ["PSs9Equatable", "dataLocalNameString"]
+- ["PSs9Equatable", "getRxBufferChar"]
+- ["PSs9Equatable", "idAsString"]
+- ["PSs9Equatable", "init"]
+- ["PSs9Equatable", "nameString"]
+- ["PSs9Equatable", "peripheral"]
+- ["PSs9Equatable", "peripheralDidUpdateName"]
+- ["PSs9Equatable", "peripheralDidUpdateRSSI"]
+- ["PSs9Equatable", "rssi"]
+- ["PSs9Equatable", "serialDataAvailable"]
+- ["PSs9Equatable", "serviceUUIDString"]
+- ["PSs9Equatable", "setBackgroundConnection"]
+- ["PSs9Equatable", ""]
+- !private ["PSs41ExtendedGraphemeClusterLiteralConvertible", "init"]
+- ["PSs8Hashable", "DeviceState"]
+- ["PSs8Hashable", "ID"]
+- !private ["PSs8Hashable", "String"]
+- ["PSs8Hashable", "advDataIsConnectable"]
+- ["PSs8Hashable", "advDataLocalName"]
+- ["PSs8Hashable", "advDataManufacturerData"]
+- ["PSs8Hashable", "advDataOverflowServiceUUIDsKey"]
+- ["PSs8Hashable", "advDataServiceData"]
+- ["PSs8Hashable", "advDataServiceUUIDs"]
+- ["PSs8Hashable", "advDataTxPowerLevel"]
+- ["PSs8Hashable", "advSolicitedServiceUUID"]
+- ["PSs8Hashable", "bbCharacteristics"]
+- ["PSs8Hashable", "bbDescriptors"]
+- ["PSs8Hashable", "bbPeripheral"]
+- ["PSs8Hashable", "bbServices"]
+- ["PSs8Hashable", "bbState"]
+- ["PSs8Hashable", "characteristicsString"]
+- ["PSs8Hashable", "clearRxBuffer"]
+- ["PSs8Hashable", "connectable"]
+- ["PSs8Hashable", "dataLocalNameString"]
+- ["PSs8Hashable", "getRxBufferChar"]
+- ["PSs8Hashable", "idAsString"]
+- ["PSs8Hashable", "init"]
+- ["PSs8Hashable", "nameString"]
+- ["PSs8Hashable", "peripheral"]
+- ["PSs8Hashable", "peripheralDidUpdateName"]
+- ["PSs8Hashable", "peripheralDidUpdateRSSI"]
+- ["PSs8Hashable", "rssi"]
+- ["PSs8Hashable", "serialDataAvailable"]
+- ["PSs8Hashable", "serviceUUIDString"]
+- ["PSs8Hashable", "setBackgroundConnection"]
+- ["PSs8Hashable", ""]
+- !private ["PSs14MirrorPathType", "init"]
+- ["CSo8NSObject", "Array"]
+- ["CSo8NSObject", "Bool"]
+- ["CSo8NSObject", "CBCharacteristic"]
+- ["CSo8NSObject", "CBDescriptor"]
+- ["CSo8NSObject", "CBPeripheral"]
+- ["CSo8NSObject", "CBService"]
+- ["CSo8NSObject", "CBUUID"]
+- ["CSo8NSObject", "DeviceState"]
+- ["CSo8NSObject", "Dictionary"]
+- ["CSo8NSObject", "ID"]
+- ["CSo8NSObject", "Int"]
+- ["CSo8NSObject", "NSUUID"]
+- ["CSo8NSObject", "String"]
+- ["CSo8NSObject", "advDataIsConnectable"]
+- ["CSo8NSObject", "advDataLocalName"]
+- ["CSo8NSObject", "advDataManufacturerData"]
+- ["CSo8NSObject", "advDataOverflowServiceUUIDsKey"]
+- ["CSo8NSObject", "advDataServiceData"]
+- ["CSo8NSObject", "advDataServiceUUIDs"]
+- ["CSo8NSObject", "advDataTxPowerLevel"]
+- ["CSo8NSObject", "advSolicitedServiceUUID"]
+- ["CSo8NSObject", "bbCharacteristics"]
+- ["CSo8NSObject", "bbDescriptors"]
+- ["CSo8NSObject", "bbPeripheral"]
+- ["CSo8NSObject", "bbServices"]
+- ["CSo8NSObject", "bbState"]
+- ["CSo8NSObject", "characteristicsString"]
+- ["CSo8NSObject", "clearRxBuffer"]
+- ["CSo8NSObject", "connectable"]
+- ["CSo8NSObject", "dataLocalNameString"]
+- ["CSo8NSObject", "getRxBufferChar"]
+- ["CSo8NSObject", "idAsString"]
+- ["CSo8NSObject", "init"]
+- ["CSo8NSObject", "nameString"]
+- ["CSo8NSObject", "peripheral"]
+- ["CSo8NSObject", "peripheralDidUpdateName"]
+- ["CSo8NSObject", "peripheralDidUpdateRSSI"]
+- ["CSo8NSObject", "rssi"]
+- ["CSo8NSObject", "serialDataAvailable"]
+- ["CSo8NSObject", "serviceUUIDString"]
+- ["CSo8NSObject", "setBackgroundConnection"]
+- ["CSo8NSObject", ""]
+- ["PSo16NSObjectProtocol", "DeviceState"]
+- ["PSo16NSObjectProtocol", "ID"]
+- !private ["PSo16NSObjectProtocol", "String"]
+- ["PSo16NSObjectProtocol", "advDataIsConnectable"]
+- ["PSo16NSObjectProtocol", "advDataLocalName"]
+- ["PSo16NSObjectProtocol", "advDataManufacturerData"]
+- ["PSo16NSObjectProtocol", "advDataOverflowServiceUUIDsKey"]
+- ["PSo16NSObjectProtocol", "advDataServiceData"]
+- ["PSo16NSObjectProtocol", "advDataServiceUUIDs"]
+- ["PSo16NSObjectProtocol", "advDataTxPowerLevel"]
+- ["PSo16NSObjectProtocol", "advSolicitedServiceUUID"]
+- ["PSo16NSObjectProtocol", "bbCharacteristics"]
+- ["PSo16NSObjectProtocol", "bbDescriptors"]
+- ["PSo16NSObjectProtocol", "bbPeripheral"]
+- ["PSo16NSObjectProtocol", "bbServices"]
+- ["PSo16NSObjectProtocol", "bbState"]
+- ["PSo16NSObjectProtocol", "characteristicsString"]
+- ["PSo16NSObjectProtocol", "clearRxBuffer"]
+- ["PSo16NSObjectProtocol", "connectable"]
+- ["PSo16NSObjectProtocol", "dataLocalNameString"]
+- ["PSo16NSObjectProtocol", "getRxBufferChar"]
+- ["PSo16NSObjectProtocol", "idAsString"]
+- ["PSo16NSObjectProtocol", "init"]
+- ["PSo16NSObjectProtocol", "nameString"]
+- ["PSo16NSObjectProtocol", "peripheral"]
+- ["PSo16NSObjectProtocol", "peripheralDidUpdateName"]
+- ["PSo16NSObjectProtocol", "peripheralDidUpdateRSSI"]
+- ["PSo16NSObjectProtocol", "rssi"]
+- ["PSo16NSObjectProtocol", "serialDataAvailable"]
+- ["PSo16NSObjectProtocol", "serviceUUIDString"]
+- ["PSo16NSObjectProtocol", "setBackgroundConnection"]
+- ["PSo16NSObjectProtocol", ""]
+- !private ["Sq", "deinit"]
+- !private ["PSs16OutputStreamType", "init"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "Array"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "Bool"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "CBCharacteristic"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "CBDescriptor"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "CBPeripheral"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "CBService"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "CBUUID"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "DeviceState"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "Dictionary"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "ID"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "Int"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "NSUUID"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "String"]
-- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "characteristics"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "advDataIsConnectable"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "advDataLocalName"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "advDataManufacturerData"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "advDataOverflowServiceUUIDsKey"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "advDataServiceData"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "advDataServiceUUIDs"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "advDataTxPowerLevel"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "advSolicitedServiceUUID"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "bbCharacteristics"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "bbDescriptors"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "bbPeripheral"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "bbServices"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "bbState"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "characteristicsString"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "clearRxBuffer"]
-- !private ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "connectable"]
-- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "dataLocalName"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "connectable"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "dataLocalNameString"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "deinit"]
-- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "descriptors"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "getRxBufferChar"]
-- !private ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "hardwareID"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "idAsString"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "init"]
-- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "manufacturerData"]
-- !private ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "nameString"]
-- !private ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "rssi"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "nameString"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "peripheral"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "peripheralDidUpdateName"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "peripheralDidUpdateRSSI"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "rssi"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "serialDataAvailable"]
-- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "serviceData"]
-- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "serviceUUID"]
-- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "services"]
+- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "serviceUUIDString"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "setBackgroundConnection"]
-- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "solicitedServiceUUID"]
-- ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "state"]
-- !private ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "txPowerLevel"]
-- !private ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", "uuidString"]
 - ["C19behavioralBluetooth28RemoteBehavioralSerialDevice", ""]
+- ["P19behavioralBluetooth36RemoteBehavioralSerialDeviceDelegate", "update"]
 - ["C19behavioralBluetooth22RemoteBluetoothCentral", "deinit"]
 - ["C19behavioralBluetooth22RemoteBluetoothCentral", "init"]
 - ["C19behavioralBluetooth24RemoteBluetoothLECentral", "deinit"]
 - ["C19behavioralBluetooth24RemoteBluetoothLECentral", "init"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "Array"]
 - ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "CBCharacteristic"]
 - ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "CBDescriptor"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "CBPeripheral"]
 - ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "CBService"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "CBUUID"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "Dictionary"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "Int"]
 - ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "String"]
-- !private ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "characteristics"]
-- !private ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "dataLocalName"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "advDataIsConnectable"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "advDataLocalName"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "advDataManufacturerData"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "advDataOverflowServiceUUIDsKey"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "advDataServiceData"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "advDataServiceUUIDs"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "advDataTxPowerLevel"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "advSolicitedServiceUUID"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "bbCharacteristics"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "bbDescriptors"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "bbPeripheral"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "bbServices"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "characteristicsString"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "dataLocalNameString"]
 - ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "deinit"]
-- !private ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "descriptors"]
 - ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "init"]
-- !private ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "manufacturerData"]
-- !private ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "serviceData"]
-- !private ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "serviceUUID"]
-- !private ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "services"]
-- !private ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "solicitedServiceUUID"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "peripheral"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "peripheralDidUpdateName"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "peripheralDidUpdateRSSI"]
+- ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "serviceUUIDString"]
 - ["C19behavioralBluetooth25RemoteBluetoothPeripheral", "deinit"]
 - ["C19behavioralBluetooth25RemoteBluetoothPeripheral", "init"]
 - ["C19behavioralBluetooth13RemoteCentral", "deinit"]
 - ["C19behavioralBluetooth13RemoteCentral", "init"]
+- ["C19behavioralBluetooth16RemotePeripheral", "Array"]
 - ["C19behavioralBluetooth16RemotePeripheral", "CBCharacteristic"]
 - ["C19behavioralBluetooth16RemotePeripheral", "CBDescriptor"]
+- ["C19behavioralBluetooth16RemotePeripheral", "CBPeripheral"]
 - ["C19behavioralBluetooth16RemotePeripheral", "CBService"]
+- ["C19behavioralBluetooth16RemotePeripheral", "CBUUID"]
+- ["C19behavioralBluetooth16RemotePeripheral", "Dictionary"]
+- ["C19behavioralBluetooth16RemotePeripheral", "Int"]
 - ["C19behavioralBluetooth16RemotePeripheral", "String"]
-- ["C19behavioralBluetooth16RemotePeripheral", "characteristics"]
-- ["C19behavioralBluetooth16RemotePeripheral", "dataLocalName"]
+- ["C19behavioralBluetooth16RemotePeripheral", "advDataIsConnectable"]
+- ["C19behavioralBluetooth16RemotePeripheral", "advDataLocalName"]
+- ["C19behavioralBluetooth16RemotePeripheral", "advDataManufacturerData"]
+- ["C19behavioralBluetooth16RemotePeripheral", "advDataOverflowServiceUUIDsKey"]
+- ["C19behavioralBluetooth16RemotePeripheral", "advDataServiceData"]
+- ["C19behavioralBluetooth16RemotePeripheral", "advDataServiceUUIDs"]
+- ["C19behavioralBluetooth16RemotePeripheral", "advDataTxPowerLevel"]
+- ["C19behavioralBluetooth16RemotePeripheral", "advSolicitedServiceUUID"]
+- ["C19behavioralBluetooth16RemotePeripheral", "bbCharacteristics"]
+- ["C19behavioralBluetooth16RemotePeripheral", "bbDescriptors"]
+- ["C19behavioralBluetooth16RemotePeripheral", "bbPeripheral"]
+- ["C19behavioralBluetooth16RemotePeripheral", "bbServices"]
+- ["C19behavioralBluetooth16RemotePeripheral", "characteristicsString"]
+- ["C19behavioralBluetooth16RemotePeripheral", "dataLocalNameString"]
 - ["C19behavioralBluetooth16RemotePeripheral", "deinit"]
-- ["C19behavioralBluetooth16RemotePeripheral", "descriptors"]
 - ["C19behavioralBluetooth16RemotePeripheral", "init"]
-- ["C19behavioralBluetooth16RemotePeripheral", "manufacturerData"]
-- ["C19behavioralBluetooth16RemotePeripheral", "serviceData"]
-- ["C19behavioralBluetooth16RemotePeripheral", "serviceUUID"]
-- ["C19behavioralBluetooth16RemotePeripheral", "services"]
-- ["C19behavioralBluetooth16RemotePeripheral", "solicitedServiceUUID"]
+- ["C19behavioralBluetooth16RemotePeripheral", "peripheral"]
+- ["C19behavioralBluetooth16RemotePeripheral", "peripheralDidUpdateName"]
+- ["C19behavioralBluetooth16RemotePeripheral", "peripheralDidUpdateRSSI"]
+- ["C19behavioralBluetooth16RemotePeripheral", "serviceUUIDString"]
 - ["C19behavioralBluetooth16RemotePeripheral", ""]
+- !private ["PSs10Streamable", "init"]
+- !private ["SS", "init"]
+- !private ["PSs30StringInterpolationConvertible", "init"]
+- !private ["PSs24StringLiteralConvertible", "init"]
+- !private ["PSs31UnicodeScalarLiteralConvertible", "init"]
+- !private ["PSs49_BuiltinExtendedGraphemeClusterLiteralConvertible", "init"]
+- !private ["PSs32_BuiltinStringLiteralConvertible", "init"]
+- !private ["PSs37_BuiltinUTF16StringLiteralConvertible", "init"]
+- !private ["PSs39_BuiltinUnicodeScalarLiteralConvertible", "init"]
+- !private ["PSs21_ObjectiveCBridgeable", "init"]
+- !private ["PSs12_Reflectable", "init"]
 depends-nominal:
 - "PSs9AnyObject"
+- "PSo20CBPeripheralDelegate"
+- "PSs11CVarArgType"
+- !private "PSs10Comparable"
+- !private "PSs28CustomDebugStringConvertible"
+- "PSs23CustomStringConvertible"
 - "C19behavioralBluetooth11DeviceState"
+- "PSs9Equatable"
+- !private "PSs41ExtendedGraphemeClusterLiteralConvertible"
+- "PSs8Hashable"
+- !private "PSs14MirrorPathType"
+- "CSo8NSObject"
+- "PSo16NSObjectProtocol"
+- !private "Sq"
+- !private "PSs16OutputStreamType"
 - "C19behavioralBluetooth28RemoteBehavioralSerialDevice"
+- "P19behavioralBluetooth36RemoteBehavioralSerialDeviceDelegate"
 - "C19behavioralBluetooth22RemoteBluetoothCentral"
 - "C19behavioralBluetooth24RemoteBluetoothLECentral"
 - "C19behavioralBluetooth27RemoteBluetoothLEPeripheral"
 - "C19behavioralBluetooth25RemoteBluetoothPeripheral"
 - "C19behavioralBluetooth13RemoteCentral"
 - "C19behavioralBluetooth16RemotePeripheral"
+- !private "PSs10Streamable"
+- !private "SS"
+- !private "PSs30StringInterpolationConvertible"
+- !private "PSs24StringLiteralConvertible"
+- !private "PSs31UnicodeScalarLiteralConvertible"
+- !private "PSs49_BuiltinExtendedGraphemeClusterLiteralConvertible"
+- !private "PSs32_BuiltinStringLiteralConvertible"
+- !private "PSs37_BuiltinUTF16StringLiteralConvertible"
+- !private "PSs39_BuiltinUnicodeScalarLiteralConvertible"
+- !private "PSs21_ObjectiveCBridgeable"
+- !private "PSs12_Reflectable"
 depends-dynamic-lookup:
 depends-external:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/Swift.swiftmodule"
@@ -142,4 +486,4 @@ depends-external:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/CoreImage.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/CoreBluetooth.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/CoreData.swiftmodule"
-interface-hash: "4a88abc5645fd14813ca5d4d496f9e62"
+interface-hash: "839efb8d10f95149c2d38e92dad3d831"
