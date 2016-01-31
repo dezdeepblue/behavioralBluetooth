@@ -1,5 +1,5 @@
 # behavioralBluetooth
-CoreBluetooth redefinition which is behaviorally based.
+Behaviorally based redefinition of CoreBluetooth.
 
 [Documentation](http://ladvien.github.io/jazzy/behavioralBluetooth/index.html)
 
