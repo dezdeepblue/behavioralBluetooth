@@ -30,13 +30,12 @@ var myRemote = RemoteBluetoothLEPeripheral()
 
 func searchTimerExpired() {
   // Look up a discovered remote device by its advertized name.
-  if let deviceID = myLocal.discoveredDeviceIdByName["HMSoft"]{
-      if let foundRemote = myLocal.discoveredPeripherals[deviceID] {
-          myRemote = foundRemote
-      }
+  if let foundRemote = myLocal.getDiscoveredRemoteDeviceByName("HMSoft"){
+      myRemote = foundRemote
       // Connect to the device, returning true if successful.
-      let didConnect = myLocal.connectToDevice(deviceID)
+      let didConnect = myLocal.connectToDevice(myRemote)
   }
+}
 ```
 
 [Documentation](http://ladvien.github.io/jazzy/behavioralBluetooth/index.html)
