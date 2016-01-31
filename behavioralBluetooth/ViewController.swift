@@ -15,8 +15,11 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         myLocal.delegate = self
-        myLocal.verboseOutput = true
-        myLocal.retriesOnDisconnect = 3
+
+        myLocal.reconnectOnDisconnect(tries: 3, timeBetweenTries: 1.5)
+        myLocal.reconnectOnFail(tries: 3, timeBetweenTries: 2)
+        myLocal.discoverAdvertizingDataOnSearch = false
+        print(myLocal.getNumberOfDiscoveredDevices())
         myLocal.search(2)
         
 
@@ -30,9 +33,23 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
     }
     
     func searchTimerExpired() {
+        
         if let deviceID = myLocal.discoveredDeviceIdByName["HMSoft"]{
-            myLocal.connectToDevice(deviceID)
+            if let foundRemote = myLocal.discoveredPeripherals[deviceID] {
+                myRemote = foundRemote
+            }
+            let didConnect = myLocal.connectToDevice(deviceID)
+            print(didConnect)
         }
+        
+       for name in myLocal.discoveredPeripheralNames {
+            print("Found device named: " + name)
+        }
+        
+        if let connectable = myRemote.connectable {
+            print("Is connectable" + String(connectable))
+        }
+        print(myLocal.getNumberOfDiscoveredDevices())
     }
     
     func connectedToDevice() {
@@ -40,7 +57,7 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
     }
 
     override func viewDidDisappear(animated: Bool) {
-myLocal.disconnectFromPeriphera(myLocal.discoveredDeviceIdByName["HMSoft"]!)
+myLocal.disconnectFromPeripheral(myLocal.discoveredDeviceIdByName["HMSoft"]!)
     }
 }
 
