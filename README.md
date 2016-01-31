@@ -7,7 +7,7 @@ I am pushing the design of the module to be behavior based.  I'm not sure this i
 
 It's an expirement!
 
-[Documentation](http://ladvien.github.io/jazzy/behavioralBluetooth/index.html)
+
 
 ```swift
 // Create an object acting as an iOS central BLE device.
@@ -23,6 +23,7 @@ myLocalBLE.search(2)
 ```
 
 If a remote device is discovered, let's connect,
+
 ```swift
 // Create an object representing a remote peripheral of interest.
 var myRemote = RemoteBluetoothLEPeripheral()
@@ -38,6 +39,7 @@ func searchTimerExpired() {
   }
 ```
 
+[Documentation](http://ladvien.github.io/jazzy/behavioralBluetooth/index.html)
 
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
