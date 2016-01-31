@@ -7,72 +7,37 @@ I am pushing the design of the module to be behavior based.  I'm not sure this i
 
 It's an expirement!
 
-
-
-```swift
-// Create an object acting as an iOS central BLE device.
-var myLocalBLE = LocalBluetoothLECentral()
-
-// Tells the iOS BLE to attempt to retry connecting 3 times, with 1.5
-// seconds inbetween attempts.
-myLocalBLE.reconnectOnDisconnect(tries: 3, timeBetweenTries: 1.5)
-// Instructs the iOS BLE to gather advertizing data on search
-myLocalBLE.discoverAdvertizingDataOnSearch = false
-// Tells the iOS BLE to search for peripherals for two seconds.
-myLocalBLE.search(2)
-```
-
-If a remote device is discovered, let's connect,
-
-```swift
-// Create an object representing a remote peripheral of interest.
-var myRemote = RemoteBluetoothLEPeripheral()
-
-func searchTimerExpired() {
-  // Look up a discovered remote device by its advertized name.
-  if let foundRemote = myLocal.getDiscoveredRemoteDeviceByName("HMSoft"){
-      myRemote = foundRemote
-      // Connect to the device, returning true if successful.
-      let didConnect = myLocal.connectToDevice(myRemote)
-  }
-}
-```
-
 The full code to get connected to a remote device would be,
 ```swift
 import UIKit
 
 class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
-    var myLocal = LocalBluetoothLECentral()
-    var myRemote = RemoteBluetoothLEPeripheral()
+  var myLocal = LocalBluetoothLECentral()
+  var myRemote = RemoteBluetoothLEPeripheral()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        myLocal.delegate = self
-
-        myLocal.reconnectOnDisconnect(tries: 3, timeBetweenTries: 1.5)
-        myLocal.reconnectOnFail(tries: 3, timeBetweenTries: 2)
-        myLocal.discoverAdvertizingDataOnSearch = false
-        myLocal.verboseOutput = true
-        myLocal.search(2)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+  override func viewDidLoad() {
+    super.viewDidLoad()
     
-    func searchTimerExpired() {
-        
-        if let foundRemote = myLocal.getDiscoveredRemoteDeviceByName("HMSoft"){
-            myRemote = foundRemote
-            myLocal.connectToDevice(myRemote)
-        }
-        
-        if let connectable = myRemote.connectable {
-            print("Is connectable" + String(connectable))
-        }
+    // Attach the delegate to ViewController.
+    myLocal.delegate = self
+
+    // Tells the iOS BLE to attempt to retry connecting 3 times, with 1.5
+    // seconds inbetween attempts.
+    myLocalBLE.reconnectOnDisconnect(tries: 3, timeBetweenTries: 1.5)
+    // Instructs the iOS BLE to gather advertizing data on search
+    myLocalBLE.discoverAdvertizingDataOnSearch = false
+    // Tells the iOS BLE to search for peripherals for two seconds.
+    myLocalBLE.search(2)
+  }
+  
+  func searchTimerExpired() {
+    // Look up a discovered remote device by its advertized name.
+    if let foundRemote = myLocal.getDiscoveredRemoteDeviceByName("HMSoft"){
+        myRemote = foundRemote
+        // Connect to the device, returning true if successful.
+        let didConnect = myLocal.connectToDevice(myRemote)
     }
+  }
 }
 ```
 
