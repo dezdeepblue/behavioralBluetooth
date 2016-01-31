@@ -38,6 +38,44 @@ func searchTimerExpired() {
 }
 ```
 
+The full code to get connected to a remote device would be,
+```swift
+import UIKit
+
+class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
+    var myLocal = LocalBluetoothLECentral()
+    var myRemote = RemoteBluetoothLEPeripheral()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        myLocal.delegate = self
+
+        myLocal.reconnectOnDisconnect(tries: 3, timeBetweenTries: 1.5)
+        myLocal.reconnectOnFail(tries: 3, timeBetweenTries: 2)
+        myLocal.discoverAdvertizingDataOnSearch = false
+        myLocal.verboseOutput = true
+        myLocal.search(2)
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    func searchTimerExpired() {
+        
+        if let foundRemote = myLocal.getDiscoveredRemoteDeviceByName("HMSoft"){
+            myRemote = foundRemote
+            myLocal.connectToDevice(myRemote)
+        }
+        
+        if let connectable = myRemote.connectable {
+            print("Is connectable" + String(connectable))
+        }
+    }
+}
+```
+
 [Documentation](http://ladvien.github.io/jazzy/behavioralBluetooth/index.html)
 
 
