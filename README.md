@@ -1,7 +1,7 @@
 # behavioralBluetooth
 Behaviorally based redefinition of CoreBluetooth.
 
-CoreBluetooth is amazing! It's good times, for real.  Sadly, it is lacks a few features I find very useful when dealing with lesser devices such as the HM-10.  For example, a search which is based on a specific amount.  Of course, it's fairly easy to implement these features, but I got tired of rewriting the same helpers over-and-over.
+CoreBluetooth is amazing! It's good times, for real.  Sadly, it is lacks a few features I find very useful when dealing with lesser devices such as the HM-10.  For example, a search which is based on a timer.  Of course, it's fairly easy to implement these features, but I got tired of rewriting the same helpers over-and-over.
 
 I am pushing the design of the module to be behavior based.  I'm not sure this is the correct term, but it does describe what I am trying to accomplish.  Often, I want to switch how the iOS BLE device acts, these "behaviors" are really all I care about.  Well, that and actually getting data from the iOS to a nearby microcontroller.  Anyway, I decided to try and focus on getting these desired behaviors out the iOS device, rather than conforming to sound OO code.
 
