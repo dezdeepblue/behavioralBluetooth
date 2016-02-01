@@ -57,6 +57,17 @@ for(var i = 0; i < sortedDeviceArrayByRSSI.nsuuids.count; i++){
 }
 
 ```
+Outputs,
+```
+HMSoft
+NSUUID: 8BF37705-5698-8306-F8CF-5203D6DB16C9
+	RSSI: -72
+Apple TV
+NSUUID: A311FF27-FD16-8F62-971E-FEB023B0EA96
+	RSSI: 127
+Apple TV
+NSUUID: C35327C8-D
+```
 
 [Documentation](http://ladvien.github.io/jazzy/behavioralBluetooth/index.html)
 [Waka Report](https://wakatime.com/@ladvien/projects/ysdncpuqyt?start=2016-01-25&end=2016-01-31)
