@@ -58,7 +58,8 @@ for(var i = 0; i < sortedDeviceArrayByRSSI.nsuuids.count; i++){
 }
 
 ```
-Outputs,
+
+Console output,
 ```
 Apple TV
 NSUUID: C35327C8-DAEE-0959-C047-F0D9B02ED90C
@@ -77,6 +78,7 @@ NSUUID: 12FE30E7-9DA0-A791-B9E4-F618CB4482C9
 myLocal.verboseOutput(true)
 ```
 
+Console output,
 ```
 Started search with 2.0 sec timeout
 Searching for BLE Devices
