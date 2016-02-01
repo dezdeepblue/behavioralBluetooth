@@ -59,14 +59,15 @@ for(var i = 0; i < sortedDeviceArrayByRSSI.nsuuids.count; i++){
 ```
 Outputs,
 ```
-HMSoft
-NSUUID: 8BF37705-5698-8306-F8CF-5203D6DB16C9
-	RSSI: -72
+Apple TV
+NSUUID: C35327C8-DAEE-0959-C047-F0D9B02ED90C
+	RSSI: -85
 Apple TV
 NSUUID: A311FF27-FD16-8F62-971E-FEB023B0EA96
-	RSSI: 127
-Apple TV
-NSUUID: C35327C8-D
+	RSSI: -87
+Unknown_0
+NSUUID: 12FE30E7-9DA0-A791-B9E4-F618CB4482C9
+	RSSI: -95
 ```
 
 [Documentation](http://ladvien.github.io/jazzy/behavioralBluetooth/index.html)
