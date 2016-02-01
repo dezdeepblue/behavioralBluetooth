@@ -42,7 +42,7 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
 }
 ```
 
-##Fun features!
+## Functions and Behaviors
 
 ### List of Devices sorted by RSSI
 
