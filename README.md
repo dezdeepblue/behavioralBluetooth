@@ -5,8 +5,9 @@ CoreBluetooth is amazing! It's good times, for real.  Sadly, it is lacks a few f
 
 I am pushing the design of the module to be behavior based.  I'm not sure this is the correct term, but it does describe what I am trying to accomplish.  Often, I want to switch how the iOS BLE device acts, these "behaviors" are really all I care about.  Well, that and actually getting data from the iOS to a nearby microcontroller.  Anyway, I decided to try and focus on getting these desired behaviors out the iOS device, rather than conforming to sound OO code.
 
-It's an expirement!
+## It's an expirement!
 
+### Getting Started
 The full code to get connected to a remote device would be,
 ```swift
 import UIKit
@@ -41,7 +42,7 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
 }
 ```
 
-Fun features!
+##Fun features!
 
 Provide a list of devices sorted by RSSI,
 
