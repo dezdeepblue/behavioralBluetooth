@@ -7,7 +7,7 @@ I am pushing the design of the module to be behavior based.  I'm not sure this i
 
 ## It's an expirement!
 
-### Getting Started
+## Getting Started
 The full code to get connected to a remote device would be,
 ```swift
 import UIKit
@@ -44,7 +44,7 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
 
 ##Fun features!
 
-Provide a list of devices sorted by RSSI,
+### List of Devices sorted by RSSI
 
 ```swift
 let sortedDeviceArrayByRSSI = myLocal.getAscendingSortedArraysBasedOnRSSI()
@@ -70,6 +70,26 @@ Unknown_0
 NSUUID: 12FE30E7-9DA0-A791-B9E4-F618CB4482C9
 	RSSI: -95
 ```
+
+### Debug Output
+
+``` swift 
+myLocal.verboseOutput(true)
+```
+
+```
+Started search with 2.0 sec timeout
+Searching for BLE Devices
+didDiscoverPeripheral A311FF27-FD16-8F62-971E-FEB023B0EA96
+didDiscoverPeripheral 8BF37705-5698-8306-F8CF-5203D6DB16C9
+didDiscoverPeripheral C35327C8-DAEE-0959-C047-F0D9B02ED90C
+didDiscoverPeripheral 12FE30E7-9DA0-A791-B9E4-F618CB4482C9
+Attempting to connect to: HMSoft
+setConnectedDevice
+didConnectToPeripheral: 8BF37705-5698-8306-F8CF-5203D6DB16C9
+didDiscoverServices: FFE0
+```
+
 
 [Documentation](http://ladvien.github.io/jazzy/behavioralBluetooth/index.html)
 [Waka Report](https://wakatime.com/@ladvien/projects/ysdncpuqyt?start=2016-01-25&end=2016-01-31)
