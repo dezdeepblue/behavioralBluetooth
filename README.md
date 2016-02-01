@@ -41,6 +41,23 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
 }
 ```
 
+Fun features!
+
+Provide a list of devices sorted by RSSI,
+
+```swift
+let sortedDeviceArrayByRSSI = myLocal.getAscendingSortedArraysBasedOnRSSI()
+
+for(var i = 0; i < sortedDeviceArrayByRSSI.nsuuids.count; i++){
+    if let name = myLocal.getDeviceName(sortedDeviceArrayByRSSI.nsuuids[i]){
+        print(name)
+    }
+    print("NSUUID: " + String(sortedDeviceArrayByRSSI.nsuuids[i].UUIDString) 
+    + "\n\tRSSI: " + String(sortedDeviceArrayByRSSI.rssies[i]))
+}
+
+```
+
 [Documentation](http://ladvien.github.io/jazzy/behavioralBluetooth/index.html)
 [Waka Report](https://wakatime.com/@ladvien/projects/ysdncpuqyt?start=2016-01-25&end=2016-01-31)
 
