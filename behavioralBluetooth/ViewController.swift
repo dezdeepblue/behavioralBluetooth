@@ -19,45 +19,35 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
         myLocal.reconnectOnDisconnect(tries: 3, timeBetweenTries: 1.5)
         myLocal.reconnectOnFail(tries: 3, timeBetweenTries: 2)
         myLocal.discoverAdvertizingDataOnSearch = false
-        print(myLocal.getNumberOfDiscoveredDevices())
+        myLocal.verboseOutput = true
         myLocal.search(2)
-        
-
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-
-
     }
     
     func searchTimerExpired() {
         
-        if let deviceID = myLocal.discoveredDeviceIdByName["HMSoft"]{
-            if let foundRemote = myLocal.discoveredPeripherals[deviceID] {
-                myRemote = foundRemote
+        // Get a list of devices sorted by RSSI.
+        let sortedDeviceArrayByRSSI = myLocal.getAscendingSortedArraysBasedOnRSSI()
+        // Print the list.
+        for(var i = 0; i < sortedDeviceArrayByRSSI.nsuuids.count; i++){
+            if let name = myLocal.getDeviceName(sortedDeviceArrayByRSSI.nsuuids[i]){
+                print(name)
             }
-            let didConnect = myLocal.connectToDevice(deviceID)
-            print(didConnect)
+            print("NSUUID: " + String(sortedDeviceArrayByRSSI.nsuuids[i].UUIDString) + "\n\tRSSI: " + String(sortedDeviceArrayByRSSI.rssies[i]))
         }
         
-       for name in myLocal.discoveredPeripheralNames {
-            print("Found device named: " + name)
+        if let foundRemote = myLocal.getDiscoveredRemoteDeviceByName("HMSoft"){
+            myRemote = foundRemote
+            myLocal.connectToDevice(myRemote)
         }
         
         if let connectable = myRemote.connectable {
             print("Is connectable" + String(connectable))
         }
-        print(myLocal.getNumberOfDiscoveredDevices())
-    }
-    
-    func connectedToDevice() {
-
-    }
-
-    override func viewDidDisappear(animated: Bool) {
-myLocal.disconnectFromPeripheral(myLocal.discoveredDeviceIdByName["HMSoft"]!)
     }
 }
 

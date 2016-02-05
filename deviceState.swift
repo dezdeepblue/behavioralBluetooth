@@ -9,12 +9,18 @@
 import Foundation
 import CoreBluetooth
 
-public class DeviceState {
-    
-    enum connectionStatuses: Int {
-        case disconnected = 1
-        
-    }
-    var connections: Int?
-    var connectionStatus: connectionStatuses?
+enum DeviceState: Int {
+    case unknown = 0,
+    disconnected,
+    failedToConnect,
+    purposefulDisconnect,
+    lostConnection,
+    connecting,
+    connected,
+    scanning,
+    off,
+    idle,
+    resetting,
+    unsupported,
+    unauthorized
 }

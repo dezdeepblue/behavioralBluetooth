@@ -20,12 +20,17 @@ import CoreBluetooth
 public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDeviceDelegate {
     
     // Device lists
-    public var discoveredDeviceList: Dictionary<NSUUID, RemoteBehavioralSerialDevice> = [:]
-    public var discoveredDeviceIdByName: Dictionary<String, NSUUID> = [:]
+    private var discoveredDeviceList: Dictionary<NSUUID, RemoteBehavioralSerialDevice> = [:]
+    internal var connectedRemotes: Dictionary<NSUUID, RemoteBehavioralSerialDevice> = [:]
+    
+    // Discovered Device handles
+    private var discoveredDeviceIdByName: Dictionary<String, NSUUID> = [:]
+    private var discoveredDeviceNameById: Dictionary<NSUUID, String> = [:]
+    internal var discoveredDeviceIdArray: Array<NSUUID> = []
+    internal var discoveredDeviceRSSIArray: Array<Int> = []
     
     // Device information
-    private var connectedRemotes: Dictionary<NSUUID, RemoteBehavioralSerialDevice> = [:]
-    public var state = DeviceState()
+    internal var deviceState = DeviceState.unknown
     public var hardwareID: NSUUID?
     public var lastConnectedDevice: NSUUID?
     public var allowConnectionInBackground: Bool = false
@@ -33,13 +38,13 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     public var purposefulDisconnect = false
     
     // Behavioral
-    private var connectionsLimit: Int = 1
-    private var retriesAfterConnectionFail: Int = 1
-    private var retriesOnDisconnect: Int = 1
-    private var verboseOutput = false
+    internal var connectionsLimit: Int = 1
+    internal var retriesAfterConnectionFail: Int = 1
+    internal var retriesOnDisconnect: Int = 1
+    internal var verboseOutput = false
     // Behavioral: Durations.
-    private var searchTimeout: Double = 1.0
-    private var reconnectTimerDuration: Double = 1.0
+    internal var searchTimeout: Double = 1.0
+    internal var reconnectTimerDuration: Double = 1.0
     public var timeBeforeAttemptingReconnectOnConnectionFail: Double = 0.5
     public var timeBeforeAttemptingReconnectOnDisconnect: Double = 0.5
     // Behavioral: Indexes
@@ -49,16 +54,12 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     
     // Delegate for search updates.
     var delegate:LocalBehavioralSerialDeviceDelegate? = nil
-    
-    //  CoreBluetooth Classes
-    private var activeCentralManager = CBCentralManager()
-    private var activePeripheralManager = CBPeripheralManager()
-    private var lastConnectedPeripheralNSUUID: NSUUID?
+    internal var lastConnectedPeripheralNSUUID: NSUUID?
     
     // Search properities.
-    private var searchComplete: Bool = false
-    private var searchTimeoutTimer: NSTimer = NSTimer()
-    private var reconnectTimer: NSTimer = NSTimer()
+    internal var searchComplete: Bool = false
+    internal var searchTimeoutTimer: NSTimer = NSTimer()
+    internal var reconnectTimer: NSTimer = NSTimer()
 
     
     override init(){
@@ -69,7 +70,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
         
     }
     
-    func debugOutput(output: String){
+    internal func debugOutput(output: String){
         if(verboseOutput){
             print(output)
         }
@@ -86,12 +87,82 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
         debugOutput("setConnectedDevice")
     }
     
-    public func getDeviceIdByName(name: String)->NSUUID{
-        if let deviceID = discoveredDeviceIdByName[name]{
-             return deviceID
-        }
-        return NSUUID()
+    // #MARK: Get Device Handles
+    /**
+    ### Get the a discovered device's NSUUID using its name.
+    - parameter name: A string object which should be the name of device.
+    */
+    public func getDeviceIdByName(name: String)->NSUUID?{
+        return discoveredDeviceIdByName[name]
     }
+    
+    /**
+     ### Return a RemoteBehavioralSerialDevice object by passing the method the device of interest's NSUUID.  This object is optional and must be unwrapped upon receiving.
+     - parameter NSUUID: The NSUUID object used to identify the RemoteBehavioralSerialDevice object.
+     */
+    public func getDiscoveredRemoteDeviceByID(deviceNSUUID: NSUUID)->RemoteBehavioralSerialDevice?{
+        return discoveredDeviceList[deviceNSUUID]
+    }
+
+    /**
+     ### Return a RemoteBehavioralSerialDevice object by passing the method the device of interest's String name.  This object is optional and must be unwrapped upon receiving.
+     - parameter name: The string object used to identify the RemoteBehavioralSerialDevice object.
+     */
+    public func getDiscoveredRemoteDeviceByName(name: String)->RemoteBehavioralSerialDevice?{
+        if let deviceID = discoveredDeviceIdByName[name]{
+            return discoveredDeviceList[deviceID]
+        }
+        return nil
+    }
+    
+    /**
+     Returns number of discovered devices
+     
+     ```swift
+     if(bbObject.getNumberOfDiscoveredDevices() > 0){
+     connectDevice()
+     }
+     ```
+     
+     */
+    public func getNumberOfDiscoveredDevices()->Int{
+        // #MARK: UNUSED
+        debugOutput("getNumberOfDiscoveredDevices: " + String(discoveredDeviceList.count))
+        return discoveredDeviceList.count
+    }
+    
+    /**
+     Provides the name of a particular discovered device as a String object.
+     
+     ```swift
+     println(getDeviceName(myDeviceNSUUID))
+     ```
+     
+     ```xml
+     Output: myDevice
+     ```
+     
+     */
+    public func getDeviceName(deviceOfInterest: NSUUID)->String?{
+        return discoveredDeviceList[deviceOfInterest]?.getDeviceName()
+    }
+    
+    /**
+     Returns the local device's [NSUUID](http://nshipster.com/uuid-udid-unique-identifier/) as a String object.
+     
+     ```swift
+     println(getDeviceUUIDAsString(myDeviceNSUUID)
+     ```
+     
+     ```xml
+     Output: BE5BA3D0-971C-4418-9ECF-E2D1ABCB66BE
+     ```
+     
+     */
+    public func getDeviceUUIDAsString(deviceOfInterest: NSUUID)->String?{
+        return hardwareID?.UUIDString
+    }
+
     
     // #MARK: Behavioral Mutators
     /**
@@ -100,6 +171,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      */
     public func setBackgroundConnection(enabled: Bool){
         allowConnectionInBackground = enabled
+        // #MARK: UNIMP
         debugOutput("setBackgroundConnection")
     }
     
@@ -113,7 +185,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     }
     
     /**
-    ###Controls automatica reconnect behavior.  If this option is set to true, the local device will attempt to automatically reconnect to all remote devices which lose connection.
+    ###Controls automatic reconnect behavior.  If this option is set to true, the local device will attempt to automatically reconnect to all remote devices which lose connection.
     - parameter enabled: Should the reconnection be attempted.
     - parameter tries: An integer representing how many attempts should be made to reconnect before foreiting the connection.
     - parameter timeBetweenTries: Double representing how long of a delay is made before another attempt to reconnect is made.
@@ -137,22 +209,14 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     }
 
     /**
-     ###Attempts to last connected device, without discovery.
+     ###Attempts to connect to last connected device, without discovery.
      */
     public func connectToLastConnected(){
         debugOutput("connectToLastConnected")
-        // #MARK: UNUSED
+        // #MARK: UNIMP
     }
     
     // #MARK: Read and Write
-    
-    /**
-     ###Writes data to a particular RemoteDevice
-     */
-    public func writeToDevice(deviceOfInterest: NSUUID, data: String){
-        debugOutput("writeToDevice")
-                // #MARK: UNUSED
-    }
     
     /**
      ###Clears all received data for a particular device from its respective local buffer.  Each remote device has its own received buffer contained within the LocalDevice object.
@@ -185,83 +249,6 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     }
     
     // #MARK: Discovered but not Connected Info
-    /**
-    Returns a Dictionary object of discovered peripheral devices.
-    */
-    public func bbDeviceByIdDictionary()->Dictionary<NSUUID, RemoteBehavioralSerialDevice>{
-                // #MARK: UNUSED
-        debugOutput("getdiscoveredDeviceDictionary has #" + String(discoveredDeviceList.count) + " items")
-        return discoveredDeviceList
-    }
-    
-    /**
-    Returns number of discovered devices
-    
-    ```swift
-    if(bbObject.getNumberOfDiscoveredDevices() > 0){
-        connectDevice()
-    }
-    ```
-    
-    */
-    public func getNumberOfDiscoveredDevices()->Int{
-                // #MARK: UNUSED
-        debugOutput("getNumberOfDiscoveredDevices: " + String(discoveredDeviceList.count))
-        return discoveredDeviceList.count
-    }
-    
-    /**
-    Returns the discovered devices as an array.
-    */
-    public func bbDeviceByIdArray()->Array<NSUUID>{
-                // #MARK: UNUSED
-        let deviceListArray = Array(discoveredDeviceList.keys)
-        return deviceListArray
-    }
-    
-    /**
-    Provides the name of a particular discovered device as a String object.
-
-     ```swift
-    println(getDeviceName(myDeviceNSUUID))
-    ```
-     
-    ```xml
-    Output: myDevice
-    ```
-     
-    */
-    public func getDeviceName(deviceOfInterest: NSUUID)->String{
-        if let deviceName = discoveredDeviceList[deviceOfInterest]?.nameString {
-                    // #MARK: UNUSED
-            return deviceName
-        }
-        else {
-            return ""
-        }
-    }
-    
-    /**
-     Returns the device's [NSUUID](http://nshipster.com/uuid-udid-unique-identifier/) as a String object.
-     
-     ```swift
-     println(getDeviceUUIDAsString(myDeviceNSUUID)
-     ```
-     
-     ```xml
-     Output: BE5BA3D0-971C-4418-9ECF-E2D1ABCB66BE
-     ```
-     
-    */
-    public func getDeviceUUIDAsString(deviceOfInterest: NSUUID)->String{
-        if let hardwareID = discoveredDeviceList[deviceOfInterest]?.idAsString(){
-                    // #MARK: UNUSED
-            return hardwareID
-        }
-        else {
-            return ""
-        }
-    }
     
     /**
      Returns the device of interest's [Radio Signal Strength Indicator (RSSI)](https://en.wikipedia.org/wiki/Received_signal_strength_indication) as an integer.
@@ -289,8 +276,9 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     }
     
     
-    private func discoveredDeviceRSSIDictionary()->Dictionary<NSUUID, Int>{
-                // #MARK: UNUSED
+    public func getDiscoveredDeviceByRSSIDictionary()->Dictionary<NSUUID, Int>{
+        
+        
         let arrayOfDevices = Array(discoveredDeviceList.keys)
         var dict: Dictionary<NSUUID, Int>?
         for key in arrayOfDevices {
@@ -318,22 +306,21 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      ```
      
      */
-    private func getAscendingSortedArraysBasedOnRSSI()-> (nsuuids: Array<NSUUID>, rssies: Array<NSNumber>){
+    public func getAscendingSortedArraysBasedOnRSSI()-> (nsuuids: Array<NSUUID>, rssies: Array<NSNumber>){
                 // #MARK: UNUSED
-        let discoveredDeviceListRSSI: Dictionary<NSUUID, Int> = discoveredDeviceRSSIDictionary()
         
         // Bubble-POP! :)
-        var rssies = Array(discoveredDeviceListRSSI.values)
-        var nsuuids = Array(discoveredDeviceListRSSI.keys)
-        let countOfKeys = discoveredDeviceListRSSI.keys.count
+        var rssies = discoveredDeviceRSSIArray
+        var nsuuids = discoveredDeviceIdArray
+        let itemCount = discoveredDeviceIdArray.count
         
         var x = 0
         var y = 0
         //var bubblePop = true
         
-        while(x < countOfKeys)
+        while(x < itemCount)
         {
-            while(y < countOfKeys - 1)
+            while(y < itemCount - 1)
             {
                 if(Int(rssies[y]) < Int(rssies[y+1]))
                 {
@@ -356,13 +343,13 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     /**
      Returns the full Behavioral DeviceState object.
      */
-    public func getDeviceState()->DeviceState{
+    internal func getDeviceState()->DeviceState{
         // Provide the raw state of the device.
                 // #MARK: UNUSED
-        return self.state
+        return DeviceState.unknown
     }
     
-    @objc private func searchTimerExpire(){
+    @objc internal func searchTimerExpire(){
         searchTimeoutTimer.invalidate()
         searchComplete = true
 
@@ -385,12 +372,12 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     }
     
     
-    private func clearDiscoveredDevices(){
+    internal func clearDiscoveredDevices(){
         // Device descriptors for discovered devices.
         discoveredDeviceList.removeAll()
     }
 
-    private func clearConnectedDevices(){
+    internal func clearConnectedDevices(){
         discoveredDeviceList.removeAll()
     }
     
@@ -399,7 +386,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
         // Check to make sure we're done searching, then print the all devices info.
     if(searchComplete){
             for ID in discoveredDeviceList.keys {
-                if let name = discoveredDeviceList[ID]?.nameString{
+                if let name = discoveredDeviceList[ID]?.getDeviceName(){
                     print("Device UUID: \(name)")
                 }
                 if let thisUUID = discoveredDeviceList[ID]?.idAsString() {
@@ -431,376 +418,6 @@ public class LocalBluetoothCentral: LocalPeripheral {
     
 }
 
-// #MARK: Bluetooth Low Energy
-/// ##The Local Bluetooth LE Object
-public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate, CBPeripheralDelegate {
-    
-    var connectedPeripherals: Dictionary<NSUUID, RemoteBluetoothLEPeripheral> = [:]
-    public var discoveredPeripherals: Dictionary<NSUUID, RemoteBluetoothLEPeripheral> = [:]
-    public var discoveredPeripheralNames: Array<String> = [""]
-    
-    // Behavioral: Variables.
-    var discoverAdvertizingDataOnSearch: Bool = false;
-    
-    // Behavioral: Methods.
-    func obtainAdvertizingDataOnConnect(enable: Bool){
-        discoverAdvertizingDataOnSearch = enable
-    }
-    
-    // #MARK: Remote Device update delegate method
-    /**
-    Delegate method called from Remote objects.
-    - parameter more on this later: more on this later.
-    */
-    override func update() {
-        //
-    }
-    
-    
-    // #MARK: Central Manager init.
-    /**
-    ###Updates the the state of the Local Bluetooth LE device.
-    - parameter
-    */
-    public func centralManagerDidUpdateState(central: CBCentralManager) {
-        
-        // Make sure the BLE device is on.
-        switch activeCentralManager.state {
-        case CBCentralManagerState.Unknown:
-            print("Unknown")
-            //self.state = central.state.rawValue
-            break
-        case CBCentralManagerState.Resetting:
-            print("Resetting")
-            break
-        case CBCentralManagerState.Unsupported:
-            print("Unsupported")
-            break
-        case CBCentralManagerState.Unauthorized:
-            print("Unauthorized")
-            break
-        case CBCentralManagerState.PoweredOff:
-            print("PoweredOff")
-            break
-        case CBCentralManagerState.PoweredOn:
-            // Scan for peripherals if BLE is turned on
-            central.scanForPeripheralsWithServices(nil, options: nil)
-            print("Searching for BLE Devices")
-            break
-        }
-    }
-    
-    // #MARK: Connect to device
-    /**
-    Requests the Local Device connect to a Bluetooth LE Remote device of interest.  The call will assure a connection to the particular device doesn't exist.  If the `connectionsLimit` has not been reached.
-    */
-    func connectToDevice(deviceNSUUID: NSUUID) -> Bool {
-        
-        // Remember NSUUID
-        lastConnectedPeripheralNSUUID = deviceNSUUID
-        
-        // Check if if we have discovered anything, if so, make sure we are not already connected.
-        if(discoveredDeviceList.isEmpty || alreadyConnected(deviceNSUUID)){
-            print("Already connected, silly")
-            return false
-        }
-        else {
-            if(connectedRemotes.count < connectionsLimit){
-                if let peripheralToConnect = discoveredPeripherals[deviceNSUUID]?.bbPeripheral{
-                   
-                    if let connectedRemoteSerialDevice = discoveredDeviceList[deviceNSUUID] {
-                        setConnectedDevice(deviceNSUUID, device: connectedRemoteSerialDevice)
-                    }
-                    
-                    activeCentralManager.connectPeripheral(peripheralToConnect, options: nil)
-                }
-                else {
-                    return false
-                }
-            }
-            retryIndexOnDisconnect = 0
-        }
-        return true
-    }
-    
-    
-    @objc public func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
-        
-        // Add peripheral to connectedPeripheral dictionary.
-        // What happens when it connects to a device without discovering it? (reconnect)?
-        if let discoveredDeviceList = discoveredDeviceList[peripheral.identifier] {
-            connectedRemotes.updateValue(discoveredDeviceList, forKey: peripheral.identifier)
-            debugOutput("didConnectToPeripheral: " + peripheral.identifier.UUIDString )
-        }
- 
-        // Transfer device object from discovered device dictionary to our connected
-        // device dictionary.
-        if let desiredDevice = discoveredPeripherals[peripheral.identifier] {
-            connectedPeripherals.updateValue(desiredDevice, forKey: peripheral.identifier)
-        }
-        
-        // 
-        if var desiredDeviceInConnectedDevices = connectedPeripherals[peripheral.identifier]?.bbPeripheral {
-            desiredDeviceInConnectedDevices = peripheral
-            desiredDeviceInConnectedDevices.delegate = self
-            
-            // #MARK: ADD
-            // LIMIT SEARCH BY ARGUMENT
-            
-            desiredDeviceInConnectedDevices.discoverServices(nil)
-        }
-        
-        if let connectedToDevice = delegate?.connectedToDevice?(){
-            connectedToDevice
-            debugOutput("Invoked Delegate: connectedToDevice")
-        }
-        else {
-            // #MARK: ADD
-            // Handle if no delegate is setup.
-        }
-    }
-    
-
-    
-    @objc public func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
-        // If we fail to connect, don't remember this device.
-        
-        if(retryIndexOnFail < retriesAfterConnectionFail){
-            reconnectTimer = NSTimer.scheduledTimerWithTimeInterval(timeBeforeAttemptingReconnectOnConnectionFail, target: self, selector: Selector("reconnectTimerExpired"), userInfo: nil, repeats: false)
-
-            debugOutput("didFailToConnectPeripheral: Retry# " + String(retryIndexOnFail) + " of " + String(retriesAfterConnectionFail) + " with " + String(timeBeforeAttemptingReconnectOnConnectionFail) + "secs inbetween attempt")
-            
-        }
-        else {
-            debugOutput("didFailToConnectPeripheral: Unable to connect")
-            lastConnectedPeripheralNSUUID = nil
-        }
-    }
-    
-    public func search(timeoutSecs: NSTimeInterval){
-        searchComplete = false
-        //clearDiscoveredDevices()
-        // Strange.  If a search for peripherals is initiated it cancels all connections
-        // without firing didDisconnectPeripheral.  This compensates.
-        clearConnectedDevices()
-        activeCentralManager = CBCentralManager(delegate: self, queue: nil)
-        searchTimeoutTimer = NSTimer.scheduledTimerWithTimeInterval(timeoutSecs, target: self, selector: Selector("searchTimerExpire"), userInfo: nil, repeats: false)
-        debugOutput("Started search with "+String(timeoutSecs) + " sec timeout")
-    }
-    
-    public func connectToDevice(serviceOfInterest: CBService, characteristicOfInterest: CBCharacteristic){
-    }
-    
-    // #MARK: Connection Lost.
-    @objc public func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
-
-        // If connection is lost, remove it from the connected device dictionary.
-        connectedRemotes.removeValueForKey(peripheral.identifier)
-        print("Lost connection to: \(peripheral.identifier.UUIDString)")
-        
-        if(purposefulDisconnect == false){
-            if(retryIndexOnDisconnect < retriesOnDisconnect){
-
-                activePeripheralManager.state
-                reconnectTimer = NSTimer.scheduledTimerWithTimeInterval(timeBeforeAttemptingReconnectOnDisconnect, target: self, selector: Selector("reconnectTimerExpired"), userInfo: nil, repeats: false)
-                debugOutput("didDisconnectPeripheral, purpose = " + String(purposefulDisconnect) + "\n\tRetry# " + String(retryIndexOnDisconnect) + " of " + String(retriesOnDisconnect) + " with " + String(timeBeforeAttemptingReconnectOnDisconnect) + "secs inbetween attempt")
-            }
-            else {
-                    debugOutput("didDisconnectPeripheral: Unable to Connect")
-                }
-        }
-        else {
-            //if let deviceStatusChanged = delegate?.deviceStatusChanged?(peripheral.identifier, deviceState: self.state){
-                purposefulDisconnect = false
-                //deviceStatusChanged
-            //}
-            
-            debugOutput("Disconneted with purpose")
-        }
-    }
-    
-    // #MARK: CoreBluetooth Central Manager
-    public func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
-        
-        debugOutput("didDiscoverPeripheral "+String(peripheral.identifier.UUIDString))
-        // 1. Creates RemotebBluetoothLE object and populates its data.
-        // 2. Add the remote object to our Remote object Dictioanry.
-        
-        let thisRemoteDevice = RemoteBluetoothLEPeripheral()
-        
-        // Populate the object.
-        thisRemoteDevice.ID = peripheral.identifier
-        thisRemoteDevice.bbPeripheral = peripheral
-
-        // Set its name.
-        if let name = peripheral.name {
-            thisRemoteDevice.nameString = name
-            discoveredPeripheralNames.append(name)
-        }
-        // Set RSSI
-        thisRemoteDevice.rssi = Int(RSSI)
-        
-        // Advertising data.
-        if(discoverAdvertizingDataOnSearch){
-            
-            debugOutput("didDiscoverPeripheral found Adv. Data.")
-            // Get DataLocalNameKey
-            if let advertisementDataLocalNameKey = advertisementData[CBAdvertisementDataLocalNameKey] {
-                thisRemoteDevice.advDataLocalName = String(advertisementDataLocalNameKey)
-                }
-            else
-            {
-                print("Nil found unwrapping AdvertisementDataLocalNameKey")
-            }
-            
-            // Get ManufacturerDataKey
-            if let advertisementDataManufacturerDataKey = advertisementData[CBAdvertisementDataManufacturerDataKey] {
-                thisRemoteDevice.advDataManufacturerData = String(advertisementDataManufacturerDataKey)
-            }
-            else
-            {
-                print("Nil found unwrapping AdvertisementDataManufacturerDataKey")
-            }
-            
-            // Get ServiceDataKeys
-            if let advertisementDataServiceDataKeys = advertisementData[CBAdvertisementDataServiceDataKey] as? Dictionary<CBUUID, NSData> {
-                // Get an array of the Data Service Data Keys Keys :)
-                let cbuuidArray = Array(advertisementDataServiceDataKeys.keys)
-                // Itterate.
-                for cbuuid in cbuuidArray {
-                    // Convert each to a string
-                    if let data = advertisementDataServiceDataKeys[cbuuid]{
-                        if let advString = String(data: data, encoding: NSUTF8StringEncoding) {
-                            thisRemoteDevice.advDataServiceUUIDs?.updateValue(advString, forKey: cbuuid)
-                        }
-                    }
-                }
-            }
-            else
-            {
-                print("Nil found unwrapping AdvertisementDataServiceDataKey")
-            }
-            
-            // Get OverflowServiceUUIDsKey
-            if let advertisementDataOverflowServiceUUIDsKey = advertisementData[CBAdvertisementDataOverflowServiceUUIDsKey] as? Array<String> {
-                for item in advertisementDataOverflowServiceUUIDsKey {
-                    thisRemoteDevice.advDataOverflowServiceUUIDsKey?.append(item)
-                }
-            }
-            else
-            {
-                print("Nil found unwrapping AdvertisementDataOverflowServiceUUIDsKey")
-            }
-            
-            if let advertisementDataTxPowerLevelKey = advertisementData[CBAdvertisementDataTxPowerLevelKey] {
-                if let txInt = advertisementDataTxPowerLevelKey as? Int{
-                    thisRemoteDevice.advDataTxPowerLevel = txInt
-                }
-            }
-            else
-            {
-                print("Nil found unwrapping AdvertisementDataTxPowerLevelKey")
-            }
-            
-            // Get IsConnectable
-            let advertisementDataIsConnectable = advertisementData[CBAdvertisementDataIsConnectable]
-            if let advertisementDataIsConnectable = advertisementDataIsConnectable {
-                thisRemoteDevice.advDataIsConnectable = String(advertisementDataIsConnectable)
-            }
-            else
-            {
-                print("Nil found unwrapping AdvertisementDataIsConnectable")
-            }
-            
-            if let advertisementDataSolicitedServiceUUIDsKey = advertisementData[CBAdvertisementDataSolicitedServiceUUIDsKey] as? Array<String> {
-                for item in advertisementDataSolicitedServiceUUIDsKey {
-                    thisRemoteDevice.advSolicitedServiceUUID?.append(item)
-                }
-            }
-            else
-            {
-                print("Nil found unwrapping AdvertisementDataSolicitedServiceUUIDsKey")
-            }
-        }
-        
-        if let thisRemoteDeviceID = thisRemoteDevice.ID {
-                discoveredDeviceList.updateValue(thisRemoteDevice, forKey: thisRemoteDeviceID)
-        }
-        
-        if let peripheralName = peripheral.name {
-            discoveredDeviceIdByName.updateValue(peripheral.identifier, forKey: peripheralName)
-        }
-        discoveredPeripherals.updateValue(thisRemoteDevice, forKey: peripheral.identifier)
-        // Clear any connections.  Strangely, if a search is initiated, all devices are disconnected without didDisconnectPeripheral() being called.
-        
-    }
-    
-    @objc public func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
-        // Look for set characteristics.
-        // If not, do below.
-        if let connectedPeripheral = connectedPeripherals[peripheral.identifier]{
-            if let connectedPeripheralbbPeripheral = connectedPeripheral.bbPeripheral {
-                if let peripheralServices = peripheral.services {
-                    for service in peripheralServices {
-                        connectedPeripheralbbPeripheral.discoverCharacteristics(nil, forService: service)
-                        connectedPeripheral.bbServices?.append(service)
-                        debugOutput("didDiscoverServices: "+String(service.UUID.UUIDString))
-                    }
-                }
-            }
-        }
-    }
-    
-    @objc public func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
-        
-        // Look for set characteristics descriptors.
-        // If not, do below.
-        if let connectedPeripheral = connectedPeripherals[peripheral.identifier]{
-            if let connectedPeripheralbbPeripheral = connectedPeripheral.bbPeripheral
-            {
-                if let serviceCharacteristics = service.characteristics {
-                    for characteristic in serviceCharacteristics {
-                        connectedPeripheral.bbCharacteristics?.append(characteristic)
-                        connectedPeripheralbbPeripheral.discoverDescriptorsForCharacteristic(characteristic)
-                    }
-                }
-            }
-        }
-    }
-    
-    @objc public func peripheral(peripheral: CBPeripheral, didDiscoverDescriptorsForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
-        // Look for set characteristics descriptors.
-        // If not, do below.
-        if let connectedPeripheral = connectedPeripherals[peripheral.identifier]{
-            if let descriptors = characteristic.descriptors {
-                for descriptor in descriptors {
-                    connectedPeripheral.bbDescriptors?.append(descriptor)
-                }
-            }
-        }
-    }
-
-    
-    internal func disconnectFromPeripheral(deviceOfInterest: NSUUID)->Bool {
-        if let deviceToDisconnectPeripheral = connectedPeripherals[deviceOfInterest]?.bbPeripheral {
-            activeCentralManager.cancelPeripheralConnection(deviceToDisconnectPeripheral)
-            purposefulDisconnect = true
-            return true
-        }
-        else
-        {
-            // ERROR: Device does not exist.
-            return false
-        }
-    }
-
-    internal func reconnectTimerExpired(){
-        if let lastConnectedPeripheralNSUUID = lastConnectedPeripheralNSUUID {
-            connectToDevice(lastConnectedPeripheralNSUUID)
-        }
-    }
-    
-}
 
 class LocalBluetoothPeripheral: LocalPeripheral {
     
