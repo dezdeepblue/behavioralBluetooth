@@ -93,6 +93,7 @@ didDiscoverServices: FFE0
 ```
 
 ### Local Device State Change
+This will start the search when the iOS BLE device is powered on and ready.  This allows the app to start scanning on load.  It is often tempting to put the Search method in the ViewDidLoad method, however, if the iOS BLE device had not yet powered on the scan will not discover peripherals resulting in the search always failing.
 
 ```swift
     func localDeviceStateChange() {
@@ -101,8 +102,6 @@ didDiscoverServices: FFE0
         }
     }
 ```
-
-This will start the search when the iOS BLE device is powered on and ready.  This allows the app to start scanning on load.  It is often tempting to put the Search method in the ViewDidLoad method, however, if the iOS BLE device had not yet powered on the scan will not discover peripherals resulting in the search always failing.
 
 [Documentation](http://ladvien.github.io/jazzy/behavioralBluetooth/index.html)
 [Waka Report](https://wakatime.com/@ladvien/projects/ysdncpuqyt?start=2016-01-25&end=2016-01-31)
