@@ -20,7 +20,6 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
         myLocal.reconnectOnFail(tries: 3, timeBetweenTries: 2)
         myLocal.discoverAdvertizingDataOnSearch = false
         myLocal.verboseOutput = true
-        myLocal.search(2)
     }
 
     override func didReceiveMemoryWarning() {
@@ -47,6 +46,12 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
         
         if let connectable = myRemote.connectable {
             print("Is connectable" + String(connectable))
+        }
+    }
+    
+    func localDeviceStateChange() {
+        if(myLocal.deviceState == DeviceState.idle){
+            myLocal.search(8)
         }
     }
 }

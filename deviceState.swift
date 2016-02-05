@@ -7,9 +7,8 @@
 //
 
 import Foundation
-import CoreBluetooth
 
-enum DeviceState: Int {
+public enum DeviceState: Int {
     case unknown = 0,
     disconnected,
     failedToConnect,

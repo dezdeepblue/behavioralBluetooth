@@ -29,6 +29,11 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
     // Unknown Index
     var unknownIndex = 0
     
+    override init() {
+        super.init()
+        activeCentralManager.delegate = self
+    }
+    
     // Behavioral: Methods.
     func obtainAdvertizingDataOnConnect(enable: Bool){
         discoverAdvertizingDataOnSearch = enable
@@ -87,8 +92,12 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
                 self.deviceState = DeviceState.off
                 break
             case CBCentralManagerState.PoweredOn:
+                //activeCentralManager.scanForPeripheralsWithServices(nil, options: nil)
                 self.deviceState = DeviceState.idle
                 break
+        }
+        if let deviceStateChanged = delegate?.localDeviceStateChange?(){
+            deviceStateChanged
         }
     }
     
@@ -200,10 +209,11 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         
         searchComplete = false
         //clearDiscoveredDevices()
-        // Strange.  If a search for peripherals is initiated it cancels all connections
-        // without firing didDisconnectPeripheral.  This compensates.
+        // Strange.  If a search for peripherals is initiated it cancels all connections without firing didDisconnectPeripheral.  This compensates.
         clearConnectedDevices()
-        activeCentralManager = CBCentralManager(delegate: self, queue: nil)
+        print(self.deviceState)
+        //activeCentralManager = CBCentralManager(delegate: self, queue: nil)
+        activeCentralManager.scanForPeripheralsWithServices(nil, options: nil)
         searchTimeoutTimer = NSTimer.scheduledTimerWithTimeInterval(timeoutSecs, target: self, selector: Selector("searchTimerExpire"), userInfo: nil, repeats: false)
         debugOutput("Started search with "+String(timeoutSecs) + " sec timeout")
     }
@@ -441,4 +451,19 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         }
     }
     
+    @objc internal override func searchTimerExpire(){
+        searchTimeoutTimer.invalidate()
+        searchComplete = true
+        
+        // Be respectful of battery life.
+        self.activeCentralManager.stopScan()
+        
+        if let searchTimerExpired = delegate?.searchTimerExpired?(){
+            searchTimerExpired
+        }
+        else {
+            // THROW ERROR
+        }
+        
+    }
 }

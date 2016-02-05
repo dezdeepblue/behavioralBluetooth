@@ -12,7 +12,7 @@ import CoreBluetooth
 // #MARK: Optional protocol for LocalBehavioralSerialDevice
 @objc protocol LocalBehavioralSerialDeviceDelegate {
     optional func searchTimerExpired()
-    optional func deviceStatusChanged(nsuuidOfDevice: NSUUID, deviceState: Int)
+    optional func localDeviceStateChange()
     optional func connectedToDevice()
 }
 
