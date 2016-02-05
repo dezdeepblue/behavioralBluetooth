@@ -97,9 +97,9 @@ This will start the search when the iOS BLE device is powered on and ready.  Thi
 
 ```swift
 func localDeviceStateChange() {
-        if(myLocal.deviceState == DeviceState.idle){
-            myLocal.search(8)
-	}
+    if(myLocal.deviceState == DeviceState.idle){
+        myLocal.search(8)
+    }
 }
 ```
 
