@@ -51,7 +51,7 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
     
     func localDeviceStateChange() {
         if(myLocal.deviceState == DeviceState.idle){
-            myLocal.search(8)
+            myLocal.search(8.0)
         }
     }
 }

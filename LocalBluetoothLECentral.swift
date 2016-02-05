@@ -48,19 +48,34 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         //
     }
 
-    
+    /**
+    ### Returns a discovered device's NSUUID.
+    - parameter name: String representing the device's advertized name.
+    */
     public override func getDeviceIdByName(name: String)->NSUUID?{
         return discoveredPeripheralsNames[name]
     }
-    
+
+    /**
+     ### Returns a string representing a discovered device's advertized name.
+     - parameter deviceOfInterest: NSUUID
+     */
     public override func getDeviceName(deviceOfInterest: NSUUID)->String?{
         return discoveredPeripheralNameById[deviceOfInterest]
     }
     
+    /**
+     ### Returns a RemoteBluetoothLEPeripheral object of interest.
+     - parameter deviceOfInterest: NSUUID
+     */
     public override func getDiscoveredRemoteDeviceByID(deviceNSUUID: NSUUID)->RemoteBluetoothLEPeripheral?{
         return discoveredPeripherals[deviceNSUUID]
     }
-    
+
+    /**
+     ### Returns a RemoteBluetoothLEPeripheral object of interest.
+     - parameter name: String representing a RemoteBluetoothLEPeripheral object's advertized name.
+     */
     public override func getDiscoveredRemoteDeviceByName(name: String)->RemoteBluetoothLEPeripheral?{
         if let deviceID = getDeviceIdByName(name){
             return getDiscoveredRemoteDeviceByID(deviceID)
@@ -70,8 +85,7 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
     
     // #MARK: Central Manager init.
     /**
-    ###Updates the the state of the Local Bluetooth LE device.
-    - parameter
+    ### Updates the the state of the Local Bluetooth LE device.
     */
     public func centralManagerDidUpdateState(central: CBCentralManager) {
         // Make sure the BLE device is on.
@@ -147,7 +161,9 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         return false
     }
     
-    
+    /**
+     ### CoreBluetooth method called when CBCentralManager connects to peripheral.
+     */
     @objc public func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
         
         // Add peripheral to connectedPeripheral dictionary.
@@ -185,7 +201,9 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
     }
     
     
-    
+    /**
+     ### CoreBluteooth method called when CBCentralManager fails to connect to a peripheral.
+     */
     @objc public func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
         // If we fail to connect, don't remember this device.
         
@@ -201,7 +219,10 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         }
     }
     
-    // #MARK: Search
+    /**
+     ### Method called to initiate the CBCentralManager didScanForPeripherals.  The method is an NSTimeInterval representing how long the CBCentralManager should search before stopping.  The method SearchTimerExpired is called after the interval expires.
+     - parameter timeoutSecs: An NSTimeInterval representing the search duration.
+     */
     public func search(timeoutSecs: NSTimeInterval){
         
         // Reset unknown device index; used for naming devices lacking names.
@@ -227,6 +248,9 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
     }
     
     // #MARK: Connection Lost.
+    /**
+    ### CoreBluteooth method called when CBCentralManager loses connection.
+    */
     @objc public func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
         
         // If connection is lost, remove it from the connected device dictionary.
@@ -261,6 +285,9 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
     }
     
     // #MARK: CoreBluetooth Central Manager
+    /**
+    ### CoreBluteooth method called when CBCentralManager when scan discovers peripherals.
+    */
     public func centralManager(central: CBCentralManager, didDiscoverPeripheral peripheral: CBPeripheral, advertisementData: [String : AnyObject], RSSI: NSNumber) {
         
         debugOutput("didDiscoverPeripheral "+String(peripheral.identifier.UUIDString))
@@ -382,6 +409,9 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         
     }
     
+    /**
+     ### CoreBluteooth method called when CBCentralManager discovers a peripheral's services.
+     */
     @objc public func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
         // Look for set characteristics.
         // If not, do below.
@@ -398,6 +428,9 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         }
     }
     
+    /**
+     ### CoreBluteooth method called when CBCentralManager discovers a service's characteristics.
+     */
     @objc public func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
         
         // Look for set characteristics descriptors.
@@ -415,6 +448,9 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         }
     }
     
+    /**
+     ### CoreBluteooth method called when CBCentralManager discovers a characteristic's descriptors.
+     */
     @objc public func peripheral(peripheral: CBPeripheral, didDiscoverDescriptorsForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
         // Look for set characteristics descriptors.
         // If not, do below.
@@ -427,7 +463,10 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         }
     }
     
-    
+    /**
+     ### The CBCentralManager will actively attempt to disconnect from a remote device.
+     - parameter deviceOfInterest: The NSUUID of device needed to be disconnecting.
+     */
     internal func disconnectFromPeripheral(deviceOfInterest: NSUUID)->Bool {
         if let deviceToDisconnectPeripheral = connectedPeripherals[deviceOfInterest]?.bbPeripheral {
             activeCentralManager.cancelPeripheralConnection(deviceToDisconnectPeripheral)
@@ -441,6 +480,10 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         }
     }
     
+    /**
+     ### 
+     - parameter timeoutSecs: An NSTimeInterval representing the search duration.
+     */
     internal func reconnectTimerExpired(){
         if let lastConnectedPeripheralNSUUID = lastConnectedPeripheralNSUUID {
             activeCentralManager.stopScan()

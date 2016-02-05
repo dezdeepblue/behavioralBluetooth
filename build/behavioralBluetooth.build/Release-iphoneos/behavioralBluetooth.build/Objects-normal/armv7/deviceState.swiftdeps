@@ -2,21 +2,18 @@
 provides-top-level:
 - "DeviceState"
 provides-nominal:
-- "C19behavioralBluetooth11DeviceState"
-- "OC19behavioralBluetooth11DeviceState18connectionStatuses"
+- "O19behavioralBluetooth11DeviceState"
 provides-member:
-- ["C19behavioralBluetooth11DeviceState", ""]
-- ["OC19behavioralBluetooth11DeviceState18connectionStatuses", ""]
+- ["O19behavioralBluetooth11DeviceState", ""]
 provides-dynamic-lookup:
 depends-top-level:
+- "DeviceState"
 - "FloatLiteralType"
 - "=="
 - !private "~="
 - "IntegerLiteralType"
 - "Int"
-- "DeviceState"
 depends-member:
-- ["PSs9AnyObject", ""]
 - !private ["PSs22BidirectionalIndexType", "Distance"]
 - !private ["PSs22BidirectionalIndexType", "IntegerLiteralType"]
 - !private ["PSs22BidirectionalIndexType", "hashValue"]
@@ -36,12 +33,24 @@ depends-member:
 - !private ["PSs23CustomStringConvertible", "IntegerLiteralType"]
 - !private ["PSs23CustomStringConvertible", "_getBuiltinLogicValue"]
 - !private ["PSs23CustomStringConvertible", "hashValue"]
-- ["C19behavioralBluetooth11DeviceState", "Int"]
-- ["C19behavioralBluetooth11DeviceState", "connectionStatus"]
-- ["C19behavioralBluetooth11DeviceState", "connectionStatuses"]
-- ["C19behavioralBluetooth11DeviceState", "connections"]
-- ["C19behavioralBluetooth11DeviceState", "deinit"]
-- ["C19behavioralBluetooth11DeviceState", "init"]
+- ["O19behavioralBluetooth11DeviceState", "RawValue"]
+- ["O19behavioralBluetooth11DeviceState", "connected"]
+- ["O19behavioralBluetooth11DeviceState", "connecting"]
+- ["O19behavioralBluetooth11DeviceState", "deinit"]
+- ["O19behavioralBluetooth11DeviceState", "disconnected"]
+- ["O19behavioralBluetooth11DeviceState", "failedToConnect"]
+- ["O19behavioralBluetooth11DeviceState", "hashValue"]
+- ["O19behavioralBluetooth11DeviceState", "idle"]
+- ["O19behavioralBluetooth11DeviceState", "init"]
+- ["O19behavioralBluetooth11DeviceState", "lostConnection"]
+- ["O19behavioralBluetooth11DeviceState", "off"]
+- ["O19behavioralBluetooth11DeviceState", "purposefulDisconnect"]
+- ["O19behavioralBluetooth11DeviceState", "rawValue"]
+- ["O19behavioralBluetooth11DeviceState", "resetting"]
+- ["O19behavioralBluetooth11DeviceState", "scanning"]
+- ["O19behavioralBluetooth11DeviceState", "unauthorized"]
+- ["O19behavioralBluetooth11DeviceState", "unknown"]
+- ["O19behavioralBluetooth11DeviceState", "unsupported"]
 - !private ["Sd", "deinit"]
 - !private ["PSs9Equatable", "Distance"]
 - !private ["PSs9Equatable", "IntegerLiteralType"]
@@ -130,14 +139,7 @@ depends-member:
 - !private ["PSs11_Strideable", "Distance"]
 - !private ["PSs11_Strideable", "IntegerLiteralType"]
 - !private ["PSs11_Strideable", "hashValue"]
-- ["OC19behavioralBluetooth11DeviceState18connectionStatuses", "RawValue"]
-- ["OC19behavioralBluetooth11DeviceState18connectionStatuses", "deinit"]
-- ["OC19behavioralBluetooth11DeviceState18connectionStatuses", "disconnected"]
-- ["OC19behavioralBluetooth11DeviceState18connectionStatuses", "hashValue"]
-- ["OC19behavioralBluetooth11DeviceState18connectionStatuses", "init"]
-- ["OC19behavioralBluetooth11DeviceState18connectionStatuses", "rawValue"]
 depends-nominal:
-- "PSs9AnyObject"
 - !private "PSs22BidirectionalIndexType"
 - !private "PSs21BitwiseOperationsType"
 - !private "Sb"
@@ -146,7 +148,7 @@ depends-nominal:
 - !private "PSs11CVarArgType"
 - !private "PSs10Comparable"
 - !private "PSs23CustomStringConvertible"
-- "C19behavioralBluetooth11DeviceState"
+- "O19behavioralBluetooth11DeviceState"
 - !private "Sd"
 - "PSs9Equatable"
 - !private "PSs16ForwardIndexType"
@@ -176,7 +178,6 @@ depends-nominal:
 - !private "PSs12_Reflectable"
 - !private "PSs18_SignedIntegerType"
 - !private "PSs11_Strideable"
-- "OC19behavioralBluetooth11DeviceState18connectionStatuses"
 depends-dynamic-lookup:
 depends-external:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/Swift.swiftmodule"
@@ -189,4 +190,4 @@ depends-external:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/CoreImage.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/CoreBluetooth.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/CoreData.swiftmodule"
-interface-hash: "061f54407b99abbb37a186d5197afca1"
+interface-hash: "eb61c426a95a0ed745c6bd73947af805"
