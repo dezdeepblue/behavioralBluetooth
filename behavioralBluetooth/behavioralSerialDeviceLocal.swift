@@ -30,7 +30,8 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     internal var discoveredDeviceRSSIArray: Array<Int> = []
     
     // Device information
-    internal var deviceState = DeviceState.unknown
+    internal var deviceState = DeviceState()
+    
     public var hardwareID: NSUUID?
     public var lastConnectedDevice: NSUUID?
     public var allowConnectionInBackground: Bool = false
@@ -57,13 +58,13 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     internal var lastConnectedPeripheralNSUUID: NSUUID?
     
     // Search properities.
-    internal var searchComplete: Bool = false
+    //internal var searchComplete: Bool = false
     internal var searchTimeoutTimer: NSTimer = NSTimer()
     internal var reconnectTimer: NSTimer = NSTimer()
 
     
     override init(){
-        
+        super.init()
     }
     
     func update() {
@@ -340,12 +341,18 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     internal func getDeviceState()->DeviceState{
         // Provide the raw state of the device.
                 // #MARK: UNUSED
-        return DeviceState.unknown
+        return self.deviceState
     }
     
     @objc internal func searchTimerExpire(){
         searchTimeoutTimer.invalidate()
-        searchComplete = true
+        
+        if(discoveredDeviceList.isEmpty){
+            self.deviceState.searchState = DeviceState.searchStates.idle
+        } else {
+            self.deviceState.searchState = DeviceState.searchStates.idleWithDiscoveredDevices
+        }
+        //searchComplete = true
 
         if let searchTimerExpired = delegate?.searchTimerExpired?(){
             searchTimerExpired
@@ -378,7 +385,8 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     // #MARK: Debug info.
     public func printDiscoveredDeviceListInfo(){
         // Check to make sure we're done searching, then print the all devices info.
-    if(searchComplete){
+    //if(searchComplete){
+        if(self.deviceState.searchState == DeviceState.searchStates.idleWithDiscoveredDevices){
             for ID in discoveredDeviceList.keys {
                 if let name = discoveredDeviceList[ID]?.getDeviceName(){
                     print("Device UUID: \(name)")

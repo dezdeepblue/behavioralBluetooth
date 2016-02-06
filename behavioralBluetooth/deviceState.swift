@@ -8,18 +8,36 @@
 
 import Foundation
 
-public enum DeviceState: Int {
-    case unknown = 0,
-    disconnected,
-    failedToConnect,
-    purposefulDisconnect,
-    lostConnection,
-    connecting,
-    connected,
-    scanning,
-    off,
-    idle,
-    resetting,
-    unsupported,
-    unauthorized
+public class DeviceState {
+    
+    var hardwareState = hardwareStates.unknown
+    var connectionState = connectionStates.unknown
+    var searchState = searchStates.unknown
+    
+    public enum hardwareStates: Int {
+        case unknown = 0,
+        off,
+        on,
+        resetting,
+        unsupported,
+        unauthorized
+    }
+    
+    public enum connectionStates: Int {
+        case unknown = 0,
+        connected,
+        disconnected,
+        failedToConnect,
+        purposefulDisconnect,
+        lostConnection,
+        connecting
+    }
+    
+    public enum searchStates: Int{
+        case unknown = 0,
+        scanning,
+        idle,
+        idleWithDiscoveredDevices
+    }
 }
+

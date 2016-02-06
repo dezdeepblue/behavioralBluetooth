@@ -80,10 +80,7 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
     
     public func getDeviceNamesAsArray()->Array<String>{
         var names: Array<String> = [""]
-        
         names = Array<String>(discoveredPeripheralsNames.keys)
-        
-        
         return names
     }
 
@@ -95,6 +92,9 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
     */
     public func search(timeoutSecs: NSTimeInterval){
         
+        // 1. Empty peripheral lists.
+        // 2. Reset unknownDevice index; used for avoiding duplicate names.
+        // 3. Reset search flag.
         // Empty Lists
         discoveredPeripherals = [:]
         discoveredDeviceRSSIArray = []
@@ -103,7 +103,8 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         // Reset unknown device index; used for naming devices lacking names.
         unknownIndex = 0
         
-        searchComplete = false
+        self.deviceState.searchState = DeviceState.searchStates.scanning
+        //searchComplete = false
         //clearDiscoveredDevices()
         // Strange.  If a search for peripherals is initiated it cancels all connections without firing didDisconnectPeripheral.  This compensates.
         clearConnectedDevices()
@@ -118,9 +119,20 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
     Requests the Local Device connect to a Bluetooth LE Remote device of interest.  The call will assure a connection to the particular device doesn't exist.  If the `connectionsLimit` has not been reached.
     */
     func connectToDevice(remoteDevice: RemoteBluetoothLEPeripheral) -> Bool {
-
+        
+        // 1. Set state.
+        // 2. Get peripheral out of bbObject.
+        // 3. Get peripheral name.
+        // 4. Set new lastConnect peripheral.
+        // 5. Return false if already connected or no peripherals discovered.
+        // 6. Check to see if connection threshold is met.
+        
+        // 1
+        self.deviceState.connectionState = DeviceState.connectionStates.connecting
+        // 2
         if let peripheral = remoteDevice.bbPeripheral{
-
+            
+            // 3
             var thisDeviceName = ""
             if let deviceName = getDeviceName(peripheral.identifier) {
                 thisDeviceName = deviceName
@@ -128,14 +140,19 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
             
             debugOutput("Attempting to connect to: " + thisDeviceName)
             
-            // Remember NSUUID
+            // 4
             lastConnectedPeripheralNSUUID = peripheral.identifier
             
-            // Check if if we have discovered anything, if so, make sure we are not already connected.
+            // 5
             if(discoveredPeripherals.isEmpty || alreadyConnected(peripheral.identifier)){
-                print("Already connected, silly")
+                if(discoveredPeripherals.isEmpty){
+                    debugOutput("There are no discovered peripherals")
+                } else {
+                    debugOutput("Already connected to " + thisDeviceName)
+                }
                 return false
             }
+            // 6
             else {
                 if(connectedRemotes.count < connectionsLimit){
                     if let peripheralToConnect = discoveredPeripherals[peripheral.identifier]?.bbPeripheral{
@@ -204,7 +221,14 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
      */
     @objc internal override func searchTimerExpire(){
         searchTimeoutTimer.invalidate()
-        searchComplete = true
+        
+        if(discoveredPeripherals.isEmpty){
+            self.deviceState.searchState = DeviceState.searchStates.idle
+        } else {
+            self.deviceState.searchState = DeviceState.searchStates.idleWithDiscoveredDevices
+        }
+        
+        //searchComplete = true
         
         // Be respectful of battery life.
         self.activeCentralManager.stopScan()
@@ -227,23 +251,22 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         // Make sure the BLE device is on.
         switch activeCentralManager.state {
         case CBCentralManagerState.Unknown:
-            self.deviceState = DeviceState.unknown
+            self.deviceState.hardwareState = DeviceState.hardwareStates.unknown
             break
         case CBCentralManagerState.Resetting:
-            self.deviceState = DeviceState.resetting
+            self.deviceState.hardwareState = DeviceState.hardwareStates.resetting
             break
         case CBCentralManagerState.Unsupported:
-            self.deviceState = DeviceState.unsupported
+            self.deviceState.hardwareState = DeviceState.hardwareStates.unsupported
             break
         case CBCentralManagerState.Unauthorized:
-            self.deviceState = DeviceState.unauthorized
+            self.deviceState.hardwareState = DeviceState.hardwareStates.unauthorized
             break
         case CBCentralManagerState.PoweredOff:
-            self.deviceState = DeviceState.off
+            self.deviceState.hardwareState = DeviceState.hardwareStates.off
             break
         case CBCentralManagerState.PoweredOn:
-            //activeCentralManager.scanForPeripheralsWithServices(nil, options: nil)
-            self.deviceState = DeviceState.idle
+            self.deviceState.hardwareState = DeviceState.hardwareStates.unknown
             break
         }
         if let deviceStateChanged = delegate?.localDeviceStateChange?(){
@@ -443,11 +466,11 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         print("Lost connection to: \(peripheral.identifier.UUIDString)")
         
         // Set the peripheral
-        discoveredPeripherals[peripheral.identifier]?.deviceState = DeviceState.disconnected
+        discoveredPeripherals[peripheral.identifier]?.deviceState.connectionState = DeviceState.connectionStates.purposefulDisconnect
         
         if(purposefulDisconnect == false){
             
-            discoveredPeripherals[peripheral.identifier]?.deviceState = DeviceState.disconnected
+            discoveredPeripherals[peripheral.identifier]?.deviceState.connectionState = DeviceState.connectionStates.disconnected
             
             if(retryIndexOnDisconnect < retriesOnDisconnect){
                 

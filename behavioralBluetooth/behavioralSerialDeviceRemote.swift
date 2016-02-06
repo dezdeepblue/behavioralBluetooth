@@ -16,7 +16,7 @@ protocol RemoteBehavioralSerialDeviceDelegate {
 /// This hopefully provides some info
 public class RemoteBehavioralSerialDevice: NSObject {
     
-    internal var state = DeviceState.unknown
+    internal var deviceState = DeviceState()
     
     internal(set) var ID: NSUUID?
     func idAsString()->String{
@@ -69,8 +69,6 @@ class RemoteBluetoothPeripheral: RemotePeripheral {
 public class RemoteBluetoothLEPeripheral: RemotePeripheral, CBPeripheralDelegate {
 
     public var dataLocalNameString: String?
-    
-    internal var deviceState = DeviceState.unknown
     
     // Peripheral
     public var bbPeripheral: CBPeripheral?
