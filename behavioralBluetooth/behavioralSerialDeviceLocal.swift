@@ -307,39 +307,33 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
      
      */
     public func getAscendingSortedArraysBasedOnRSSI()-> (nsuuids: Array<NSUUID>, rssies: Array<NSNumber>){
-                // #MARK: UNUSED
         
         // Bubble-POP! :)
         var rssies = discoveredDeviceRSSIArray
         var nsuuids = discoveredDeviceIdArray
         let itemCount = discoveredDeviceIdArray.count
         
-        var x = 0
-        var y = 0
-        //var bubblePop = true
-        
-        while(x < itemCount)
-        {
-            while(y < itemCount - 1)
+        for(var i = 1; i < itemCount; i++){
+            for(var j = 0; j < itemCount - 1;j++)
             {
-                if(Int(rssies[y]) < Int(rssies[y+1]))
+                // Multiply by -1 to make it descending.
+                if((Int(rssies[j]) * -1) > (Int(rssies[j+1]) * -1))
                 {
-                    let temp1 = Int(rssies[y+1])
-                    let temp2 = nsuuids[y+1]
+                    let temp1 = Int(rssies[j])
+                    let temp2 = nsuuids[j]
                     
-                    rssies[y+1] = Int(rssies[y]);
-                    nsuuids[y+1] = nsuuids[y]
+                    rssies[j] = Int(rssies[j+1]);
+                    nsuuids[j] = nsuuids[j+1]
                     
-                    rssies[y] = temp1
-                    nsuuids[y] = temp2
+                    rssies[j+1] = temp1
+                    nsuuids[j+1] = temp2
                 }
-                y++
             }
-            x++
         }
+        
         return (nsuuids, rssies)
     }
-    
+
     /**
      Returns the full Behavioral DeviceState object.
      */

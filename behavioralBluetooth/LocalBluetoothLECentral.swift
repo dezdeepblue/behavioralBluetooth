@@ -281,6 +281,7 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
             unknownIndex++
         }
         // Set RSSI
+        print(RSSI)
         thisRemoteDevice.rssi = Int(RSSI)
         
         // Advertising data.

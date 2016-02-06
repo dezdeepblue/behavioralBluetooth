@@ -19,7 +19,7 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
         myLocal.reconnectOnDisconnect(tries: 3, timeBetweenTries: 1.5)
         myLocal.reconnectOnFail(tries: 3, timeBetweenTries: 2)
         myLocal.discoverAdvertizingDataOnSearch = false
-        myLocal.verboseOutput = true
+        myLocal.verboseOutput = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,32 +27,5 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func searchTimerExpired() {
-        
-        // Get a list of devices sorted by RSSI.
-        let sortedDeviceArrayByRSSI = myLocal.getAscendingSortedArraysBasedOnRSSI()
-        // Print the list.
-        for(var i = 0; i < sortedDeviceArrayByRSSI.nsuuids.count; i++){
-            if let name = myLocal.getDeviceName(sortedDeviceArrayByRSSI.nsuuids[i]){
-                print(name)
-            }
-            print("NSUUID: " + String(sortedDeviceArrayByRSSI.nsuuids[i].UUIDString) + "\n\tRSSI: " + String(sortedDeviceArrayByRSSI.rssies[i]))
-        }
-        
-        if let foundRemote = myLocal.getDiscoveredRemoteDeviceByName("HMSoft"){
-            myRemote = foundRemote
-            myLocal.connectToDevice(myRemote)
-        }
-        
-        if let connectable = myRemote.connectable {
-            print("Is connectable" + String(connectable))
-        }
-    }
-    
-    func localDeviceStateChange() {
-        if(myLocal.deviceState == DeviceState.idle){
-            myLocal.search(8.0)
-        }
-    }
 }
 
