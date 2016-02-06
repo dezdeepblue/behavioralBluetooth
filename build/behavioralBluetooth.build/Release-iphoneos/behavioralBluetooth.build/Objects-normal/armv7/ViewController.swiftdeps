@@ -10,12 +10,11 @@ provides-dynamic-lookup:
 - "searchTimerExpired"
 - "localDeviceStateChange"
 - "myLocal"
-- "myRemote"
 - "didReceiveMemoryWarning"
+- "myRemote"
 depends-top-level:
 - "UIViewController"
 - !private "String"
-- !private "DeviceState"
 - !private "+"
 - !private "++"
 - !private "BooleanLiteralType"
@@ -24,9 +23,10 @@ depends-top-level:
 - "LocalBluetoothLECentral"
 - !private "print"
 - "RemoteBluetoothLEPeripheral"
-- "ViewController"
+- !private "DeviceState"
 - !private "StringLiteralType"
 - !private "<"
+- "ViewController"
 depends-member:
 - !private ["PSs9AnyObject", "DeviceState"]
 - ["PSs9AnyObject", "LocalBluetoothLECentral"]

@@ -22,6 +22,21 @@ behavioralSerialDeviceRemote.swift
 	public var advDataTxPowerLevel: Int?
 	public var advDataIsConnectable: String?
 	public var advSolicitedServiceUUID: Array<String>?
+deviceState.swift
+	public enum DeviceState: Int
+	case unknown = 0,
+	disconnected,
+	failedToConnect,
+	purposefulDisconnect,
+	lostConnection,
+	connecting,
+	connected,
+	scanning,
+	off,
+	idle,
+	resetting,
+	unsupported,
+	unauthorized
 behavioralSerialDeviceLocal.swift
 	public var hardwareID: NSUUID?
 	public var lastConnectedDevice: NSUUID?

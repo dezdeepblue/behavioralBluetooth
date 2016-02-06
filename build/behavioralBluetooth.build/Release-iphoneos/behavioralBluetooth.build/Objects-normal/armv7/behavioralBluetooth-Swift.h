@@ -365,9 +365,10 @@ SWIFT_CLASS("_TtC19behavioralBluetooth23LocalBluetoothLECentral")
 /// \param deviceOfInterest The NSUUID of device needed to be disconnecting.
 - (BOOL)disconnectFromPeripheral:(NSUUID * __nonnull)deviceOfInterest;
 
-/// <h3></h3>
-/// \param timeoutSecs An NSTimeInterval representing the search duration.
+/// <h3>Method fired after lost connection with device.  The delay can be changed by calling either reconnectOnFail or reconnectOnDisconnect.</h3>
 - (void)reconnectTimerExpired;
+
+/// <h3>Method after search duration has expired.</h3>
 - (void)searchTimerExpire;
 @end
 
