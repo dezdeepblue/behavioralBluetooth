@@ -8,11 +8,11 @@ provides-member:
 provides-dynamic-lookup:
 depends-top-level:
 - "DeviceState"
-- "Int"
 - "FloatLiteralType"
 - "=="
 - !private "~="
 - "IntegerLiteralType"
+- "Int"
 depends-member:
 - !private ["PSs22BidirectionalIndexType", "Distance"]
 - !private ["PSs22BidirectionalIndexType", "IntegerLiteralType"]

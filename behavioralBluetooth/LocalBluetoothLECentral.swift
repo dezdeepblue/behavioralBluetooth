@@ -32,7 +32,6 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
 
     // MARK: Properties END
     
-    
     // #MARK: LocalBluetoothLECentral: Getters / Setters
     override init() {
         super.init()
@@ -78,6 +77,15 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
         }
         return nil
     }
+    
+    public func getDeviceNamesAsArray()->Array<String>{
+        var names: Array<String> = [""]
+        
+        names = Array<String>(discoveredPeripheralsNames.keys)
+        
+        
+        return names
+    }
 
     // #MARK: LocalBluetoothLECentral: Actions
     
@@ -86,6 +94,11 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
     - parameter timeoutSecs: An NSTimeInterval representing the search duration.
     */
     public func search(timeoutSecs: NSTimeInterval){
+        
+        // Empty Lists
+        discoveredPeripherals = [:]
+        discoveredDeviceRSSIArray = []
+        discoveredDeviceIdArray = []
         
         // Reset unknown device index; used for naming devices lacking names.
         unknownIndex = 0
@@ -167,6 +180,10 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
             // ERROR: Device does not exist.
             return false
         }
+    }
+    
+    internal func disconnectFromAllPeripherals(){
+
     }
     
     /**

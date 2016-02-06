@@ -7,11 +7,11 @@ provides-member:
 - ["O19behavioralBluetooth11DeviceState", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "DeviceState"
-- "FloatLiteralType"
 - "=="
 - !private "~="
+- "DeviceState"
 - "IntegerLiteralType"
+- "FloatLiteralType"
 - "Int"
 depends-member:
 - !private ["PSs22BidirectionalIndexType", "Distance"]

@@ -7,11 +7,11 @@
 //
 
 import UIKit
+var myLocal = LocalBluetoothLECentral()
+var myRemote = RemoteBluetoothLEPeripheral()
 
 class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
-    var myLocal = LocalBluetoothLECentral()
-    var myRemote = RemoteBluetoothLEPeripheral()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         myLocal.delegate = self

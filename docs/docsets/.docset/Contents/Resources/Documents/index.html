@@ -82,40 +82,38 @@
 <a href='#it_39_s_an_expirement' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='it_39_s_an_expirement'>It&rsquo;s an expirement!</h2>
 <a href='#getting_started' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='getting_started'>Getting Started</h2>
 
-<p>The full code to get connected to a remote device would be,
-&ldquo;`swift
-import UIKit</p>
+<p>The full code to get connected to a remote device would be,</p>
+<pre class="highlight swift"><code><span class="kd">import</span> <span class="kt">UIKit</span>
 
-<p>class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
-  var myLocal = LocalBluetoothLECentral()
-  var myRemote = RemoteBluetoothLEPeripheral()</p>
+<span class="kd">class</span> <span class="kt">ViewController</span><span class="p">:</span> <span class="kt">UIViewController</span><span class="p">,</span> <span class="kt">LocalBehavioralSerialDeviceDelegate</span> <span class="p">{</span>
+  <span class="k">var</span> <span class="nv">myLocal</span> <span class="o">=</span> <span class="kt">LocalBluetoothLECentral</span><span class="p">()</span>
+  <span class="k">var</span> <span class="nv">myRemote</span> <span class="o">=</span> <span class="kt">RemoteBluetoothLEPeripheral</span><span class="p">()</span>
 
-<p>override func viewDidLoad() {
-    super.viewDidLoad()</p>
-<pre class="highlight plaintext"><code>// Attach the delegate to ViewController.
-myLocal.delegate = self
+  <span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidLoad</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">super</span><span class="o">.</span><span class="nf">viewDidLoad</span><span class="p">()</span>
 
-// Tells the iOS BLE to attempt to retry connecting 3 times, with 1.5
-// seconds inbetween attempts.
-myLocalBLE.reconnectOnDisconnect(tries: 3, timeBetweenTries: 1.5)
-// Instructs the iOS BLE to gather advertizing data on search
-myLocalBLE.discoverAdvertizingDataOnSearch = false
-// Tells the iOS BLE to search for peripherals for two seconds.
-myLocalBLE.search(2)
+    <span class="c1">// Attach the delegate to ViewController.</span>
+    <span class="n">myLocal</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="k">self</span>
+
+    <span class="c1">// Tells the iOS BLE to attempt to retry connecting 3 times, with 1.5</span>
+    <span class="c1">// seconds inbetween attempts.</span>
+    <span class="n">myLocalBLE</span><span class="o">.</span><span class="nf">reconnectOnDisconnect</span><span class="p">(</span><span class="nv">tries</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="nv">timeBetweenTries</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">)</span>
+    <span class="c1">// Instructs the iOS BLE to gather advertizing data on search</span>
+    <span class="n">myLocalBLE</span><span class="o">.</span><span class="n">discoverAdvertizingDataOnSearch</span> <span class="o">=</span> <span class="kc">false</span>
+    <span class="c1">// Tells the iOS BLE to search for peripherals for two seconds.</span>
+    <span class="n">myLocalBLE</span><span class="o">.</span><span class="nf">search</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kd">func</span> <span class="nf">searchTimerExpired</span><span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// Look up a discovered remote device by its advertized name.</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">foundRemote</span> <span class="o">=</span> <span class="n">myLocal</span><span class="o">.</span><span class="nf">getDiscoveredRemoteDeviceByName</span><span class="p">(</span><span class="s">"HMSoft"</span><span class="p">){</span>
+        <span class="n">myRemote</span> <span class="o">=</span> <span class="n">foundRemote</span>
+        <span class="c1">// Connect to the device, returning true if successful.</span>
+        <span class="k">let</span> <span class="nv">didConnect</span> <span class="o">=</span> <span class="n">myLocal</span><span class="o">.</span><span class="nf">connectToDevice</span><span class="p">(</span><span class="n">myRemote</span><span class="p">)</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 </code></pre>
-
-<p>}</p>
-
-<p>func searchTimerExpired() {
-    // Look up a discovered remote device by its advertized name.
-    if let foundRemote = myLocal.getDiscoveredRemoteDeviceByName(<q>HMSoft</q>){
-        myRemote = foundRemote
-        // Connect to the device, returning true if successful.
-        let didConnect = myLocal.connectToDevice(myRemote)
-    }
-  }
-}
-&rdquo;`</p>
 <a href='#functions_and_behaviors' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h2 id='functions_and_behaviors'>Functions and Behaviors</h2>
 <a href='#list_of_devices_sorted_by_rssi' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h3 id='list_of_devices_sorted_by_rssi'>List of Devices sorted by RSSI</h3>
 <pre class="highlight swift"><code><span class="k">let</span> <span class="nv">sortedDeviceArrayByRSSI</span> <span class="o">=</span> <span class="n">myLocal</span><span class="o">.</span><span class="nf">getAscendingSortedArraysBasedOnRSSI</span><span class="p">()</span>

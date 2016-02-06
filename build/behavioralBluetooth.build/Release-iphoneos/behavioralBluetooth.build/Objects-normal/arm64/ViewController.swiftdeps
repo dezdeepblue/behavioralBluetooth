@@ -6,27 +6,27 @@ provides-nominal:
 provides-member:
 - ["C19behavioralBluetooth14ViewController", ""]
 provides-dynamic-lookup:
-- "localDeviceStateChange"
-- "didReceiveMemoryWarning"
-- "viewDidLoad"
-- "myLocal"
 - "myRemote"
 - "searchTimerExpired"
+- "localDeviceStateChange"
+- "didReceiveMemoryWarning"
+- "myLocal"
+- "viewDidLoad"
 depends-top-level:
+- !private "++"
 - !private "=="
+- "ViewController"
+- "RemoteBluetoothLEPeripheral"
+- !private "+"
+- !private "String"
+- "LocalBluetoothLECentral"
+- !private "StringLiteralType"
+- !private "<"
+- "LocalBehavioralSerialDeviceDelegate"
+- !private "BooleanLiteralType"
 - !private "print"
 - "UIViewController"
 - !private "DeviceState"
-- "LocalBehavioralSerialDeviceDelegate"
-- !private "StringLiteralType"
-- !private "<"
-- "LocalBluetoothLECentral"
-- !private "+"
-- !private "String"
-- !private "BooleanLiteralType"
-- !private "++"
-- "RemoteBluetoothLEPeripheral"
-- "ViewController"
 depends-member:
 - !private ["PSs9AnyObject", "DeviceState"]
 - ["PSs9AnyObject", "LocalBluetoothLECentral"]
