@@ -321,6 +321,7 @@ SWIFT_CLASS("_TtC19behavioralBluetooth23LocalBluetoothLECentral")
 /// <h3>Returns a RemoteBluetoothLEPeripheral object of interest.</h3>
 /// \param name String representing a RemoteBluetoothLEPeripheral object's advertized name.
 - (RemoteBluetoothLEPeripheral * __nullable)getDiscoveredRemoteDeviceByName:(NSString * __nonnull)name;
+- (NSArray<NSString *> * __nonnull)getDeviceNamesAsArray;
 
 /// <h3>Method called to initiate the CBCentralManager didScanForPeripherals.  The method is an NSTimeInterval representing how long the CBCentralManager should search before stopping.  The method SearchTimerExpired is called after the interval expires.</h3>
 /// \param timeoutSecs An NSTimeInterval representing the search duration.
@@ -335,6 +336,7 @@ SWIFT_CLASS("_TtC19behavioralBluetooth23LocalBluetoothLECentral")
 /// <h3>The CBCentralManager will actively attempt to disconnect from a remote device.</h3>
 /// \param deviceOfInterest The NSUUID of device needed to be disconnecting.
 - (BOOL)disconnectFromPeripheral:(NSUUID * __nonnull)deviceOfInterest;
+- (void)disconnectFromAllPeripherals;
 
 /// <h3>Method fired after lost connection with device.  The delay can be changed by calling either reconnectOnFail or reconnectOnDisconnect.</h3>
 - (void)reconnectTimerExpired;
@@ -459,12 +461,28 @@ SWIFT_CLASS("_TtC19behavioralBluetooth13RemoteCentral")
 
 SWIFT_CLASS("_TtC19behavioralBluetooth14ViewController")
 @interface ViewController : UIViewController <LocalBehavioralSerialDeviceDelegate>
-@property (nonatomic, strong) LocalBluetoothLECentral * __nonnull myLocal;
-@property (nonatomic, strong) RemoteBluetoothLEPeripheral * __nonnull myRemote;
 - (void)viewDidLoad;
 - (void)didReceiveMemoryWarning;
+- (nonnull instancetype)initWithNibName:(NSString * __nullable)nibNameOrNil bundle:(NSBundle * __nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
+- (nullable instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+@end
+
+@class UIRefreshControl;
+@class UITableView;
+@class NSIndexPath;
+@class UITableViewCell;
+
+SWIFT_CLASS("_TtC19behavioralBluetooth25deviceTableViewController")
+@interface deviceTableViewController : UITableViewController <LocalBehavioralSerialDeviceDelegate>
+@property (nonatomic, strong) UIRefreshControl * __nonnull refreshController;
+- (void)viewDidLoad;
+- (void)didReceiveMemoryWarning;
+- (NSInteger)numberOfSectionsInTableView:(UITableView * __nonnull)tableView;
+- (NSInteger)tableView:(UITableView * __nonnull)tableView numberOfRowsInSection:(NSInteger)section;
+- (UITableViewCell * __nonnull)tableView:(UITableView * __nonnull)tableView cellForRowAtIndexPath:(NSIndexPath * __nonnull)indexPath;
 - (void)searchTimerExpired;
-- (void)localDeviceStateChange;
+- (void)refreshTableOnPullDown;
+- (nonnull instancetype)initWithStyle:(UITableViewStyle)style OBJC_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)initWithNibName:(NSString * __nullable)nibNameOrNil bundle:(NSBundle * __nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * __nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 @end

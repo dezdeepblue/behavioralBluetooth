@@ -1,10 +1,11 @@
 version: "Apple Swift version 2.1.1 (swiftlang-700.1.101.15 clang-700.1.81)"
 options: "cc11395423e413006b7560da0f639248"
-build_time: [508041134, 512620000]
+build_time: [508100802, 478602000]
 inputs:
-  "/Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/AppDelegate.swift": [506489648, 0]
-  "/Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/behavioralSerialDeviceLocal.swift": [508025987, 0]
-  "/Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/behavioralSerialDeviceRemote.swift": [508023741, 0]
-  "/Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/LocalBluetoothLECentral.swift": [508040511, 0]
+  "/Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/ViewController.swift": [508085969, 0]
   "/Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/deviceState.swift": [508026183, 0]
-  "/Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/ViewController.swift": [508029456, 0]
+  "/Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/behavioralSerialDeviceRemote.swift": [508023741, 0]
+  "/Users/Ladvien/Desktop/behavioralBluetooth/deviceTableViewController.swift": [508085894, 0]
+  "/Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/AppDelegate.swift": [506489648, 0]
+  "/Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/behavioralSerialDeviceLocal.swift": [508100393, 0]
+  "/Users/Ladvien/Desktop/behavioralBluetooth/behavioralBluetooth/LocalBluetoothLECentral.swift": [508088630, 0]

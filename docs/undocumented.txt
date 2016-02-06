@@ -22,6 +22,8 @@ behavioralSerialDeviceRemote.swift
 	public var advDataTxPowerLevel: Int?
 	public var advDataIsConnectable: String?
 	public var advSolicitedServiceUUID: Array<String>?
+LocalBluetoothLECentral.swift
+	public func getDeviceNamesAsArray()->Array<String>
 deviceState.swift
 	public enum DeviceState: Int
 	case unknown = 0,
