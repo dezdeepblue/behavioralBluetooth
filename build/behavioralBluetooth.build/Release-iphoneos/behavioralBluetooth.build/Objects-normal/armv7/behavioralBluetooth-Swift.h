@@ -290,8 +290,8 @@ SWIFT_CLASS("_TtC19behavioralBluetooth21LocalBluetoothCentral")
 @class CBPeripheralManager;
 @class RemoteBluetoothLEPeripheral;
 @class CBPeripheral;
-@class NSError;
 @class NSNumber;
+@class NSError;
 @class CBService;
 @class CBCharacteristic;
 
@@ -305,11 +305,6 @@ SWIFT_CLASS("_TtC19behavioralBluetooth23LocalBluetoothLECentral")
 @property (nonatomic) NSInteger unknownIndex;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 - (void)obtainAdvertizingDataOnConnect:(BOOL)enable;
-
-/// Delegate method called from Remote objects.
-///
-/// \param more on this later more on this later.
-- (void)update;
 
 /// <h3>Returns a discovered device's NSUUID.</h3>
 /// \param name String representing the device's advertized name.
@@ -327,39 +322,15 @@ SWIFT_CLASS("_TtC19behavioralBluetooth23LocalBluetoothLECentral")
 /// \param name String representing a RemoteBluetoothLEPeripheral object's advertized name.
 - (RemoteBluetoothLEPeripheral * __nullable)getDiscoveredRemoteDeviceByName:(NSString * __nonnull)name;
 
-/// <h3>Updates the the state of the Local Bluetooth LE device.</h3>
-- (void)centralManagerDidUpdateState:(CBCentralManager * __nonnull)central;
-
-/// Requests the Local Device connect to a Bluetooth LE Remote device of interest.  The call will assure a connection to the particular device doesn't exist.  If the connectionsLimit has not been reached.
-- (BOOL)connectToDevice:(RemoteBluetoothLEPeripheral * __nonnull)remoteDevice;
-
-/// <h3>CoreBluetooth method called when CBCentralManager connects to peripheral.</h3>
-- (void)centralManager:(CBCentralManager * __nonnull)central didConnectPeripheral:(CBPeripheral * __nonnull)peripheral;
-
-/// <h3>CoreBluteooth method called when CBCentralManager fails to connect to a peripheral.</h3>
-- (void)centralManager:(CBCentralManager * __nonnull)central didFailToConnectPeripheral:(CBPeripheral * __nonnull)peripheral error:(NSError * __nullable)error;
-
 /// <h3>Method called to initiate the CBCentralManager didScanForPeripherals.  The method is an NSTimeInterval representing how long the CBCentralManager should search before stopping.  The method SearchTimerExpired is called after the interval expires.</h3>
 /// \param timeoutSecs An NSTimeInterval representing the search duration.
 - (void)search:(NSTimeInterval)timeoutSecs;
 
+/// Requests the Local Device connect to a Bluetooth LE Remote device of interest.  The call will assure a connection to the particular device doesn't exist.  If the connectionsLimit has not been reached.
+- (BOOL)connectToDevice:(RemoteBluetoothLEPeripheral * __nonnull)remoteDevice;
+
 /// ###Writes data to a particular RemoteDevice
 - (void)writeToDevice:(NSUUID * __nonnull)deviceOfInterest data:(NSString * __nonnull)data;
-
-/// <h3>CoreBluteooth method called when CBCentralManager loses connection.</h3>
-- (void)centralManager:(CBCentralManager * __nonnull)central didDisconnectPeripheral:(CBPeripheral * __nonnull)peripheral error:(NSError * __nullable)error;
-
-/// <h3>CoreBluteooth method called when CBCentralManager when scan discovers peripherals.</h3>
-- (void)centralManager:(CBCentralManager * __nonnull)central didDiscoverPeripheral:(CBPeripheral * __nonnull)peripheral advertisementData:(NSDictionary<NSString *, id> * __nonnull)advertisementData RSSI:(NSNumber * __nonnull)RSSI;
-
-/// <h3>CoreBluteooth method called when CBCentralManager discovers a peripheral's services.</h3>
-- (void)peripheral:(CBPeripheral * __nonnull)peripheral didDiscoverServices:(NSError * __nullable)error;
-
-/// <h3>CoreBluteooth method called when CBCentralManager discovers a service's characteristics.</h3>
-- (void)peripheral:(CBPeripheral * __nonnull)peripheral didDiscoverCharacteristicsForService:(CBService * __nonnull)service error:(NSError * __nullable)error;
-
-/// <h3>CoreBluteooth method called when CBCentralManager discovers a characteristic's descriptors.</h3>
-- (void)peripheral:(CBPeripheral * __nonnull)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic * __nonnull)characteristic error:(NSError * __nullable)error;
 
 /// <h3>The CBCentralManager will actively attempt to disconnect from a remote device.</h3>
 /// \param deviceOfInterest The NSUUID of device needed to be disconnecting.
@@ -370,6 +341,30 @@ SWIFT_CLASS("_TtC19behavioralBluetooth23LocalBluetoothLECentral")
 
 /// <h3>Method after search duration has expired.</h3>
 - (void)searchTimerExpire;
+
+/// <h3>Updates the the state of the Local Bluetooth LE device.</h3>
+- (void)centralManagerDidUpdateState:(CBCentralManager * __nonnull)central;
+
+/// <h3>CoreBluteooth method called when CBCentralManager when scan discovers peripherals.</h3>
+- (void)centralManager:(CBCentralManager * __nonnull)central didDiscoverPeripheral:(CBPeripheral * __nonnull)peripheral advertisementData:(NSDictionary<NSString *, id> * __nonnull)advertisementData RSSI:(NSNumber * __nonnull)RSSI;
+
+/// <h3>CoreBluetooth method called when CBCentralManager connects to peripheral.</h3>
+- (void)centralManager:(CBCentralManager * __nonnull)central didConnectPeripheral:(CBPeripheral * __nonnull)peripheral;
+
+/// <h3>CoreBluteooth method called when CBCentralManager fails to connect to a peripheral.</h3>
+- (void)centralManager:(CBCentralManager * __nonnull)central didFailToConnectPeripheral:(CBPeripheral * __nonnull)peripheral error:(NSError * __nullable)error;
+
+/// <h3>CoreBluteooth method called when CBCentralManager loses connection.</h3>
+- (void)centralManager:(CBCentralManager * __nonnull)central didDisconnectPeripheral:(CBPeripheral * __nonnull)peripheral error:(NSError * __nullable)error;
+
+/// <h3>CoreBluteooth method called when CBCentralManager discovers a peripheral's services.</h3>
+- (void)peripheral:(CBPeripheral * __nonnull)peripheral didDiscoverServices:(NSError * __nullable)error;
+
+/// <h3>CoreBluteooth method called when CBCentralManager discovers a service's characteristics.</h3>
+- (void)peripheral:(CBPeripheral * __nonnull)peripheral didDiscoverCharacteristicsForService:(CBService * __nonnull)service error:(NSError * __nullable)error;
+
+/// <h3>CoreBluteooth method called when CBCentralManager discovers a characteristic's descriptors.</h3>
+- (void)peripheral:(CBPeripheral * __nonnull)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic * __nonnull)characteristic error:(NSError * __nullable)error;
 @end
 
 

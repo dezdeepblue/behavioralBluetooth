@@ -6,73 +6,72 @@ provides-nominal:
 provides-member:
 - ["C19behavioralBluetooth23LocalBluetoothLECentral", ""]
 provides-dynamic-lookup:
-- "connectToDevice"
-- "activePeripheralManager"
-- "centralManager"
-- "centralManager"
-- "centralManager"
-- "centralManager"
-- "centralManagerDidUpdateState"
 - "writeToDevice"
-- "update"
-- "activeCentralManager"
-- "peripheral"
-- "peripheral"
-- "peripheral"
-- "discoverAdvertizingDataOnSearch"
-- "getDeviceIdByName"
-- "obtainAdvertizingDataOnConnect"
 - "getDiscoveredRemoteDeviceByID"
-- "getDiscoveredRemoteDeviceByName"
-- "reconnectTimerExpired"
-- "search"
+- "connectToDevice"
 - "searchTimerExpire"
+- "centralManagerDidUpdateState"
 - "unknownIndex"
+- "obtainAdvertizingDataOnConnect"
+- "discoverAdvertizingDataOnSearch"
+- "activeCentralManager"
 - "getDeviceName"
 - "disconnectFromPeripheral"
+- "peripheral"
+- "peripheral"
+- "peripheral"
+- "activePeripheralManager"
+- "reconnectTimerExpired"
+- "getDeviceIdByName"
+- "centralManager"
+- "centralManager"
+- "centralManager"
+- "centralManager"
+- "search"
+- "getDiscoveredRemoteDeviceByName"
 depends-top-level:
-- "NSUUID"
-- "Bool"
-- "NSError"
-- "Dictionary"
-- !private "CBAdvertisementDataLocalNameKey"
-- !private "DeviceState"
-- "CBPeripheralManager"
-- !private "CBAdvertisementDataTxPowerLevelKey"
-- !private "NSTimer"
 - !private "<"
-- !private "CBUUID"
-- !private "Array"
-- "CBService"
-- "CBCharacteristic"
-- "BooleanLiteralType"
-- !private "Selector"
-- !private "CBAdvertisementDataManufacturerDataKey"
-- !private "CBCentralManagerState"
-- "NSTimeInterval"
-- !private "print"
-- !private "CBAdvertisementDataIsConnectable"
-- "CBCentralManager"
-- "RemoteBluetoothLEPeripheral"
-- "NSNumber"
-- !private "NSUTF8StringEncoding"
-- !private "=="
-- !private "||"
-- "CBPeripheral"
-- "LocalPeripheral"
-- !private "Int"
-- !private "++"
-- !private "CBAdvertisementDataSolicitedServiceUUIDsKey"
-- "CBCentralManagerDelegate"
-- "AnyObject"
-- !private "CBAdvertisementDataOverflowServiceUUIDsKey"
 - !private "CBAdvertisementDataServiceDataKey"
-- !private "NSData"
-- !private "StringLiteralType"
-- "CBPeripheralDelegate"
-- "String"
+- "NSError"
+- "CBPeripheralManager"
 - "LocalBluetoothLECentral"
+- !private "NSUTF8StringEncoding"
+- !private "CBAdvertisementDataIsConnectable"
+- !private "print"
+- !private "Int"
+- !private "Selector"
+- "CBCharacteristic"
+- !private "NSData"
+- !private "||"
+- "BooleanLiteralType"
+- !private "NSTimer"
+- "NSNumber"
+- "CBCentralManagerDelegate"
+- !private "CBAdvertisementDataOverflowServiceUUIDsKey"
+- "CBService"
+- "RemoteBluetoothLEPeripheral"
+- "LocalPeripheral"
+- "Bool"
+- "NSTimeInterval"
+- !private "=="
+- "AnyObject"
+- "CBCentralManager"
+- "CBPeripheral"
+- !private "DeviceState"
+- "NSUUID"
+- !private "CBAdvertisementDataManufacturerDataKey"
+- !private "CBAdvertisementDataTxPowerLevelKey"
 - !private "+"
+- !private "CBAdvertisementDataLocalNameKey"
+- !private "Array"
+- "String"
+- !private "CBUUID"
+- !private "++"
+- !private "CBCentralManagerState"
+- !private "StringLiteralType"
+- "Dictionary"
+- "CBPeripheralDelegate"
+- !private "CBAdvertisementDataSolicitedServiceUUIDsKey"
 depends-member:
 - !private ["PSs9AnyObject", "Array"]
 - !private ["PSs9AnyObject", "CBAdvertisementDataIsConnectable"]
@@ -168,7 +167,6 @@ depends-member:
 - !private ["PSs9AnyObject", "timeBeforeAttemptingReconnectOnConnectionFail"]
 - !private ["PSs9AnyObject", "timeBeforeAttemptingReconnectOnDisconnect"]
 - ["PSs9AnyObject", "unknownIndex"]
-- ["PSs9AnyObject", "update"]
 - ["PSs9AnyObject", "writeToDevice"]
 - ["PSs9AnyObject", ""]
 - !private ["Sa", "Generator"]
@@ -454,7 +452,6 @@ depends-member:
 - !private ["PSs11CVarArgType", "timeBeforeAttemptingReconnectOnConnectionFail"]
 - !private ["PSs11CVarArgType", "timeBeforeAttemptingReconnectOnDisconnect"]
 - ["PSs11CVarArgType", "unknownIndex"]
-- ["PSs11CVarArgType", "update"]
 - ["PSs11CVarArgType", "writeToDevice"]
 - ["PSs11CVarArgType", ""]
 - !private ["VSs9Character", "deinit"]
@@ -599,7 +596,6 @@ depends-member:
 - !private ["PSs23CustomStringConvertible", "timeBeforeAttemptingReconnectOnConnectionFail"]
 - !private ["PSs23CustomStringConvertible", "timeBeforeAttemptingReconnectOnDisconnect"]
 - ["PSs23CustomStringConvertible", "unknownIndex"]
-- ["PSs23CustomStringConvertible", "update"]
 - !private ["PSs23CustomStringConvertible", "updateValue"]
 - ["PSs23CustomStringConvertible", "writeToDevice"]
 - ["PSs23CustomStringConvertible", ""]
@@ -749,7 +745,6 @@ depends-member:
 - !private ["PSs9Equatable", "unknown"]
 - ["PSs9Equatable", "unknownIndex"]
 - !private ["PSs9Equatable", "unsupported"]
-- ["PSs9Equatable", "update"]
 - ["PSs9Equatable", "writeToDevice"]
 - ["PSs9Equatable", ""]
 - !private ["PSs41ExtendedGraphemeClusterLiteralConvertible", "init"]
@@ -868,7 +863,6 @@ depends-member:
 - !private ["PSs8Hashable", "unknown"]
 - ["PSs8Hashable", "unknownIndex"]
 - !private ["PSs8Hashable", "unsupported"]
-- ["PSs8Hashable", "update"]
 - ["PSs8Hashable", "writeToDevice"]
 - ["PSs8Hashable", ""]
 - !private ["PSs9Indexable", "Generator"]
@@ -983,7 +977,6 @@ depends-member:
 - !private ["C19behavioralBluetooth27LocalBehavioralSerialDevice", "timeBeforeAttemptingReconnectOnConnectionFail"]
 - !private ["C19behavioralBluetooth27LocalBehavioralSerialDevice", "timeBeforeAttemptingReconnectOnDisconnect"]
 - ["C19behavioralBluetooth27LocalBehavioralSerialDevice", "unknownIndex"]
-- ["C19behavioralBluetooth27LocalBehavioralSerialDevice", "update"]
 - ["C19behavioralBluetooth27LocalBehavioralSerialDevice", "writeToDevice"]
 - !private ["P19behavioralBluetooth35LocalBehavioralSerialDeviceDelegate", "connectedToDevice"]
 - !private ["P19behavioralBluetooth35LocalBehavioralSerialDeviceDelegate", "localDeviceStateChange"]
@@ -1065,7 +1058,6 @@ depends-member:
 - !private ["C19behavioralBluetooth23LocalBluetoothLECentral", "timeBeforeAttemptingReconnectOnConnectionFail"]
 - !private ["C19behavioralBluetooth23LocalBluetoothLECentral", "timeBeforeAttemptingReconnectOnDisconnect"]
 - ["C19behavioralBluetooth23LocalBluetoothLECentral", "unknownIndex"]
-- ["C19behavioralBluetooth23LocalBluetoothLECentral", "update"]
 - ["C19behavioralBluetooth23LocalBluetoothLECentral", "writeToDevice"]
 - ["C19behavioralBluetooth15LocalPeripheral", "AnyObject"]
 - !private ["C19behavioralBluetooth15LocalPeripheral", "Array"]
@@ -1143,7 +1135,6 @@ depends-member:
 - !private ["C19behavioralBluetooth15LocalPeripheral", "timeBeforeAttemptingReconnectOnConnectionFail"]
 - !private ["C19behavioralBluetooth15LocalPeripheral", "timeBeforeAttemptingReconnectOnDisconnect"]
 - ["C19behavioralBluetooth15LocalPeripheral", "unknownIndex"]
-- ["C19behavioralBluetooth15LocalPeripheral", "update"]
 - ["C19behavioralBluetooth15LocalPeripheral", "writeToDevice"]
 - ["C19behavioralBluetooth15LocalPeripheral", ""]
 - !private ["PSs14MirrorPathType", "Distance"]
@@ -1285,7 +1276,6 @@ depends-member:
 - !private ["CSo8NSObject", "timeBeforeAttemptingReconnectOnConnectionFail"]
 - !private ["CSo8NSObject", "timeBeforeAttemptingReconnectOnDisconnect"]
 - ["CSo8NSObject", "unknownIndex"]
-- ["CSo8NSObject", "update"]
 - ["CSo8NSObject", "writeToDevice"]
 - !private ["PSo16NSObjectProtocol", "Array"]
 - !private ["PSo16NSObjectProtocol", "CBAdvertisementDataIsConnectable"]
@@ -1380,7 +1370,6 @@ depends-member:
 - !private ["PSo16NSObjectProtocol", "timeBeforeAttemptingReconnectOnConnectionFail"]
 - !private ["PSo16NSObjectProtocol", "timeBeforeAttemptingReconnectOnDisconnect"]
 - ["PSo16NSObjectProtocol", "unknownIndex"]
-- ["PSo16NSObjectProtocol", "update"]
 - ["PSo16NSObjectProtocol", "writeToDevice"]
 - ["PSo16NSObjectProtocol", ""]
 - !private ["PSo14NSSecureCoding", "UUIDString"]
@@ -1495,7 +1484,6 @@ depends-member:
 - !private ["P19behavioralBluetooth36RemoteBehavioralSerialDeviceDelegate", "timeBeforeAttemptingReconnectOnConnectionFail"]
 - !private ["P19behavioralBluetooth36RemoteBehavioralSerialDeviceDelegate", "timeBeforeAttemptingReconnectOnDisconnect"]
 - ["P19behavioralBluetooth36RemoteBehavioralSerialDeviceDelegate", "unknownIndex"]
-- ["P19behavioralBluetooth36RemoteBehavioralSerialDeviceDelegate", "update"]
 - ["P19behavioralBluetooth36RemoteBehavioralSerialDeviceDelegate", "writeToDevice"]
 - ["P19behavioralBluetooth36RemoteBehavioralSerialDeviceDelegate", ""]
 - !private ["C19behavioralBluetooth27RemoteBluetoothLEPeripheral", "ID"]
@@ -1770,4 +1758,4 @@ depends-external:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/CoreImage.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/CoreBluetooth.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/armv7/CoreData.swiftmodule"
-interface-hash: "60c5031889c33ff50daffe94c620f848"
+interface-hash: "6127ef5be3410e3a8c09320f47df82d6"
