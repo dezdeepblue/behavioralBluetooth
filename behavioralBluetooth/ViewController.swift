@@ -19,7 +19,8 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
         myLocal.reconnectOnDisconnect(tries: 3, timeBetweenTries: 1.5)
         myLocal.reconnectOnFail(tries: 3, timeBetweenTries: 2)
         myLocal.discoverAdvertizingDataOnSearch = false
-        myLocal.verboseOutput = false
+        myLocal.verboseOutput = true
+        myLocal.addServiceOfInterest("FFE0")
     }
 
     override func didReceiveMemoryWarning() {

@@ -26,6 +26,9 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
 
     // Behavioral: Variables.
     var discoverAdvertizingDataOnSearch: Bool = false;
+    private var desiredServices: Array<CBUUID>?
+    private var desiredCharacteristic = CBCharacteristic?()
+    
     
     // Unknown Index
     var unknownIndex = 0
@@ -86,31 +89,34 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
 
     // #MARK: LocalBluetoothLECentral: Actions
     
+    public func addServiceOfInterest(serviceOfInterest: String){
+        let cbServiceOfInterest = CBUUID(string: serviceOfInterest)
+        desiredServices?.append(cbServiceOfInterest)
+    }
+    
     /**
     ### Method called to initiate the CBCentralManager didScanForPeripherals.  The method is an NSTimeInterval representing how long the CBCentralManager should search before stopping.  The method SearchTimerExpired is called after the interval expires.
     - parameter timeoutSecs: An NSTimeInterval representing the search duration.
     */
     public func search(timeoutSecs: NSTimeInterval){
-        
         // 1. Empty peripheral lists.
         // 2. Reset unknownDevice index; used for avoiding duplicate names.
-        // 3. Reset search flag.
-        // Empty Lists
+        // 3. Set device state to scanning.
+        
         discoveredPeripherals = [:]
         discoveredDeviceRSSIArray = []
         discoveredDeviceIdArray = []
         
-        // Reset unknown device index; used for naming devices lacking names.
         unknownIndex = 0
         
         self.deviceState.searchState = DeviceState.searchStates.scanning
-        //searchComplete = false
         //clearDiscoveredDevices()
         // Strange.  If a search for peripherals is initiated it cancels all connections without firing didDisconnectPeripheral.  This compensates.
         clearConnectedDevices()
-        print(self.deviceState)
+        
         //activeCentralManager = CBCentralManager(delegate: self, queue: nil)
-        activeCentralManager.scanForPeripheralsWithServices(nil, options: nil)
+        
+        activeCentralManager.scanForPeripheralsWithServices(desiredServices, options: nil)
         searchTimeoutTimer = NSTimer.scheduledTimerWithTimeInterval(timeoutSecs, target: self, selector: Selector("searchTimerExpire"), userInfo: nil, repeats: false)
         debugOutput("Started search with "+String(timeoutSecs) + " sec timeout")
     }
@@ -497,6 +503,8 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
     ### CoreBluteooth method called when CBCentralManager discovers a peripheral's services.
     */
     @objc public func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
+
+        debugOutput("Discovered Service:" + String(peripheral.services))
         // Look for set characteristics.
         // If not, do below.
         if let connectedPeripheral = connectedPeripherals[peripheral.identifier]{

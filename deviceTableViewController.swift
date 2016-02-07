@@ -49,7 +49,7 @@ class deviceTableViewController: UITableViewController, LocalBehavioralSerialDev
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(sortedDeviceArrayByRSSI.nsuuids.count)
+
         // #warning Incomplete implementation, return the number of rows
         return sortedDeviceArrayByRSSI.nsuuids.count
     }
@@ -68,6 +68,17 @@ class deviceTableViewController: UITableViewController, LocalBehavioralSerialDev
         cell.textLabel?.text = deviceName
         cell.detailTextLabel?.text = String(deviceRSSI)
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
+        
+        // 1. Get device at index NSUUID.
+        // 2. Get remote device by ID.
+        let deviceID = sortedDeviceArrayByRSSI.nsuuids[indexPath.row]
+        if let device = myLocal.getDiscoveredRemoteDeviceByID(deviceID) {
+            myLocal.connectToDevice(device)
+        }
+
     }
 
 
