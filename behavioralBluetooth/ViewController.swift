@@ -7,8 +7,10 @@
 //
 
 import UIKit
-var myLocal = LocalBluetoothLECentral()
+import bluetoothBehave
+
 var myRemote = RemoteBluetoothLEPeripheral()
+var myLocal = LocalBluetoothLECentral()
 
 class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
     
@@ -18,8 +20,8 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
 
         myLocal.reconnectOnDisconnect(tries: 3, timeBetweenTries: 1.5)
         myLocal.reconnectOnFail(tries: 3, timeBetweenTries: 2)
-        myLocal.discoverAdvertizingDataOnSearch = false
-        myLocal.verboseOutput = true
+        myLocal.setDiscoverAdvertizingData(true)
+        myLocal.verboseOutput(true)
         myLocal.addServiceOfInterest("FFE0")
     }
 

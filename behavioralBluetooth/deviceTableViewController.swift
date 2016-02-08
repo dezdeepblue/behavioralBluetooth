@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import bluetoothBehave
 
 class deviceTableViewController: UITableViewController, LocalBehavioralSerialDeviceDelegate {
 
@@ -99,6 +100,12 @@ class deviceTableViewController: UITableViewController, LocalBehavioralSerialDev
         // 2. Disconnect from all devices.
         myLocal.search(1.0)
         myLocal.disconnectFromAllPeripherals()
+    }
+    
+    func localDeviceStateChange() {
+        print("Hardware" + String(myLocal.getHardwareState()))
+        print("Connection" + String(myLocal.getConnectionState()))
+        print("Search" + String(myLocal.getSearchState()))
     }
     
     /*

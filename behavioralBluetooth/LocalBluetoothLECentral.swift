@@ -504,7 +504,6 @@ public class LocalBluetoothLECentral: LocalPeripheral, CBCentralManagerDelegate,
     */
     @objc public func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
 
-        debugOutput("Discovered Service:" + String(peripheral.services))
         // Look for set characteristics.
         // If not, do below.
         if let connectedPeripheral = connectedPeripherals[peripheral.identifier]{
