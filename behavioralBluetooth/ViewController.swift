@@ -10,7 +10,7 @@ import UIKit
 import bluetoothBehave
 
 var myRemote = RemoteBluetoothLEPeripheral()
-var myLocal = LocalBluetoothLECentral()
+var myLocal = LocalBehavioralSerialDevice()
 
 class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
     
