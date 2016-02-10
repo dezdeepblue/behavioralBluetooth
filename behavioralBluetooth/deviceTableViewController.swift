@@ -9,7 +9,7 @@
 import UIKit
 import bluetoothBehave
 
-class deviceTableViewController: UITableViewController, LocalBehavioralSerialDeviceDelegate {
+class deviceTableViewController: UITableViewController, bluetoothBehaveLocalDelegate {
 
     var refreshController = UIRefreshControl()
     

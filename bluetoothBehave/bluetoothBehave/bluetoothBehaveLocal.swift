@@ -10,7 +10,7 @@ import Foundation
 import CoreBluetooth
 
 // #MARK: Optional protocol for LocalBehavioralSerialDevice
-@objc public protocol LocalBehavioralSerialDeviceDelegate {
+@objc public protocol bluetoothBehaveLocalDelegate {
     optional func searchTimerExpired()
     optional func localDeviceStateChange()
     optional func connectedToDevice()
@@ -18,12 +18,12 @@ import CoreBluetooth
 
 // #MARK: LocalBehavioralSerialDevice
 /// This hopefully provides some info
-public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDeviceDelegate, CBCentralManagerDelegate, CBPeripheralDelegate {
+public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCentralManagerDelegate, CBPeripheralDelegate {
     
     // MARK: Properties START
     // Device lists
-    private var discoveredDeviceList: Dictionary<NSUUID, RemoteBehavioralSerialDevice> = [:]
-    internal var connectedRemotes: Dictionary<NSUUID, RemoteBehavioralSerialDevice> = [:]
+    private var discoveredDeviceList: Dictionary<NSUUID, bluetoothBehaveRemote> = [:]
+    internal var connectedRemotes: Dictionary<NSUUID, bluetoothBehaveRemote> = [:]
     
     // Discovered Device handles
     private var discoveredDeviceIdByName: Dictionary<String, NSUUID> = [:]
@@ -54,9 +54,8 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     public var retryIndexOnFail: Int = 0
     public var retryIndexOnDisconnect: Int = 0
 
-    
     // Delegate for search updates.
-    public var delegate:LocalBehavioralSerialDeviceDelegate? = nil
+    public var delegate:bluetoothBehaveLocalDelegate? = nil
     internal var lastConnectedPeripheralNSUUID: NSUUID?
     
     // Search properities.
@@ -69,8 +68,8 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     internal var activePeripheralManager = CBPeripheralManager()
     
     // Peripheral List
-    private var connectedPeripherals: Dictionary<NSUUID, RemoteBluetoothLEPeripheral> = [:]
-    private var discoveredPeripherals: Dictionary<NSUUID, RemoteBluetoothLEPeripheral> = [:]
+    private var connectedPeripherals: Dictionary<NSUUID, bluetoothBehaveRemote> = [:]
+    private var discoveredPeripherals: Dictionary<NSUUID, bluetoothBehaveRemote> = [:]
     private var discoveredPeripheralsNames: Dictionary<String, NSUUID> = [:]
     private var discoveredPeripheralNameById: Dictionary<NSUUID, String> = [:]
     
@@ -101,7 +100,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     ###Set the ID for the desired connected device. The device passed to this function will become the local device's new sought device.  If this will affect autoreconnect scenarios.
     - parameter device: The behavioralBluetooth RemoteSerialDevice desired.
     */
-    internal func setConnectedDevice(nsuuidAsKey: NSUUID, device: RemoteBehavioralSerialDevice){
+    internal func setConnectedDevice(nsuuidAsKey: NSUUID, device: bluetoothBehaveRemote){
         
         connectedRemotes.updateValue(device, forKey: nsuuidAsKey)
         debugOutput("setConnectedDevice")
@@ -118,10 +117,65 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     public func getSearchState()->DeviceState.searchStates{
         return self.deviceState.search
     }
+
+    // #MARK: LocalBluetoothLECentral: Getters / Setters
+    public override init() {
+        super.init()
+        activeCentralManager.delegate = self
+    }
     
+    // Behavioral: Methods.
+    public func setDiscoverAdvertizingData(enable: Bool){
+        discoverAdvertizingDataOnSearch = enable
+    }
     
-    public func verboseOutput(enabled: Bool){
-        verboseOutput = enabled
+    /**
+     ### Returns a discovered device's NSUUID.
+     - parameter name: String representing the device's advertized name.
+     */
+    public func getDeviceIdByName(name: String)->NSUUID?{
+        return discoveredPeripheralsNames[name]
+    }
+    
+    /**
+     Provides the name of a particular discovered device as a String object.
+     
+     ```swift
+     println(getDeviceName(myDeviceNSUUID))
+     ```
+     
+     ```xml
+     Output: myDevice
+     ```
+     
+     */
+    public func getDeviceName(deviceOfInterest: NSUUID)->String?{
+        return discoveredPeripheralNameById[deviceOfInterest]
+    }
+    
+    /**
+     ### Returns a RemoteBluetoothLEPeripheral object of interest.
+     - parameter deviceOfInterest: NSUUID
+     */
+    public func getDiscoveredRemoteDeviceByID(deviceNSUUID: NSUUID)->bluetoothBehaveRemote?{
+        return discoveredPeripherals[deviceNSUUID]
+    }
+    
+    /**
+     ### Returns a RemoteBluetoothLEPeripheral object of interest.
+     - parameter name: String representing a RemoteBluetoothLEPeripheral object's advertized name.
+     */
+    public func getDiscoveredRemoteDeviceByName(name: String)->bluetoothBehaveRemote?{
+        if let deviceID = getDeviceIdByName(name){
+            return getDiscoveredRemoteDeviceByID(deviceID)
+        }
+        return nil
+    }
+    
+    public func getDeviceNamesAsArray()->Array<String>{
+        var names: Array<String> = [""]
+        names = Array<String>(discoveredPeripheralsNames.keys)
+        return names
     }
 
     
@@ -161,6 +215,11 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
 
     
     // #MARK: Behavioral Mutators
+    
+    public func verboseOutput(enabled: Bool){
+        verboseOutput = enabled
+    }
+    
     /**
      ###Sets whether the connected serial device should be dismissed when the app enters the background.
      - parameter allow: Bool
@@ -383,65 +442,6 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     }
 
     
-    // #MARK: LocalBluetoothLECentral: Getters / Setters
-    public override init() {
-        super.init()
-        activeCentralManager.delegate = self
-    }
-    
-    // Behavioral: Methods.
-    public func setDiscoverAdvertizingData(enable: Bool){
-        discoverAdvertizingDataOnSearch = enable
-    }
-    
-    /**
-     ### Returns a discovered device's NSUUID.
-     - parameter name: String representing the device's advertized name.
-     */
-    public func getDeviceIdByName(name: String)->NSUUID?{
-        return discoveredPeripheralsNames[name]
-    }
-    
-    /**
-     Provides the name of a particular discovered device as a String object.
-     
-     ```swift
-     println(getDeviceName(myDeviceNSUUID))
-     ```
-     
-     ```xml
-     Output: myDevice
-     ```
-     
-     */
-    public func getDeviceName(deviceOfInterest: NSUUID)->String?{
-        return discoveredPeripheralNameById[deviceOfInterest]
-    }
-    
-    /**
-     ### Returns a RemoteBluetoothLEPeripheral object of interest.
-     - parameter deviceOfInterest: NSUUID
-     */
-    public func getDiscoveredRemoteDeviceByID(deviceNSUUID: NSUUID)->RemoteBluetoothLEPeripheral?{
-        return discoveredPeripherals[deviceNSUUID]
-    }
-    
-    /**
-     ### Returns a RemoteBluetoothLEPeripheral object of interest.
-     - parameter name: String representing a RemoteBluetoothLEPeripheral object's advertized name.
-     */
-    public func getDiscoveredRemoteDeviceByName(name: String)->RemoteBluetoothLEPeripheral?{
-        if let deviceID = getDeviceIdByName(name){
-            return getDiscoveredRemoteDeviceByID(deviceID)
-        }
-        return nil
-    }
-    
-    public func getDeviceNamesAsArray()->Array<String>{
-        var names: Array<String> = [""]
-        names = Array<String>(discoveredPeripheralsNames.keys)
-        return names
-    }
     
     // #MARK: LocalBluetoothLECentral: Actions
     
@@ -480,7 +480,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
     /**
      Requests the Local Device connect to a Bluetooth LE Remote device of interest.  The call will assure a connection to the particular device doesn't exist.  If the `connectionsLimit` has not been reached.
      */
-    public func connectToDevice(remoteDevice: RemoteBluetoothLEPeripheral) -> Bool {
+    public func connectToDevice(remoteDevice: bluetoothBehaveRemote) -> Bool {
         
         // 1. Set state.
         // 2. Get peripheral out of bbObject.
@@ -645,7 +645,7 @@ public class LocalBehavioralSerialDevice: NSObject, RemoteBehavioralSerialDevice
         // 1. Creates RemotebBluetoothLE object and populates its data.
         // 2. Add the remote object to our Remote object Dictioanry.
         
-        let thisRemoteDevice = RemoteBluetoothLEPeripheral()
+        let thisRemoteDevice = bluetoothBehaveRemote()
         
         // Populate the object.
         thisRemoteDevice.ID = peripheral.identifier

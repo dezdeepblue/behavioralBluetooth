@@ -9,10 +9,10 @@
 import UIKit
 import bluetoothBehave
 
-var myRemote = RemoteBluetoothLEPeripheral()
-var myLocal = LocalBehavioralSerialDevice()
+var myRemote = bluetoothBehaveRemote()
+var myLocal = bluetootBehaveLocal()
 
-class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
+class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()

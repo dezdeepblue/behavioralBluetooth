@@ -16,8 +16,8 @@
 		463BA36E1C4DE63000AA3007 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 463BA36C1C4DE63000AA3007 /* LaunchScreen.storyboard */; };
 		463BA3791C4DE63000AA3007 /* behavioralBluetoothTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463BA3781C4DE63000AA3007 /* behavioralBluetoothTests.swift */; };
 		463BA3841C4DE63000AA3007 /* behavioralBluetoothUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 463BA3831C4DE63000AA3007 /* behavioralBluetoothUITests.swift */; };
-		468134C41C6811EE00945591 /* bluetoothBehave.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 468134C31C6811EE00945591 /* bluetoothBehave.framework */; };
-		468134C51C6811EE00945591 /* bluetoothBehave.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 468134C31C6811EE00945591 /* bluetoothBehave.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		46E9657D1C6828A100DD0B97 /* bluetoothBehave.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E9657C1C6828A100DD0B97 /* bluetoothBehave.framework */; };
+		46E9657E1C6828A100DD0B97 /* bluetoothBehave.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 46E9657C1C6828A100DD0B97 /* bluetoothBehave.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,13 +45,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		4678DC641C67D3EA008CC76A /* Embed Frameworks */ = {
+		46E9657B1C68287F00DD0B97 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				468134C51C6811EE00945591 /* bluetoothBehave.framework in Embed Frameworks */,
+				46E9657E1C6828A100DD0B97 /* bluetoothBehave.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,8 +74,8 @@
 		463BA37F1C4DE63000AA3007 /* behavioralBluetoothUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = behavioralBluetoothUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		463BA3831C4DE63000AA3007 /* behavioralBluetoothUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = behavioralBluetoothUITests.swift; sourceTree = "<group>"; };
 		463BA3851C4DE63000AA3007 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		468134C31C6811EE00945591 /* bluetoothBehave.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = bluetoothBehave.framework; path = "../../Library/Developer/Xcode/DerivedData/behavioralBluetooth-ghpwxssztrzqsabxgihxipiuakyn/Build/Products/Debug-iphoneos/bluetoothBehave.framework"; sourceTree = "<group>"; };
 		468134C81C68192500945591 /* bluetoothBehave.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = bluetoothBehave.xcodeproj; path = bluetoothBehave/bluetoothBehave.xcodeproj; sourceTree = "<group>"; };
+		46E9657C1C6828A100DD0B97 /* bluetoothBehave.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = bluetoothBehave.framework; path = "../../Library/Developer/Xcode/DerivedData/behavioralBluetooth-eifatxaqacnrtndbahypkpjioyyn/Build/Products/Debug-iphoneos/bluetoothBehave.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,7 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				468134C41C6811EE00945591 /* bluetoothBehave.framework in Frameworks */,
+				46E9657D1C6828A100DD0B97 /* bluetoothBehave.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,8 +107,8 @@
 		463BA3541C4DE62F00AA3007 = {
 			isa = PBXGroup;
 			children = (
+				46E9657C1C6828A100DD0B97 /* bluetoothBehave.framework */,
 				468134C81C68192500945591 /* bluetoothBehave.xcodeproj */,
-				468134C31C6811EE00945591 /* bluetoothBehave.framework */,
 				463BA35F1C4DE63000AA3007 /* behavioralBluetooth */,
 				463BA3771C4DE63000AA3007 /* behavioralBluetoothTests */,
 				463BA3821C4DE63000AA3007 /* behavioralBluetoothUITests */,
@@ -177,7 +177,7 @@
 				463BA3591C4DE63000AA3007 /* Sources */,
 				463BA35A1C4DE63000AA3007 /* Frameworks */,
 				463BA35B1C4DE63000AA3007 /* Resources */,
-				4678DC641C67D3EA008CC76A /* Embed Frameworks */,
+				46E9657B1C68287F00DD0B97 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

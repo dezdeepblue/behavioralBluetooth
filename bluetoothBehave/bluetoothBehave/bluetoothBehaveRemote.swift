@@ -9,12 +9,12 @@
 import Foundation
 import CoreBluetooth
 
-protocol RemoteBehavioralSerialDeviceDelegate {
+protocol bluetoothBehaveRemoteDelegate {
     func update()
 }
 
 /// This hopefully provides some info
-public class RemoteBehavioralSerialDevice: NSObject {
+public class bluetoothBehaveRemote: NSObject, CBPeripheralDelegate {
     
     internal var deviceState = DeviceState()
     
@@ -44,30 +44,7 @@ public class RemoteBehavioralSerialDevice: NSObject {
     public func getDeviceName()->String?{
         return nameString
     }
-}
-
-public class RemoteCentral: RemoteBehavioralSerialDevice {
     
-}
-
-public class RemotePeripheral: RemoteBehavioralSerialDevice {
-    
-}
-
-public class RemoteBluetoothCentral: RemotePeripheral {
-    
-}
-
-public class RemoteBluetoothLECentral: RemotePeripheral {
-
-}
-
-public class RemoteBluetoothPeripheral: RemotePeripheral {
-    
-}
-
-public class RemoteBluetoothLEPeripheral: RemotePeripheral, CBPeripheralDelegate {
-
     public var dataLocalNameString: String?
     
     // Peripheral
@@ -83,7 +60,7 @@ public class RemoteBluetoothLEPeripheral: RemotePeripheral, CBPeripheralDelegate
     
     // May have sever descriptors.
     public var bbDescriptors: Array<CBDescriptor>?
-
+    
     // Discovered device advertisement data.
     public var advDataLocalName: String?
     public var advDataManufacturerData: String?
@@ -93,7 +70,6 @@ public class RemoteBluetoothLEPeripheral: RemotePeripheral, CBPeripheralDelegate
     public var advDataTxPowerLevel: Int?
     public var advDataIsConnectable: String?
     public var advSolicitedServiceUUID: Array<String>?
-    
 }
 
 

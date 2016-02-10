@@ -8,18 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		468134A31C680D5E00945591 /* bluetoothBehave.h in Headers */ = {isa = PBXBuildFile; fileRef = 468134A21C680D5E00945591 /* bluetoothBehave.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		468134AE1C680D7C00945591 /* behavioralSerialDeviceLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468134AA1C680D7C00945591 /* behavioralSerialDeviceLocal.swift */; };
-		468134AF1C680D7C00945591 /* behavioralSerialDeviceRemote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468134AB1C680D7C00945591 /* behavioralSerialDeviceRemote.swift */; };
-		468134B31C680D9E00945591 /* deviceState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468134B21C680D9E00945591 /* deviceState.swift */; };
+		468134AE1C680D7C00945591 /* bluetoothBehaveLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468134AA1C680D7C00945591 /* bluetoothBehaveLocal.swift */; };
+		468134AF1C680D7C00945591 /* bluetoothBehaveRemote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468134AB1C680D7C00945591 /* bluetoothBehaveRemote.swift */; };
+		468134B31C680D9E00945591 /* bluetoothBehaveState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468134B21C680D9E00945591 /* bluetoothBehaveState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4681349F1C680D5E00945591 /* bluetoothBehave.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = bluetoothBehave.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		468134A21C680D5E00945591 /* bluetoothBehave.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bluetoothBehave.h; sourceTree = "<group>"; };
 		468134A41C680D5E00945591 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		468134AA1C680D7C00945591 /* behavioralSerialDeviceLocal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = behavioralSerialDeviceLocal.swift; sourceTree = "<group>"; };
-		468134AB1C680D7C00945591 /* behavioralSerialDeviceRemote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = behavioralSerialDeviceRemote.swift; sourceTree = "<group>"; };
-		468134B21C680D9E00945591 /* deviceState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = deviceState.swift; sourceTree = "<group>"; };
+		468134AA1C680D7C00945591 /* bluetoothBehaveLocal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bluetoothBehaveLocal.swift; sourceTree = "<group>"; };
+		468134AB1C680D7C00945591 /* bluetoothBehaveRemote.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bluetoothBehaveRemote.swift; sourceTree = "<group>"; };
+		468134B21C680D9E00945591 /* bluetoothBehaveState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bluetoothBehaveState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,9 +52,9 @@
 		468134A11C680D5E00945591 /* bluetoothBehave */ = {
 			isa = PBXGroup;
 			children = (
-				468134B21C680D9E00945591 /* deviceState.swift */,
-				468134AA1C680D7C00945591 /* behavioralSerialDeviceLocal.swift */,
-				468134AB1C680D7C00945591 /* behavioralSerialDeviceRemote.swift */,
+				468134B21C680D9E00945591 /* bluetoothBehaveState.swift */,
+				468134AA1C680D7C00945591 /* bluetoothBehaveLocal.swift */,
+				468134AB1C680D7C00945591 /* bluetoothBehaveRemote.swift */,
 				468134A21C680D5E00945591 /* bluetoothBehave.h */,
 				468134A41C680D5E00945591 /* Info.plist */,
 			);
@@ -139,9 +139,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				468134AF1C680D7C00945591 /* behavioralSerialDeviceRemote.swift in Sources */,
-				468134B31C680D9E00945591 /* deviceState.swift in Sources */,
-				468134AE1C680D7C00945591 /* behavioralSerialDeviceLocal.swift in Sources */,
+				468134AF1C680D7C00945591 /* bluetoothBehaveRemote.swift in Sources */,
+				468134B31C680D9E00945591 /* bluetoothBehaveState.swift in Sources */,
+				468134AE1C680D7C00945591 /* bluetoothBehaveLocal.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
