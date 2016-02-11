@@ -22,14 +22,14 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
         myLocal.reconnectOnFail(tries: 3, timeBetweenTries: 2)
         myLocal.setDiscoverAdvertizingData(true)
         myLocal.verboseOutput(true)
-        myLocal.addServiceOfInterest("FFE0")
+        //myLocal.addServiceOfInterest("FFE0")
     }
     
     override func viewDidAppear(animated: Bool) {
         print(myLocal.getConnectionState())
         if(myLocal.getConnectionState() == DeviceState.connectionStates.connected){
             if let deviceID = myLocal.getDeviceIdByName("ALABTU"){
-                myLocal.writeToDevice(deviceID, data: "DOUGHNUTS!")
+                myLocal.writeToDevice(deviceID, data: "DOUGHNUTS!\n\r")
             }
 
         }
