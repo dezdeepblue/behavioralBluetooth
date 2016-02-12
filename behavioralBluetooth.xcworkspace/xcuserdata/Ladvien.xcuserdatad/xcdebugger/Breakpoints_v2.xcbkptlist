@@ -9,13 +9,141 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "behavioralBluetooth/ViewController.swift"
-            timestampString = "476803860.524431"
+            filePath = "bluetoothBehave/bluetoothBehave/bluetoothBehaveLocal.swift"
+            timestampString = "476979661.968013"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
-            landmarkName = "viewDidAppear(_:)"
+            startingLineNumber = "574"
+            endingLineNumber = "574"
+            landmarkName = "writeToDevice(_:data:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "bluetoothBehave/bluetoothBehave/bluetoothBehaveLocal.swift"
+            timestampString = "476979887.293039"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "576"
+            endingLineNumber = "576"
+            landmarkName = "writeToDevice(_:data:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "bluetoothBehave/bluetoothBehave/bluetoothBehaveLocal.swift"
+            timestampString = "476978988.418187"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "572"
+            endingLineNumber = "572"
+            landmarkName = "writeToDevice(_:data:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "bluetoothBehave/bluetoothBehave/bluetoothBehaveLocal.swift"
+            timestampString = "476978989.220335"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "573"
+            endingLineNumber = "573"
+            landmarkName = "writeToDevice(_:data:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "bluetoothBehave/bluetoothBehave/bluetoothBehaveLocal.swift"
+            timestampString = "476980179.582336"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "942"
+            endingLineNumber = "942"
+            landmarkName = "peripheral(_:didDiscoverCharacteristicsForService:error:)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "bluetoothBehave/bluetoothBehave/bluetoothBehaveLocal.swift"
+            timestampString = "476980747.439921"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "949"
+            endingLineNumber = "949"
+            landmarkName = "peripheral(_:didDiscoverCharacteristicsForService:error:)"
+            landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "bluetoothBehave.bluetootBehaveLocal.peripheral (bluetoothBehave.bluetootBehaveLocal)(__ObjC.CBPeripheral, didDiscoverCharacteristicsForService : __ObjC.CBService, error : Swift.Optional&lt;__ObjC.NSError&gt;) -&gt; ()"
+                  moduleName = "bluetoothBehave"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Ladvien/Desktop/behavioralBluetooth/bluetoothBehave/bluetoothBehave/bluetoothBehaveLocal.swift"
+                  timestampString = "476980998.568751"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "949"
+                  endingLineNumber = "949"
+                  offsetFromSymbolStart = "1900">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "bluetoothBehave.bluetootBehaveLocal.peripheral (bluetoothBehave.bluetootBehaveLocal)(__ObjC.CBPeripheral, didDiscoverCharacteristicsForService : __ObjC.CBService, error : Swift.Optional&lt;__ObjC.NSError&gt;) -&gt; ()"
+                  moduleName = "bluetoothBehave"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Ladvien/Desktop/behavioralBluetooth/bluetoothBehave/bluetoothBehave/bluetoothBehaveLocal.swift"
+                  timestampString = "476980998.56895"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "949"
+                  endingLineNumber = "949"
+                  offsetFromSymbolStart = "1908">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "bluetoothBehave/bluetoothBehave/bluetoothBehaveLocal.swift"
+            timestampString = "476980747.439921"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "947"
+            endingLineNumber = "947"
+            landmarkName = "peripheral(_:didDiscoverCharacteristicsForService:error:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

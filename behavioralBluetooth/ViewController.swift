@@ -22,6 +22,7 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
         myLocal.reconnectOnFail(tries: 3, timeBetweenTries: 2)
         myLocal.setDiscoverAdvertizingData(true)
         myLocal.verboseOutput(true)
+        myLocal.characteristicsAreAlwaysInteresting(true)
         //myLocal.addServiceOfInterest("FFE0")
     }
     
@@ -31,7 +32,6 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
             if let deviceID = myLocal.getDeviceIdByName("ALABTU"){
                 myLocal.writeToDevice(deviceID, data: "DOUGHNUTS!\n\r")
             }
-
         }
     }
 

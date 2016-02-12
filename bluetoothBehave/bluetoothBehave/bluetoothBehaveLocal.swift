@@ -42,6 +42,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     internal var connectionsLimit: Int = 1
     internal var retriesAfterConnectionFail: Int = 1
     internal var retriesOnDisconnect: Int = 1
+    private var characteristicsAreAlwaysInteresting: Bool = false
     private var verboseOutput = false
     // Behavioral: Durations.
     internal var searchTimeout: Double = 1.0
@@ -73,8 +74,8 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     
     // Behavioral: Variables.
     internal var discoverAdvertizingDataOnSearch: Bool = false;
-    private var desiredServices: Array<CBUUID>?
-    private var desiredCharacteristic = CBCharacteristic?()
+    private var discoveredServices: Array<CBUUID>?
+    internal var interestingCharacteristics: Array<CBCharacteristic> = CBCharacteristic
     
     
     // Unknown Index
@@ -124,17 +125,26 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     
     // Behavioral: Methods.
     
+    public func characteristicsAreAlwaysInteresting(enable: Bool) -> Bool{
+        characteristicsAreAlwaysInteresting = enable
+        return characteristicsAreAlwaysInteresting
+    }
+    
+    public func clearInterestingCharacteristics(){
+        interestingCharacteristics?.removeAll()
+    }
+    
     public func addDesiredService(service: String){
         let serviceAsCBUUID = CBUUID(string: service)
-        if var desiredServices = desiredServices {
-            if(!desiredServices.contains(serviceAsCBUUID)){
-                desiredServices.append(serviceAsCBUUID)
+        if var discoveredServices = discoveredServices {
+            if(!discoveredServices.contains(serviceAsCBUUID)){
+                discoveredServices.append(serviceAsCBUUID)
             }
         }
     }
     
-    public func clearDesiredServices(){
-        desiredServices?.removeAll()
+    public func cleardiscoveredServices(){
+        discoveredServices?.removeAll()
     }
     
     public func setDiscoverAdvertizingData(enable: Bool){
@@ -459,7 +469,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     
     public func addServiceOfInterest(serviceOfInterest: String){
         let cbServiceOfInterest = CBUUID(string: serviceOfInterest)
-        desiredServices?.append(cbServiceOfInterest)
+        discoveredServices?.append(cbServiceOfInterest)
     }
     
     /**
@@ -484,7 +494,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
         
         //activeCentralManager = CBCentralManager(delegate: self, queue: nil)
         
-        activeCentralManager.scanForPeripheralsWithServices(desiredServices, options: nil)
+        activeCentralManager.scanForPeripheralsWithServices(discoveredServices, options: nil)
         searchTimeoutTimer = NSTimer.scheduledTimerWithTimeInterval(timeoutSecs, target: self, selector: Selector("searchTimerExpire"), userInfo: nil, repeats: false)
         debugOutput("Started search with "+String(timeoutSecs) + " sec timeout")
     }
@@ -553,6 +563,30 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
      */
     public func writeToDevice(deviceOfInterest: NSUUID, data: String){
         debugOutput("writeToDevice")
+        
+        // 1. Find the connected remote in list and get its peripheral.
+        // 2. Convert the String to NSData
+        // 3. If a desired characteristic has been given, write to it.  Probably need to change desiredCharacteristic to be part of the remoteDevice object.
+        // 4. Write NSData to characteristic(s)
+        
+        if let peripheralOfInterest = connectedPeripherals[deviceOfInterest]?.bbPeripheral {
+            if let stringAsNSData = data.dataUsingEncoding(NSUTF8StringEncoding) {
+                
+                if let interestingCharacteristics = interestingCharacteristics {
+                    for characteristic in interestingCharacteristics {
+                        peripheralOfInterest.writeValue(stringAsNSData, forCharacteristic: characteristic, type: CBCharacteristicWriteType.WithResponse)
+
+                    }
+                    // #MARK: Add "WriteWithResponse" option.
+                    
+                } else {
+                    debugOutput("No desiredCharacteristic set.  Nothing written")
+                }
+
+            }
+
+            
+        }
         // #MARK: ADD
     }
     
@@ -799,7 +833,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
             desiredDeviceInConnectedDevices.delegate = self
             
             // 4  NOTE: If array is empty, it will automatically search for all as the array will be nil.
-            desiredDeviceInConnectedDevices.discoverServices(desiredServices)
+            desiredDeviceInConnectedDevices.discoverServices(discoveredServices)
         }
         
         // 5
@@ -902,6 +936,13 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
             {
                 if let serviceCharacteristics = service.characteristics {
                     for characteristic in serviceCharacteristics {
+                        
+                        if(characteristicsAreAlwaysInteresting == true){
+                                
+                            print(interestingCharacteristics)
+                            interestingCharacteristics?.append(characteristic)
+                        }
+                        print(interestingCharacteristics)
                         connectedPeripheral.bbCharacteristics?.append(characteristic)
                         connectedPeripheralbbPeripheral.discoverDescriptorsForCharacteristic(characteristic)
                     }
