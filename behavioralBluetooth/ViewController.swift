@@ -14,6 +14,13 @@ var myLocal = bluetootBehaveLocal()
 
 class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
 
+    
+    @IBOutlet weak var sysLogTextBox: UITextView!
+    
+    @IBOutlet weak var rxedDataTextBox: UITextView!
+    
+    @IBOutlet weak var txDataTextBox: UITextView!
+    
     @IBAction func sendButton(sender: AnyObject) {
         // Make sure we are connected to something.
         if(myLocal.getConnectionState() == DeviceState.connectionStates.connected){
@@ -29,14 +36,9 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
         }
     }
     
-    
-    @IBOutlet weak var sysLogTextBox: UITextView!
-    
-    @IBOutlet weak var rxedDataTextBox: UITextView!
-    
-    @IBOutlet weak var txDataTextBox: UITextView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        myLocal.addDesiredService("FFE0")
         
         // Consider all characteristics, of all connected devices, to be devices
         myLocal.characteristicsAreAlwaysInteresting(true)
@@ -46,6 +48,8 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
     
     override func viewDidAppear(animated: Bool) {
         myLocal.delegate = self
+        
+        myLocal.allDeviceUpdatesAreInteresting(true)
     }
 
     override func didReceiveMemoryWarning() {
@@ -57,5 +61,9 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
         sysLogTextBox.text.appendContentsOf(message)
     }
     
+    func receivedNotificationAsString(deviceID: NSUUID, string: String) {
+        print("")
+    }
+
 }
 

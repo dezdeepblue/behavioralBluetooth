@@ -15,6 +15,8 @@ import CoreBluetooth
     optional func localDeviceStateChange()
     optional func connectedToDevice()
     optional func debug(message: String)
+    optional func receivedNotificationAsString(deviceID: NSUUID, string: String)
+    optional func receivedNotificationAsNSData(deviceID: NSUUID, data: NSData)
 }
 
 // #MARK: LocalBehavioralSerialDevice
@@ -79,7 +81,10 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     // Behavioral: Variables.
     internal var discoverAdvertizingDataOnSearch: Bool = false;
     private var discoveredServices: Array<CBUUID>?
-    var interestingCharacteristics: Array<CBCharacteristic>?
+    private var interestingCharacteristicsForWriting: Array<CBCharacteristic>?
+    private var interestingCharacteristicsForReading: Array<CBCharacteristic>?
+    
+    private var allCharacteristicsAreInterestingForReading: Bool = false
     
     
     // Unknown Index
@@ -107,10 +112,10 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     - parameter device: The behavioralBluetooth RemoteSerialDevice desired.
     */
     internal func setConnectedDevice(nsuuidAsKey: NSUUID, device: bluetoothBehaveRemote){
-        
         connectedPeripherals.updateValue(device, forKey: nsuuidAsKey)
         debugOutput("setConnectedDevice")
     }
+    
     // #MARK: State Getters
     public func getHardwareState()->DeviceState.hardwareStates {
         return self.deviceState.hardware
@@ -131,14 +136,17 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     }
     
     // Behavioral: Methods.
-    
     public func characteristicsAreAlwaysInteresting(enable: Bool) -> Bool{
         characteristicsAreAlwaysInteresting = enable
         return characteristicsAreAlwaysInteresting
     }
     
     public func clearInterestingCharacteristics(){
-        interestingCharacteristics?.removeAll()
+        interestingCharacteristicsForWriting?.removeAll()
+    }
+    
+    public func allDeviceUpdatesAreInteresting(enable: Bool){
+        allCharacteristicsAreInterestingForReading = enable
     }
     
     public func addDesiredService(service: String){
@@ -577,6 +585,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
                             setConnectedDevice(peripheral.identifier, device: connectedRemoteSerialDevice)
                         }
                         
+                        // MARK: ADD CBConnectPeripheralOptions
                         activeCentralManager.connectPeripheral(peripheralToConnect, options: nil)
                     }
                     else {
@@ -604,8 +613,8 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
         if let peripheralOfInterest = connectedPeripherals[deviceOfInterest]?.bbPeripheral {
             
             if let stringAsNSData = string.dataUsingEncoding(NSUTF8StringEncoding) {
-                if let interestingCharacteristics = interestingCharacteristics {
-                    for characteristic in interestingCharacteristics {
+                if let interestingCharacteristicsForWriting = interestingCharacteristicsForWriting {
+                    for characteristic in interestingCharacteristicsForWriting {
                         debugOutput("Wrote to characteristic: \(characteristic) on device named: \(peripheralOfInterest.name) with data:\n\(stringAsNSData)")
                         peripheralOfInterest.writeValue(stringAsNSData, forCharacteristic: characteristic, type: CBCharacteristicWriteType.WithoutResponse)
                         // #MARK: Add "WriteWithResponse" option.
@@ -740,7 +749,6 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
             unknownIndex++
         }
         // Set RSSI
-        print(RSSI)
         thisRemoteDevice.rssi = Int(RSSI)
         
         // Advertising data.
@@ -983,11 +991,20 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
                         
                         if(characteristicsAreAlwaysInteresting == true){
                             // WEIRD! Method for appending to optional arrays.
-                            if (interestingCharacteristics?.append(characteristic)) == nil {
-                                interestingCharacteristics = [characteristic]
+                            if (interestingCharacteristicsForWriting?.append(characteristic)) == nil {
+                                interestingCharacteristicsForWriting = [characteristic]
                             }
                         }
-                            print("Int. Char. after: " + String(interestingCharacteristics))
+                        
+                        // For reading
+                        if(allCharacteristicsAreInterestingForReading == true){
+                            connectedPeripheralbbPeripheral.setNotifyValue(true, forCharacteristic: characteristic)
+                        }
+                        else if ((interestingCharacteristicsForReading?.contains(characteristic)) != nil){
+                            connectedPeripheralbbPeripheral.setNotifyValue(true, forCharacteristic: characteristic)
+                        } 
+
+                        print("Int. Char. after: " + String(interestingCharacteristicsForWriting))
                         connectedPeripheral.bbCharacteristics?.append(characteristic)
                         connectedPeripheralbbPeripheral.discoverDescriptorsForCharacteristic(characteristic)
                     }
@@ -1010,7 +1027,24 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
             }
         }
     }
-}
+    
+    public func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+        
+        if let data = characteristic.value {
+            if let receivedNotificationAsNSData = delegate?.receivedNotificationAsNSData?(peripheral.identifier, data: data){
+                    receivedNotificationAsNSData
+            }
+            
+            if let receivedNotificationAsString = delegate?.receivedNotificationAsString{
+                if let string = String(data:data, encoding: NSUTF8StringEncoding){
+                    receivedNotificationAsString(peripheral.identifier, string: string)
+                }
+            }
+        }
+    }
+    
+
+} // END Class
 
 
 
