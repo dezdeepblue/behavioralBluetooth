@@ -45,6 +45,28 @@ class ViewController: UIViewController, LocalBehavioralSerialDeviceDelegate {
 
 ## Functions and Behaviors
 
+### Write to Device
+
+```swift
+
+
+@IBAction func sendButton(sender: AnyObject) {
+	// Make sure we are connected to something.
+	if(myLocal.getConnectionState() == DeviceState.connectionStates.connected){
+    		// Get the device ID.
+    		if let deviceID = myLocal.getConnectedDeviceIdByName("ALABTU"){
+        		// Write a string to the device
+        		myLocal.writeToDevice(deviceID, string: "DOUGHNUTS!\n\r")
+    		} else {
+        		print("Device was not in connected device list.")
+    		}
+	} else {
+    		print("Oh my! Your iOS device isn't connected to anything.")
+	}
+}
+
+```
+
 ### List of Devices sorted by RSSI
 
 ```swift
