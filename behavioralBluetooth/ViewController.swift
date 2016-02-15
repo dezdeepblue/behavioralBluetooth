@@ -27,11 +27,14 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
     }
     
     override func viewDidAppear(animated: Bool) {
-        print(myLocal.getConnectionState())
+
         if(myLocal.getConnectionState() == DeviceState.connectionStates.connected){
+
             if let deviceID = myLocal.getDeviceIdByName("ALABTU"){
+
                 myLocal.writeToDevice(deviceID, data: "DOUGHNUTS!\n\r")
             }
+            
         }
     }
 

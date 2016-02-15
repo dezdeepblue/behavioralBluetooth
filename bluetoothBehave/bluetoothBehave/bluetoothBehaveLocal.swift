@@ -75,7 +75,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     // Behavioral: Variables.
     internal var discoverAdvertizingDataOnSearch: Bool = false;
     private var discoveredServices: Array<CBUUID>?
-    internal var interestingCharacteristics: Array<CBCharacteristic> = CBCharacteristic
+    var interestingCharacteristics: Array<CBCharacteristic>?
     
     
     // Unknown Index
@@ -570,22 +570,18 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
         // 4. Write NSData to characteristic(s)
         
         if let peripheralOfInterest = connectedPeripherals[deviceOfInterest]?.bbPeripheral {
+            
             if let stringAsNSData = data.dataUsingEncoding(NSUTF8StringEncoding) {
-                
                 if let interestingCharacteristics = interestingCharacteristics {
                     for characteristic in interestingCharacteristics {
-                        peripheralOfInterest.writeValue(stringAsNSData, forCharacteristic: characteristic, type: CBCharacteristicWriteType.WithResponse)
-
+                        debugOutput("Wrote to characteristic: \(characteristic) on device named: \(peripheralOfInterest.name) with data:\n\(stringAsNSData)")
+                        peripheralOfInterest.writeValue(stringAsNSData, forCharacteristic: characteristic, type: CBCharacteristicWriteType.WithoutResponse)
+                        // #MARK: Add "WriteWithResponse" option.
                     }
-                    // #MARK: Add "WriteWithResponse" option.
-                    
                 } else {
                     debugOutput("No desiredCharacteristic set.  Nothing written")
                 }
-
             }
-
-            
         }
         // #MARK: ADD
     }
@@ -938,11 +934,12 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
                     for characteristic in serviceCharacteristics {
                         
                         if(characteristicsAreAlwaysInteresting == true){
-                                
-                            print(interestingCharacteristics)
-                            interestingCharacteristics?.append(characteristic)
+                            // WEIRD! Method for appending to optional arrays.
+                            if (interestingCharacteristics?.append(characteristic)) == nil {
+                                interestingCharacteristics = [characteristic]
+                            }
                         }
-                        print(interestingCharacteristics)
+                            print("Int. Char. after: " + String(interestingCharacteristics))
                         connectedPeripheral.bbCharacteristics?.append(characteristic)
                         connectedPeripheralbbPeripheral.discoverDescriptorsForCharacteristic(characteristic)
                     }
