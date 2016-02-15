@@ -14,6 +14,7 @@ import CoreBluetooth
     optional func searchTimerExpired()
     optional func localDeviceStateChange()
     optional func connectedToDevice()
+    optional func debug(message: String)
 }
 
 // #MARK: LocalBehavioralSerialDevice
@@ -68,8 +69,11 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     
     // Peripheral List
     private var connectedPeripherals: Dictionary<NSUUID, bluetoothBehaveRemote> = [:]
+    private var connectedPeripheralsIDsByName: Dictionary<String, NSUUID> = [:]
+    private var connectedPeripheralNameById: Dictionary<NSUUID, String> = [:]
+    
     private var discoveredPeripherals: Dictionary<NSUUID, bluetoothBehaveRemote> = [:]
-    private var discoveredPeripheralsNames: Dictionary<String, NSUUID> = [:]
+    private var discoveredPeripheralsIDsByName: Dictionary<String, NSUUID> = [:]
     private var discoveredPeripheralNameById: Dictionary<NSUUID, String> = [:]
     
     // Behavioral: Variables.
@@ -88,9 +92,12 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
         
     }
     
-    internal func debugOutput(output: String){
+    internal func debugOutput(message: String){
         if(verboseOutput){
-            print(output)
+            if let debug = delegate?.debug{
+                debug(message+"\n")
+            }
+            print(message)
         }
     }
     
@@ -155,12 +162,12 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
      ### Returns a discovered device's NSUUID.
      - parameter name: String representing the device's advertized name.
      */
-    public func getDeviceIdByName(name: String)->NSUUID?{
-        return discoveredPeripheralsNames[name]
+    public func getDiscoveredDeviceIdByName(name: String)->NSUUID?{
+        return discoveredPeripheralsIDsByName[name]
     }
     
     /**
-     Provides the name of a particular discovered device as a String object.
+     Provides the name of a particular connected device as a String object.
      
      ```swift
      println(getDeviceName(myDeviceNSUUID))
@@ -171,9 +178,34 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
      ```
      
      */
-    public func getDeviceName(deviceOfInterest: NSUUID)->String?{
+    public func getDiscoveredDeviceNameByID(deviceOfInterest: NSUUID)->String?{
         return discoveredPeripheralNameById[deviceOfInterest]
     }
+    
+    /**
+     ### Returns a connected device's NSUUID.
+     - parameter name: String representing the device's advertized name.
+     */
+    public func getConnectedDeviceIdByName(name: String)->NSUUID?{
+        return connectedPeripheralsIDsByName[name]
+    }
+    
+    /**
+     Provides the name of a particular connected device as a String object.
+     
+     ```swift
+     println(getDeviceName(myDeviceNSUUID))
+     ```
+     
+     ```xml
+     Output: myDevice
+     ```
+     
+     */
+    public func getConnectedDeviceNameByID(deviceOfInterest: NSUUID)->String?{
+        return connectedPeripheralNameById[deviceOfInterest]
+    }
+    
     
     /**
      ### Returns a RemoteBluetoothLEPeripheral object of interest.
@@ -188,7 +220,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
      - parameter name: String representing a RemoteBluetoothLEPeripheral object's advertized name.
      */
     public func getDiscoveredRemoteDeviceByName(name: String)->bluetoothBehaveRemote?{
-        if let deviceID = getDeviceIdByName(name){
+        if let deviceID = getDiscoveredDeviceIdByName(name){
             return getDiscoveredRemoteDeviceByID(deviceID)
         }
         return nil
@@ -196,7 +228,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     
     public func getDeviceNamesAsArray()->Array<String>{
         var names: Array<String> = [""]
-        names = Array<String>(discoveredPeripheralsNames.keys)
+        names = Array<String>(discoveredPeripheralsIDsByName.keys)
         return names
     }
 
@@ -467,7 +499,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     
     // #MARK: LocalBluetoothLECentral: Actions
     
-    public func addServiceOfInterest(serviceOfInterest: String){
+    public func addServiceOfWritingInterest(serviceOfInterest: String){
         let cbServiceOfInterest = CBUUID(string: serviceOfInterest)
         discoveredServices?.append(cbServiceOfInterest)
     }
@@ -518,7 +550,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
             
             // 3
             var thisDeviceName = ""
-            if let deviceName = getDeviceName(peripheral.identifier) {
+            if let deviceName = getDiscoveredDeviceNameByID(peripheral.identifier) {
                 thisDeviceName = deviceName
             }
             
@@ -561,7 +593,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     /**
      ###Writes data to a particular RemoteDevice
      */
-    public func writeToDevice(deviceOfInterest: NSUUID, data: String){
+    public func writeToDevice(deviceOfInterest: NSUUID, string: String){
         debugOutput("writeToDevice")
         
         // 1. Find the connected remote in list and get its peripheral.
@@ -571,7 +603,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
         
         if let peripheralOfInterest = connectedPeripherals[deviceOfInterest]?.bbPeripheral {
             
-            if let stringAsNSData = data.dataUsingEncoding(NSUTF8StringEncoding) {
+            if let stringAsNSData = string.dataUsingEncoding(NSUTF8StringEncoding) {
                 if let interestingCharacteristics = interestingCharacteristics {
                     for characteristic in interestingCharacteristics {
                         debugOutput("Wrote to characteristic: \(characteristic) on device named: \(peripheralOfInterest.name) with data:\n\(stringAsNSData)")
@@ -698,12 +730,12 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
         
         // Set its name.
         if let name = peripheral.name {
-            discoveredPeripheralsNames[name] = peripheral.identifier
+            discoveredPeripheralsIDsByName[name] = peripheral.identifier
             discoveredPeripheralNameById[peripheral.identifier] = name
         }
         else {
             let stringIndex = String(unknownIndex)
-            discoveredPeripheralsNames["Unknown_\(stringIndex)"] = peripheral.identifier
+            discoveredPeripheralsIDsByName["Unknown_\(stringIndex)"] = peripheral.identifier
             discoveredPeripheralNameById[peripheral.identifier] = "Unknown_\(stringIndex)"
             unknownIndex++
         }
@@ -809,32 +841,41 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     @objc public func centralManager(central: CBCentralManager, didConnectPeripheral peripheral: CBPeripheral) {
         
         // 1. Add the conencted peripheral to the discoveredPeripherals dictionary
-        // 2. Find desired device in connectedPeripherals
-        // 3. Set the new connected device's peripheral delegate.
-        // 4. If a specific services are listed, discover them, if not, discover all.
-        // 5. Set connection status to connected.
-        // 6. Notify the optional delegate.
+        // 2. Add device to deviceByName and deviceByID arrays.
+        // 3. Find desired device in connectedPeripherals
+        // 4. Set the new connected device's peripheral delegate.
+        // 5. If a specific services are listed, discover them, if not, discover all.
+        // 6. Set connection status to connected.
+        // 7. Notify the optional delegate.
         
         // 1
         if let desiredDevice = discoveredPeripherals[peripheral.identifier] {
             connectedPeripherals.updateValue(desiredDevice, forKey: peripheral.identifier)
                 debugOutput("didConnectToPeripheral: " + peripheral.identifier.UUIDString )
+            // 2
+            if let name = getDiscoveredDeviceNameByID(peripheral.identifier) {
+                connectedPeripheralNameById[peripheral.identifier] = name
+                connectedPeripheralsIDsByName[name] = peripheral.identifier
+            }
         }
         
-        // 2
+
+        
+        // 3
         if var desiredDeviceInConnectedDevices = connectedPeripherals[peripheral.identifier]?.bbPeripheral {
             
-            // 3
+            // 4
             desiredDeviceInConnectedDevices = peripheral
             desiredDeviceInConnectedDevices.delegate = self
             
-            // 4  NOTE: If array is empty, it will automatically search for all as the array will be nil.
+            // 5  NOTE: If array is empty, it will automatically search for all as the array will be nil.
             desiredDeviceInConnectedDevices.discoverServices(discoveredServices)
         }
         
-        // 5
+        // 6
         self.deviceState.connection = DeviceState.connectionStates.connected
         
+        // 7
         if let connectedToDevice = delegate?.connectedToDevice?(){
             connectedToDevice
             debugOutput("Invoked Delegate: connectedToDevice")
@@ -868,12 +909,17 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
      */
     @objc public func centralManager(central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: NSError?) {
         
-        // If connection is lost, remove it from the connected device dictionary.
-        connectedPeripherals.removeValueForKey(peripheral.identifier)
-        print("Lost connection to: \(peripheral.identifier.UUIDString)")
+        // 1. Remove device ids & names from connected collections.
+        // 2. Set the deviceState to purposefulDisconnect.
         
-        // Set the peripheral
-        discoveredPeripherals[peripheral.identifier]?.deviceState.connection = DeviceState.connectionStates.purposefulDisconnect
+        // 1
+        if let name = getDiscoveredDeviceNameByID(peripheral.identifier){
+            connectedPeripheralsIDsByName.removeValueForKey(name)
+            connectedPeripheralNameById.removeValueForKey(peripheral.identifier)
+        }
+        connectedPeripherals.removeValueForKey(peripheral.identifier)
+
+        debugOutput("Lost connection to: \(peripheral.identifier.UUIDString)")
         
         if(purposefulDisconnect == false){
             
@@ -890,6 +936,8 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
             }
         }
         else {
+            // Set the peripheral
+            discoveredPeripherals[peripheral.identifier]?.deviceState.connection = DeviceState.connectionStates.purposefulDisconnect
             //if let deviceStatusChanged = delegate?.deviceStatusChanged?(peripheral.identifier, deviceState: self.state){
             purposefulDisconnect = false
             //deviceStatusChanged

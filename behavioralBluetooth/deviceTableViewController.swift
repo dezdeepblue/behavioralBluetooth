@@ -64,7 +64,7 @@ class deviceTableViewController: UITableViewController, bluetoothBehaveLocalDele
         // 3. Return cell.
         let deviceID = sortedDeviceArrayByRSSI.nsuuids[indexPath.row]
         let deviceRSSI = sortedDeviceArrayByRSSI.rssies[indexPath.row]
-        let deviceName = myLocal.getDeviceName(deviceID)
+        let deviceName = myLocal.getDiscoveredDeviceNameByID(deviceID)
 
         cell.textLabel?.text = deviceName
         cell.detailTextLabel?.text = String(deviceRSSI)

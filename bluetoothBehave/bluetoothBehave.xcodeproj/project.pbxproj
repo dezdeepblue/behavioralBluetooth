@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		463A11031C722FB200D009B1 /* designNotes in Resources */ = {isa = PBXBuildFile; fileRef = 463A11021C722FB200D009B1 /* designNotes */; };
 		468134A31C680D5E00945591 /* bluetoothBehave.h in Headers */ = {isa = PBXBuildFile; fileRef = 468134A21C680D5E00945591 /* bluetoothBehave.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		468134AE1C680D7C00945591 /* bluetoothBehaveLocal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468134AA1C680D7C00945591 /* bluetoothBehaveLocal.swift */; };
 		468134AF1C680D7C00945591 /* bluetoothBehaveRemote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468134AB1C680D7C00945591 /* bluetoothBehaveRemote.swift */; };
@@ -14,6 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		463A11021C722FB200D009B1 /* designNotes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = designNotes; path = ../designNotes; sourceTree = "<group>"; };
 		4681349F1C680D5E00945591 /* bluetoothBehave.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = bluetoothBehave.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		468134A21C680D5E00945591 /* bluetoothBehave.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bluetoothBehave.h; sourceTree = "<group>"; };
 		468134A41C680D5E00945591 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -52,6 +54,7 @@
 		468134A11C680D5E00945591 /* bluetoothBehave */ = {
 			isa = PBXGroup;
 			children = (
+				463A11021C722FB200D009B1 /* designNotes */,
 				468134B21C680D9E00945591 /* bluetoothBehaveState.swift */,
 				468134AA1C680D7C00945591 /* bluetoothBehaveLocal.swift */,
 				468134AB1C680D7C00945591 /* bluetoothBehaveRemote.swift */,
@@ -129,6 +132,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				463A11031C722FB200D009B1 /* designNotes in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

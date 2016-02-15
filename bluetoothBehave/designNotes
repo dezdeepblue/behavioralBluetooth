@@ -1,0 +1,9 @@
+To Do
+
+1.  Add a DeviceStateDidChange state delegate that updates the LocalBLE object.  Then have the BLE object pass it to its delegate.  This will allow the consumer to trigger code on DeviceState changes.
+
+2. Need to setup work-in-background mode.
+
+Design Notes
+
+1. I think I really need to flatten connectedPeripherals and discoveredPeripherals.  My one concern was regarding connecting to a peripheral discovered during a previous session.  However, it still technically is a discoveredPeripheral, though, not from the current session.
