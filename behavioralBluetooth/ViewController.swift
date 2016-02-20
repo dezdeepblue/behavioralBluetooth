@@ -42,8 +42,6 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
         
         // Consider all characteristics, of all connected devices, to be devices
         myLocal.characteristicsAreAlwaysInteresting(true)
-        
-        
     }
     
     override func viewDidAppear(animated: Bool) {

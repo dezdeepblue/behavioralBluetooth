@@ -919,7 +919,8 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
         
         // 1. Remove device ids & names from connected collections.
         // 2. Set the deviceState to purposefulDisconnect.
-        
+        // 3. If disconnected on purpose -- 
+        // 4. Set device state as 
         // 1
         if let name = getDiscoveredDeviceNameByID(peripheral.identifier){
             connectedPeripheralsIDsByName.removeValueForKey(name)
@@ -961,8 +962,11 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     */
     @objc public func peripheral(peripheral: CBPeripheral, didDiscoverServices error: NSError?) {
         
-        // Look for set characteristics.
-        // If not, do below.
+        // 1. Assert the discovered peripheral is connected.
+        // 2. Unwrap the connected peripheral.
+        // 3. Unwrap discovered service.
+        // 4. For each service discovered discover characteristics and add the peripheral to the flat object.
+        
         if let connectedPeripheral = connectedPeripherals[peripheral.identifier]{
             if let connectedPeripheralbbPeripheral = connectedPeripheral.bbPeripheral {
                 if let peripheralServices = peripheral.services {
@@ -981,22 +985,20 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
      */
     @objc public func peripheral(peripheral: CBPeripheral, didDiscoverCharacteristicsForService service: CBService, error: NSError?) {
         
-        // Look for set characteristics descriptors.
-        // If not, do below.
+        // 1. Assert the peripheral is connected.
+        // 2. Unwrap the connected peripheral.
+        // 3. Unwrap the discovered service characteristic array.
+        // 4. If allCharInter == true, add the characteristic to array for writing or reading
+        // 5. Add the characteristic to the flat object.
+        // 6. Start discovering descriptors for the characteristic.
+        
+        
         if let connectedPeripheral = connectedPeripherals[peripheral.identifier]{
             if let connectedPeripheralbbPeripheral = connectedPeripheral.bbPeripheral
             {
                 if let serviceCharacteristics = service.characteristics {
                     for characteristic in serviceCharacteristics {
                         
-                        if(characteristicsAreAlwaysInteresting == true){
-                            // WEIRD! Method for appending to optional arrays.
-                            if (interestingCharacteristicsForWriting?.append(characteristic)) == nil {
-                                interestingCharacteristicsForWriting = [characteristic]
-                            }
-                        }
-                        
-                        // For reading
                         if(allCharacteristicsAreInterestingForReading == true){
                             connectedPeripheralbbPeripheral.setNotifyValue(true, forCharacteristic: characteristic)
                         }
@@ -1004,7 +1006,6 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
                             connectedPeripheralbbPeripheral.setNotifyValue(true, forCharacteristic: characteristic)
                         } 
 
-                        print("Int. Char. after: " + String(interestingCharacteristicsForWriting))
                         connectedPeripheral.bbCharacteristics?.append(characteristic)
                         connectedPeripheralbbPeripheral.discoverDescriptorsForCharacteristic(characteristic)
                     }
@@ -1017,8 +1018,11 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
      ### CoreBluteooth method called when CBCentralManager discovers a characteristic's descriptors.
      */
     @objc public func peripheral(peripheral: CBPeripheral, didDiscoverDescriptorsForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
-        // Look for set characteristics descriptors.
-        // If not, do below.
+        
+        // 1. Assert the peripheral is connected.
+        // 2. Unwrap the descriptor for the discovered characteristic.
+        // 3. Attach the descriptor to flat object.
+        
         if let connectedPeripheral = connectedPeripherals[peripheral.identifier]{
             if let descriptors = characteristic.descriptors {
                 for descriptor in descriptors {
@@ -1029,6 +1033,10 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     }
     
     public func peripheral(peripheral: CBPeripheral, didUpdateValueForCharacteristic characteristic: CBCharacteristic, error: NSError?) {
+        
+        // 1. Unwrap characteristic value
+        // 2. Pass the value to delegate as data
+        // 3. Pass the value to delegate as String.
         
         if let data = characteristic.value {
             if let receivedNotificationAsNSData = delegate?.receivedNotificationAsNSData?(peripheral.identifier, data: data){
