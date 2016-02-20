@@ -10,31 +10,21 @@ import Foundation
 
 public class DeviceState {
     
-    public var hardware = hardwareStates.unknown
-    public var connection = connectionStates.unknown
-    public var search = searchStates.unknown
+    public var state = states.unknown
     
-    public enum hardwareStates: Int {
+    public enum states: Int {
         case unknown = 0,
         off,
         on,
         resetting,
         unsupported,
-        unauthorized
-    }
-    
-    public enum connectionStates: Int {
-        case unknown = 0,
+        unauthorized,
         connected,
         disconnected,
         failedToConnect,
         purposefulDisconnect,
         lostConnection,
-        connecting
-    }
-    
-    public enum searchStates: Int{
-        case unknown = 0,
+        connecting,
         scanning,
         idle,
         idleWithDiscoveredDevices

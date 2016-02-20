@@ -23,7 +23,7 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
     
     @IBAction func sendButton(sender: AnyObject) {
         // Make sure we are connected to something.
-        if(myLocal.getConnectionState() == DeviceState.connectionStates.connected){
+        if(myLocal.getConnectionState() == DeviceState.states.connected){
             // Get the device ID.
             if let deviceID = myLocal.getConnectedDeviceIdByName("ALABTU"){
                 // Write a string to the device
