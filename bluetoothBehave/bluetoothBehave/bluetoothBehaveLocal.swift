@@ -646,12 +646,28 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     
     public func disconnectFromAllPeripherals(){
         
+        // 1. Unwrap peripheral(s)
+        // 2. Disconnect all peripheral(s).
+        
+        for peripheral in connectedPeripherals {
+            if let peripheral = peripheral.1.bbPeripheral {
+                activeCentralManager.cancelPeripheralConnection(peripheral)
+            }
+        }
+        
     }
     
     /**
      ### Method fired after lost connection with device.  The delay can be changed by calling either reconnectOnFail or reconnectOnDisconnect.
      */
     internal func reconnectTimerExpired(){
+        
+        // 1. If there has been a connection this session, unwrap the ID.
+        // 2. Stop searching for devices. (Why do I have this here?)
+        // 3. Check if last connected device ID is in the lsit of discovered peripheral, if so, unwrap it.
+        // 4. Increment retry index.
+        // 5. Attempt to connect to device.
+        
         if let lastConnectedPeripheralNSUUID = lastConnectedPeripheralNSUUID {
             activeCentralManager.stopScan()
             if let lastConnectedDevice = discoveredPeripherals[lastConnectedPeripheralNSUUID]{
@@ -665,17 +681,21 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
      ### Method after search duration has expired.
      */
     @objc internal func searchTimerExpire(){
-        searchTimeoutTimer.invalidate()
         
+        // 1. Invalidate timer.
+        // 2. Set device state.
+        // 3. Stop searching to save battery.
+        // 4. Check for delegate, update delegate.
+        
+        // 1
+        searchTimeoutTimer.invalidate()
+        // 2
         if(discoveredPeripherals.isEmpty){
             self.deviceState.state = DeviceState.states.idle
         } else {
             self.deviceState.state = DeviceState.states.idleWithDiscoveredDevices
         }
-        
-        //searchComplete = true
-        
-        // Be respectful of battery life.
+        // 3
         self.activeCentralManager.stopScan()
         
         if let searchTimerExpired = delegate?.searchTimerExpired?(){
@@ -688,11 +708,13 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     }
     
     // #MARK: Central Manager Methods
-    
     /**
     ### Updates the the state of the Local Bluetooth LE device.
     */
     public func centralManagerDidUpdateState(central: CBCentralManager) {
+        
+        // 1. Make sure the iOS hardware is on and pass it to the behave state manager.
+        
         // Make sure the BLE device is on.
         switch activeCentralManager.state {
         case CBCentralManagerState.Unknown:
@@ -727,10 +749,14 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
         debugOutput("didDiscoverPeripheral "+String(peripheral.identifier.UUIDString))
         // 1. Creates RemotebBluetoothLE object and populates its data.
         // 2. Add the remote object to our Remote object Dictioanry.
+        // 3. Populate the Remote object.
+        // 4. Set device name.
+        // 5. Discover Advertizing data.
+        // 6. Add the populated Remote object to the list of discovered peripherals.
         
         let thisRemoteDevice = bluetoothBehaveRemote()
         
-        // Populate the object.
+        // Populate the flat object.
         thisRemoteDevice.ID = peripheral.identifier
         thisRemoteDevice.bbPeripheral = peripheral
         
@@ -838,9 +864,6 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
             discoveredPeripherals.updateValue(thisRemoteDevice, forKey: thisRemoteDeviceID)
         }
         
-        discoveredPeripherals.updateValue(thisRemoteDevice, forKey: peripheral.identifier)
-        // Clear any connections.  Strangely, if a search is initiated, all devices are disconnected without didDisconnectPeripheral() being called.
-        
     }
     
     /**
@@ -898,9 +921,15 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
      ### CoreBluteooth method called when CBCentralManager fails to connect to a peripheral.
      */
     @objc public func centralManager(central: CBCentralManager, didFailToConnectPeripheral peripheral: CBPeripheral, error: NSError?) {
-        // If we fail to connect, don't remember this device.
+
+        // 1. Set state
+        // 2. Check if retry limit is exceeded.
+        // 3.   Set reconnect timer.
+        
+        self.deviceState.state = DeviceState.states.failedToConnect
         
         if(retryIndexOnFail < retriesAfterConnectionFail){
+            
             reconnectTimer = NSTimer.scheduledTimerWithTimeInterval(timeBeforeAttemptingReconnectOnConnectionFail, target: self, selector: Selector("reconnectTimerExpired"), userInfo: nil, repeats: false)
             
             debugOutput("didFailToConnectPeripheral: Retry# " + String(retryIndexOnFail) + " of " + String(retriesAfterConnectionFail) + " with " + String(timeBeforeAttemptingReconnectOnConnectionFail) + "secs inbetween attempt")
@@ -908,7 +937,6 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
         }
         else {
             debugOutput("didFailToConnectPeripheral: Unable to connect")
-            lastConnectedPeripheralNSUUID = nil
         }
     }
     
@@ -922,7 +950,8 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
         // 3. If disconnected on purpose -- 
         // 4. Set device state.
         // 5. Check retry index; try to reconnect to last connected.
-        // 6.
+        // 6. If purposefully disconnected, tidy up, and set state.
+        
         // 1
         if let name = getDiscoveredDeviceNameByID(peripheral.identifier){
             connectedPeripheralsIDsByName.removeValueForKey(name)
