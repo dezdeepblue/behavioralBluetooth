@@ -103,9 +103,7 @@ class deviceTableViewController: UITableViewController, bluetoothBehaveLocalDele
     }
     
     func localDeviceStateChange() {
-        print("Hardware" + String(myLocal.getHardwareState()))
-        print("Connection" + String(myLocal.getConnectionState()))
-        print("Search" + String(myLocal.getSearchState()))
+        print("State: " + String(myLocal.state()))
     }
     
     /*

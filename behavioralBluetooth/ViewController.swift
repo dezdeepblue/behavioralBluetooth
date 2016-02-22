@@ -23,7 +23,7 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
     
     @IBAction func sendButton(sender: AnyObject) {
         // Make sure we are connected to something.
-        if(myLocal.getConnectionState() == DeviceState.states.connected){
+        if(myLocal.state() == DeviceState.states.connected){
             // Get the device ID.
             if let deviceID = myLocal.getConnectedDeviceIdByName("ALABTU"){
                 // Write a string to the device
@@ -40,14 +40,11 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
         super.viewDidLoad()
         myLocal.addDesiredService("FFE0")
         
-        // Consider all characteristics, of all connected devices, to be devices
-        myLocal.characteristicsAreAlwaysInteresting(true)
+        myLocal.verboseOutput(true)
     }
     
     override func viewDidAppear(animated: Bool) {
         myLocal.delegate = self
-        
-        myLocal.allDeviceUpdatesAreInteresting(true)
     }
 
     override func didReceiveMemoryWarning() {

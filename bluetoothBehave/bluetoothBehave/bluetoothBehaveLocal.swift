@@ -81,11 +81,11 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     // Behavioral: Variables.
     internal var discoverAdvertizingDataOnSearch: Bool = false;
     private var discoveredServices: Array<CBUUID>?
-    private var interestingCharacteristicsForWriting: Array<CBCharacteristic>?
+    private var interestingCharacteristicsForWriting: Array<CBCharacteristic> = Array<CBCharacteristic>()
     private var interestingCharacteristicsForReading: Array<CBCharacteristic>?
     
-    private var allCharacteristicsAreInterestingForReading: Bool = false
-    
+    private var allCharacteristicsAreInterestingForReading: Bool = true
+    private var allCharacteristicsAreInterestingForWriting: Bool = true
     
     // Unknown Index
     var unknownIndex = 0
@@ -117,15 +117,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     }
     
     // #MARK: State Getters
-    public func getHardwareState()->DeviceState.states {
-        return self.deviceState.state
-    }
-
-    public func getConnectionState()->DeviceState.states{
-        return self.deviceState.state
-    }
-
-    public func getSearchState()->DeviceState.states{
+    public func state()->DeviceState.states {
         return self.deviceState.state
     }
 
@@ -142,7 +134,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     }
     
     public func clearInterestingCharacteristics(){
-        interestingCharacteristicsForWriting?.removeAll()
+        interestingCharacteristicsForWriting.removeAll()
     }
     
     public func allDeviceUpdatesAreInteresting(enable: Bool){
@@ -274,7 +266,25 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     public func getDeviceUUIDAsString(deviceOfInterest: NSUUID)->String?{
         return hardwareID?.UUIDString
     }
+    
+    /**
+     ### Returns an array of NSUUIDs of all devices connected to the iOS central.
+     */
+    public func connectedDevices()->Array<NSUUID>{
+        return Array(connectedPeripheralsIDsByName.values)
+    }
 
+    /**
+     ### Returns true if the NSUUID of interest is contained in the list of connected peripherals.
+     - parameter deviceID: NSUUID of the device whose connection status is in question. lkkm
+     */
+    public func isPeripheralConnected(deviceID: NSUUID)->Bool {
+        if(connectedDevices().contains(deviceID)){
+            return true
+        } else {
+            return false
+        }
+    }
     
     // #MARK: Behavioral Mutators
     
@@ -611,16 +621,11 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
         // 4. Write NSData to characteristic(s)
         
         if let peripheralOfInterest = connectedPeripherals[deviceOfInterest]?.bbPeripheral {
-            
             if let stringAsNSData = string.dataUsingEncoding(NSUTF8StringEncoding) {
-                if let interestingCharacteristicsForWriting = interestingCharacteristicsForWriting {
-                    for characteristic in interestingCharacteristicsForWriting {
-                        debugOutput("Wrote to characteristic: \(characteristic) on device named: \(peripheralOfInterest.name) with data:\n\(stringAsNSData)")
-                        peripheralOfInterest.writeValue(stringAsNSData, forCharacteristic: characteristic, type: CBCharacteristicWriteType.WithoutResponse)
-                        // #MARK: Add "WriteWithResponse" option.
-                    }
-                } else {
-                    debugOutput("No desiredCharacteristic set.  Nothing written")
+                for characteristic in interestingCharacteristicsForWriting {
+                    debugOutput("Wrote to characteristic: \(characteristic) on device named: \(peripheralOfInterest.name) with data:\n\(stringAsNSData)")
+                    peripheralOfInterest.writeValue(stringAsNSData, forCharacteristic: characteristic, type: CBCharacteristicWriteType.WithoutResponse)
+                    // #MARK: Add "WriteWithResponse" option.
                 }
             }
         }
@@ -632,8 +637,14 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
      - parameter deviceOfInterest: The NSUUID of device needed to be disconnecting.
      */
     internal func disconnectFromPeripheral(deviceOfInterest: NSUUID)->Bool {
+        
+        // 1. Unwrap peripheral by ID
+        // 2. Cancel connection to peripheral.
+        // 3. Set state to purposeful disconnect.
+        
         if let deviceToDisconnectPeripheral = connectedPeripherals[deviceOfInterest]?.bbPeripheral {
             activeCentralManager.cancelPeripheralConnection(deviceToDisconnectPeripheral)
+            self.deviceState.state = DeviceState.states.purposefulDisconnect
             purposefulDisconnect = true
             return true
         }
@@ -1036,7 +1047,14 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
                         }
                         else if ((interestingCharacteristicsForReading?.contains(characteristic)) != nil){
                             connectedPeripheralbbPeripheral.setNotifyValue(true, forCharacteristic: characteristic)
-                        } 
+                        }
+                        
+                        if(allCharacteristicsAreInterestingForWriting == true){
+                           interestingCharacteristicsForWriting.append(characteristic)
+                        }
+                        //else if (){
+                        //    connectedPeripheralbbPeripheral.setNotifyValue(true, forCharacteristic: characteristic)
+                        //}
 
                         connectedPeripheral.bbCharacteristics?.append(characteristic)
                         connectedPeripheralbbPeripheral.discoverDescriptorsForCharacteristic(characteristic)

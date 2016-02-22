@@ -7,3 +7,7 @@ To Do
 Design Notes
 
 1. I think I really need to flatten connectedPeripherals and discoveredPeripherals.  My one concern was regarding connecting to a peripheral discovered during a previous session.  However, it still technically is a discoveredPeripheral, though, not from the current session.
+
+2. Need to add search for specific characteristic to write.
+
+3. Add repeating search.
