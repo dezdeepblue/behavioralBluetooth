@@ -612,7 +612,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     /**
      ###Writes data to a particular RemoteDevice
      */
-    public func writeToDevice(deviceOfInterest: NSUUID, string: String){
+    public func writeToDevice(deviceOfInterest: NSUUID, var string: String){
         debugOutput("writeToDevice")
         
         // 1. Find the connected remote in list and get its peripheral.
@@ -621,6 +621,7 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
         // 4. Write NSData to characteristic(s)
         
         if let peripheralOfInterest = connectedPeripherals[deviceOfInterest]?.bbPeripheral {
+            string += "\n"
             if let stringAsNSData = string.dataUsingEncoding(NSUTF8StringEncoding) {
                 for characteristic in interestingCharacteristicsForWriting {
                     debugOutput("Wrote to characteristic: \(characteristic) on device named: \(peripheralOfInterest.name) with data:\n\(stringAsNSData)")
