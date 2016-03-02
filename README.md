@@ -134,14 +134,28 @@ Often, there is a need for the BLE scan to continue until a particular device is
 Note, a continuous search will make Apple very upset.  They treasure the user's battery life.  If the search is left to be repeating the code-consumer is responsible for calling stopSearchTimer to stop the iOS device from scanning.  This may be done from the `searchTimerExpired` method by calling `myLocal.stopSearchTimer()`.  When called this way the stopSearchTimer method updates the device state, invalidates the timer, and stops the scan.
 
 ```swift
-func localDeviceStateChange() {
-    if(myLocal.deviceState == DeviceState.idle){
-        myLocal.search(8)
-    }
+var myLocal = bluetootBehaveLocal()
+
+override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Starts a single search.
+        myLoca.searchRepeats(nil)
+        myLocal.search(1.0)
+        
+        // Starts a never ending search.
+        myLoca.searchRepeats(0)
+        myLocal.search(1.0)
+        
+        // Starts a repeating search; will repeat 5 times, including initial
+        myLocal.searchRepeats(9)
+        myLocal.verboseOutput(true)
 }
+
 ```
 
 [Documentation](http://ladvien.github.io/jazzy/behavioralBluetooth/index.html)
+
 [Waka Report](https://wakatime.com/@ladvien/projects/ysdncpuqyt?start=2016-01-25&end=2016-01-31)
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">Creative Commons Attribution-NonCommercial 4.0 International License</a>.
