@@ -148,7 +148,7 @@ override func viewDidLoad() {
         myLocal.search(1.0)
         
         // Starts a repeating search; will repeat 5 times, including initial
-        myLocal.searchRepeats(9)
+        myLocal.searchRepeats(5)
         myLocal.verboseOutput(true)
 }
 
