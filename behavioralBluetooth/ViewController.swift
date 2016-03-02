@@ -39,7 +39,7 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         myLocal.addDesiredService("FFE0")
-        
+        myLocal.searchRepeats(2)
         myLocal.verboseOutput(true)
     }
     

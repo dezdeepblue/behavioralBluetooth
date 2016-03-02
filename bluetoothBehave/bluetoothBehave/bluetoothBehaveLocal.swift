@@ -64,6 +64,8 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     //internal var searchComplete: Bool = false
     internal var searchTimeoutTimer: NSTimer = NSTimer()
     internal var reconnectTimer: NSTimer = NSTimer()
+    internal var numberOfSearchRepeats: Int?
+    internal var numberOfSearchRepeatsIndex: Int = 0
     
     //  CoreBluetooth Classes
     internal var activeCentralManager = CBCentralManager()
@@ -125,6 +127,10 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
     public override init() {
         super.init()
         activeCentralManager.delegate = self
+    }
+    
+    public func searchRepeats(numberOfRepeats: Int){
+        numberOfSearchRepeats = numberOfRepeats
     }
     
     // Behavioral: Methods.
@@ -545,9 +551,86 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
         //activeCentralManager = CBCentralManager(delegate: self, queue: nil)
         
         activeCentralManager.scanForPeripheralsWithServices(discoveredServices, options: nil)
-        searchTimeoutTimer = NSTimer.scheduledTimerWithTimeInterval(timeoutSecs, target: self, selector: Selector("searchTimerExpire"), userInfo: nil, repeats: false)
+        
+        searchTimeoutTimer = NSTimer.scheduledTimerWithTimeInterval(timeoutSecs, target: self, selector: Selector("searchTimerExpire"), userInfo: nil, repeats: true)
         debugOutput("Started search with "+String(timeoutSecs) + " sec timeout")
     }
+    
+    /**
+     ### Method after search duration has expired.
+     */
+    @objc internal func searchTimerExpire(){
+        
+        // 1. Set device state.
+        // 2. If not repeating, invalidate timer. Or start scan over.
+        // 3. Stop searching to save battery.
+        // 4. Check for delegate, update delegate.
+        
+        // 1
+        if(discoveredPeripherals.isEmpty){
+            self.deviceState.state = DeviceState.states.idle
+        } else {
+            self.deviceState.state = DeviceState.states.idleWithDiscoveredDevices
+        }
+        
+        // 2
+        // If nil end timer.
+        if let numberOfSearchRepeats = numberOfSearchRepeats {
+            // If 0, then repeat forever
+            // If > 0, then repeat until index is greater
+            // Else, stop the scanning, invalidate timer.
+            if(numberOfSearchRepeats == 0){
+                activeCentralManager.scanForPeripheralsWithServices(discoveredServices, options: nil)
+            } else if(numberOfSearchRepeats > numberOfSearchRepeatsIndex) {
+                activeCentralManager.scanForPeripheralsWithServices(discoveredServices, options: nil)
+                    numberOfSearchRepeatsIndex++
+            } else {
+                self.activeCentralManager.stopScan()
+                searchTimeoutTimer.invalidate()
+            }
+        } else {
+            // 3
+            self.activeCentralManager.stopScan()
+            searchTimeoutTimer.invalidate()
+        }
+        
+        if let searchTimerExpired = delegate?.searchTimerExpired?(){
+            searchTimerExpired
+        }
+        else {
+            // THROW ERROR
+        }
+        
+    }
+
+    @objc internal func stopSearchTimer(){
+        
+        // Eh, DRYish.
+        
+        // 1. Update state
+        // 2. Stop scanning.
+        // 3. Invalidate timer.
+        // 4. Invoke the search delegate.
+        
+        // 1
+        if(discoveredPeripherals.isEmpty){
+            self.deviceState.state = DeviceState.states.idle
+        } else {
+            self.deviceState.state = DeviceState.states.idleWithDiscoveredDevices
+        }
+        //2
+        activeCentralManager.stopScan()
+        //3
+        searchTimeoutTimer.invalidate()
+        
+        if let searchTimerExpired = delegate?.searchTimerExpired?(){
+            searchTimerExpired
+        }
+        else {
+            // THROW ERROR
+        }
+    }
+    
     
     /**
      Requests the Local Device connect to a Bluetooth LE Remote device of interest.  The call will assure a connection to the particular device doesn't exist.  If the `connectionsLimit` has not been reached.
@@ -689,35 +772,6 @@ public class bluetootBehaveLocal: NSObject, bluetoothBehaveLocalDelegate, CBCent
         }
     }
     
-    /**
-     ### Method after search duration has expired.
-     */
-    @objc internal func searchTimerExpire(){
-        
-        // 1. Invalidate timer.
-        // 2. Set device state.
-        // 3. Stop searching to save battery.
-        // 4. Check for delegate, update delegate.
-        
-        // 1
-        searchTimeoutTimer.invalidate()
-        // 2
-        if(discoveredPeripherals.isEmpty){
-            self.deviceState.state = DeviceState.states.idle
-        } else {
-            self.deviceState.state = DeviceState.states.idleWithDiscoveredDevices
-        }
-        // 3
-        self.activeCentralManager.stopScan()
-        
-        if let searchTimerExpired = delegate?.searchTimerExpired?(){
-            searchTimerExpired
-        }
-        else {
-            // THROW ERROR
-        }
-        
-    }
     
     // #MARK: Central Manager Methods
     /**
