@@ -129,9 +129,9 @@ func localDeviceStateChange() {
 ```
 
 ### Repeating Search
-Often, there is a need for the BLE scan to continue until a particular device is found.  The search property `myLocal.searchRepeats(numberOfRepeats)` will cause the search to continue a number of times before the search is stopped.  The `myLocal.searchRepeats(numberOfRepeats)` will changing this repeating behavior.  If set to an integer above zero the search will repeat until the number is exceeded.  If set to 0, the search will repeat until the `stopSearchTimer()` is called.  If searchRepeats is passed a nil, it will not repeat the search.
+Often, there is a need for the iOS BLE scan to continue until a particular device is found.  The search property `myLocal.searchRepeats(numberOfRepeats)` will cause the search to continue a number of times before the search is stopped.  The `myLocal.searchRepeats(numberOfRepeats)` will changing this repeating behavior.  If set to an integer above zero the search will repeat until the number is reached.  If set to 0, the search will repeat until the `stopSearchTimer()` is called.  If searchRepeats is passed a nil, it will not repeat the search.
 
-Note, a continuous search will make Apple very upset.  They treasure the user's battery life.  If the search is left to be repeating the code-consumer is responsible for calling stopSearchTimer to stop the iOS device from scanning.  This may be done from the `searchTimerExpired` method by calling `myLocal.stopSearchTimer()`.  When called this way the stopSearchTimer method updates the device state, invalidates the timer, and stops the scan.
+Note, a continuous search will make Apple very upset.  They treasure the user's battery life.  If the search is left to be repeating the code-consumer is responsible for calling stopSearchTimer to stop the iOS device from scanning.  This may be done from the `searchTimerExpired` method by calling `myLocal.stopSearchTimer()`.  When called this way the stopSearchTimer method updates the device state, invalidates the timer, stops the scan, and call the searchTimerExpired delegate for a final update on discovered devices.
 
 ```swift
 var myLocal = bluetootBehaveLocal()
