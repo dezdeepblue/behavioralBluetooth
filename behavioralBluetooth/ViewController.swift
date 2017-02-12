@@ -21,7 +21,7 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
     
     @IBOutlet weak var txDataTextBox: UITextView!
     
-    @IBAction func sendButton(sender: AnyObject) {
+    @IBAction func sendButton(_ sender: AnyObject) {
         // Make sure we are connected to something.
         if(myLocal.state() == DeviceState.states.connected){
             // Get the device ID.
@@ -43,7 +43,7 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
         myLocal.verboseOutput(true)
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         myLocal.delegate = self
     }
 
@@ -52,11 +52,11 @@ class ViewController: UIViewController, bluetoothBehaveLocalDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-    func debug(message: String) {
-        sysLogTextBox.text.appendContentsOf(message)
+    func debug(_ message: String) {
+        sysLogTextBox.text.append(message)
     }
     
-    func receivedNotificationAsString(deviceID: NSUUID, string: String) {
+    func receivedNotificationAsString(_ deviceID: UUID, string: String) {
         print("")
     }
 

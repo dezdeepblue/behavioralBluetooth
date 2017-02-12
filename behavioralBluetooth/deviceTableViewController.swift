@@ -24,7 +24,7 @@ class deviceTableViewController: UITableViewController, bluetoothBehaveLocalDele
         myLocal.delegate = self
         
         // Setup pull-down-on-scroll-to-refresh controller
-        refreshController.addTarget(self, action: Selector("refreshTableOnPullDown"), forControlEvents: UIControlEvents.ValueChanged)
+        refreshController.addTarget(self, action: #selector(deviceTableViewController.refreshTableOnPullDown), for: UIControlEvents.valueChanged)
         self.refreshControl = refreshController
         
         // Start search.
@@ -44,20 +44,20 @@ class deviceTableViewController: UITableViewController, bluetoothBehaveLocalDele
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         // #warning Incomplete implementation, return the number of rows
         return sortedDeviceArrayByRSSI.nsuuids.count
     }
 
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath)
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         // 1. Get discovered devices' name, ID, and RSSI sorted by RSSI
         // 2. Set cell's label to name and detail-label to RSSI.
@@ -67,11 +67,11 @@ class deviceTableViewController: UITableViewController, bluetoothBehaveLocalDele
         let deviceName = myLocal.getDiscoveredDeviceNameByID(deviceID)
 
         cell.textLabel?.text = deviceName
-        cell.detailTextLabel?.text = String(deviceRSSI)
+        cell.detailTextLabel?.text = String(describing: deviceRSSI)
         return cell
     }
     
-    override func tableView(tableView: UITableView, didHighlightRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
         
         // 1. Get device at index NSUUID.
         // 2. Get remote device by ID.
@@ -103,7 +103,7 @@ class deviceTableViewController: UITableViewController, bluetoothBehaveLocalDele
     }
     
     func localDeviceStateChange() {
-        print("State: " + String(myLocal.state()))
+        print("State: " + String(describing: myLocal.state()))
     }
     
     /*

@@ -10,7 +10,7 @@ import Foundation
 
 public class DeviceState {
     
-    public var state = states.unknown
+    var state = states.unknown
     
     public enum states: Int {
         case unknown = 0,

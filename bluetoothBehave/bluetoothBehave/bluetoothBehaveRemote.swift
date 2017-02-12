@@ -14,62 +14,71 @@ protocol bluetoothBehaveRemoteDelegate {
 }
 
 /// This hopefully provides some info
-public class bluetoothBehaveRemote: NSObject, CBPeripheralDelegate {
+public class bluetoothBehaveRemote {
     
-    internal var deviceState = DeviceState()
-    
-    internal(set) var ID: NSUUID?
-    func idAsString()->String{
-        return String(ID)
-    }
-    private var nameString: String?
-    internal(set) var connectable: Bool?
-    internal(set) var rssi: Int?
-    
-    public func serialDataAvailable(deviceOfInterest: NSUUID, data: String){
-    }
-    
-    public func setBackgroundConnection(allow: Bool){
+    public init(){
         
     }
     
-    public func getRxBufferChar(deviceOfInterest: NSUUID){
+    internal var deviceState = DeviceState()
+
+    internal(set) var ID: UUID?
+    
+    func idAsString()->String{
+        return String(describing: ID)
+    }
+ 
+    internal(set) var connectable: Bool?
+    internal(set) var rssi: Int?
+ 
+    func serialDataAvailable(_ deviceOfInterest: UUID, data: String){
+        
+    }
+ 
+    
+    func setBackgroundConnection(_ allow: Bool){
+        
+    }
+    
+    
+    func getRxBufferChar(_ deviceOfInterest: UUID){
     
     }
     
-    public func clearRxBuffer(deviceOfInterest: NSUUID){
+    func clearRxBuffer(_ deviceOfInterest: UUID){
     
     }
-    
-    public func getDeviceName()->String?{
+ 
+    var nameString: String?
+    func getDeviceName()->String?{
         return nameString
     }
-    
-    public var dataLocalNameString: String?
+ 
+    var dataLocalNameString: String?
     
     // Peripheral
-    public var bbPeripheral: CBPeripheral?
+    var bbPeripheral: CBPeripheral?
     
     // Each device may have multiple services.
-    public var bbServices: Array<CBService>?
-    public var serviceUUIDString: Array<String>?
+    var bbServices: Array<CBService>?
+    var serviceUUIDString: Array<String>?
     
     // May have several characteristics
-    public var bbCharacteristics: Array<CBCharacteristic>?
-    public var characteristicsString: String?
+    var bbCharacteristics: Array<CBCharacteristic>?
+    var characteristicsString: String?
     
     // May have sever descriptors.
-    public var bbDescriptors: Array<CBDescriptor>?
+    var bbDescriptors: Array<CBDescriptor>?
     
     // Discovered device advertisement data.
-    public var advDataLocalName: String?
-    public var advDataManufacturerData: String?
-    public var advDataServiceData: String?
-    public var advDataServiceUUIDs: Dictionary<CBUUID, String>?
-    public var advDataOverflowServiceUUIDsKey: Array<String>?
-    public var advDataTxPowerLevel: Int?
-    public var advDataIsConnectable: String?
-    public var advSolicitedServiceUUID: Array<String>?
+    var advDataLocalName: String?
+    var advDataManufacturerData: String?
+    var advDataServiceData: String?
+    var advDataServiceUUIDs: Dictionary<CBUUID, String>?
+    var advDataOverflowServiceUUIDsKey: Array<String>?
+    var advDataTxPowerLevel: Int?
+    var advDataIsConnectable: String?
+    var advSolicitedServiceUUID: Array<String>?
 }
 
 
